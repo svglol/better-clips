@@ -1,0 +1,55 @@
+{
+  "name": "nuxt-app",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@9.9.0",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "postinstall": "nuxt prepare && pnpm simple-git-hooks install",
+    "lint": "pnpm lint:js && pnpm lint:style",
+    "lint:js": "eslint . --fix",
+    "lint:style": "stylelint **/*.{vue,css} --fix --ignore-path .gitignore",
+    "preview": "nuxt preview",
+    "test": "vitest --run",
+    "typecheck": "nuxt typecheck"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "3.2.0",
+    "@commitlint/cli": "19.4.1",
+    "@commitlint/config-conventional": "19.4.1",
+    "@nuxt/devtools": "1.4.1",
+    "@nuxt/eslint": "0.5.5",
+    "@nuxt/fonts": "0.7.2",
+    "@nuxt/test-utils": "3.14.1",
+    "@nuxt/ui": "2.18.4",
+    "@vue-macros/nuxt": "1.11.6",
+    "@vue/test-utils": "2.4.6",
+    "@vueuse/core": "11.0.3",
+    "@vueuse/nuxt": "11.0.3",
+    "eslint": "9.9.1",
+    "eslint-plugin-tailwindcss": "3.17.4",
+    "happy-dom": "15.7.3",
+    "lint-staged": "15.2.10",
+    "nuxt": "3.13.1",
+    "playwright-core": "1.46.1",
+    "postcss-html": "1.7.0",
+    "simple-git-hooks": "2.11.1",
+    "stylelint": "16.9.0",
+    "stylelint-config-recommended-vue": "1.5.0",
+    "stylelint-config-standard": "36.0.1",
+    "vitest": "2.0.5",
+    "vue-tsc": "2.1.6"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged",
+    "commit-msg": "pnpm commitlint --edit $1"
+  },
+  "lint-staged": {
+    "*.{js,ts,mjs,vue}": [
+      "eslint --fix"
+    ],
+    "*.{css,vue}": "stylelint --fix"
+  }
+}
