@@ -11,12 +11,12 @@ export async function fetchFromTwitchAPI<T>(endpoint: string, params: URLSearchP
 }
 
 export async function getTwitchToken() {
-  const token = await useStorage().getItem('twitchToken') as TwitchToken
+  const token = await useStorage('cache').getItem('twitchToken') as TwitchToken
   if (token)
     return token.access_token
 
   const tokenData = await getToken()
-  await useStorage().setItem('twitchToken', tokenData, { expires: tokenData.expires_in })
+  await useStorage('cache').setItem('twitchToken', tokenData, { expires: tokenData.expires_in })
   return tokenData.access_token
 }
 
