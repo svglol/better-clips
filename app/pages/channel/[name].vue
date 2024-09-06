@@ -12,7 +12,29 @@
           <span class="text-sm text-gray-500 dark:text-gray-400">{{ channel?.description }}</span>
         </div>
       </div>
-      <div class="flex flex-row gap-4">
+      <div class="flex flex-row items-center gap-4">
+        <UPopover
+          v-if="selected?.query === 'custom'"
+          :popper="{ placement: 'bottom-start' }"
+        >
+          <UButton
+            size="xs"
+            icon="i-heroicons-calendar-days-20-solid"
+          >
+            {{ new Date(tempDateRange.start).toLocaleDateString() }} -
+            {{ new Date(tempDateRange.end).toLocaleDateString() }}
+          </UButton>
+
+          <template #panel="{ close }">
+            <div class="flex flex-col items-center divide-gray-200 sm:flex-row sm:divide-x dark:divide-gray-800">
+              <UIDatePicker
+                v-model="tempDateRange"
+                @close="onDatePickerClose(close)"
+              />
+              <div />
+            </div>
+          </template>
+        </UPopover>
         <USelectMenu v-model="selected" :options="rangeOptions" color="primary" />
         <UButton
           :icon="isFavorite ? 'material-symbols:star' : 'material-symbols:star-outline'"
@@ -57,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { sub } from 'date-fns'
+import { format, sub } from 'date-fns'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { ModalClip } from '#components'
 
@@ -75,16 +97,25 @@ const rangeOptions = [
   { label: 'Last 14 days', duration: { days: 14 }, query: '14d' },
   { label: 'Last 7 days', duration: { days: 7 }, query: '7d' },
   { label: 'Last day', duration: { days: 1 }, query: '1d' },
+  { label: 'Custom', duration: { days: 1 }, query: 'custom' },
 ]
 
 const selected = ref(route.query.range ? rangeOptions.find(option => option.query === route.query.range) : rangeOptions[0])
-const dateRange = ref({ start: sub(new Date(), rangeOptions?.[0]?.duration ?? { years: 100 }), end: new Date() })
+const dateRange = ref({ start: route.query.start ? new Date(route.query.start.toString()) : sub(new Date(), rangeOptions?.[0]?.duration ?? { years: 100 }), end: route.query.end ? new Date(route.query.end.toString()) : new Date() })
+const tempDateRange = ref({ ...dateRange.value })
 
 watch(selected, (newValue) => {
   if (newValue) {
-    const query = { ...route.query, range: newValue.query }
-    router.replace({ query })
-    dateRange.value = { start: sub(new Date(), newValue.duration), end: new Date() }
+    if (newValue.query === 'custom') {
+      const query = { ...route.query, range: newValue.query, start: format(dateRange.value.start, 'yyyy-MM-dd'), end: format(dateRange.value.end, 'yyyy-MM-dd') }
+      router.replace({ query })
+    }
+    else {
+      const query = { ...route.query, range: newValue.query, start: undefined, end: undefined }
+      router.replace({ query })
+      dateRange.value = { start: sub(new Date(), newValue.duration), end: new Date() }
+      tempDateRange.value = { ...dateRange.value }
+    }
   }
 }, { immediate: true })
 
@@ -107,15 +138,20 @@ const startdate = computed(() => dateRange.value.start.toISOString())
 const enddate = computed(() => dateRange.value.end.toISOString())
 
 const { data, status, execute } = await useLazyFetch<TwitchAPIResponse<TwitchClip>>(() => `/api/twitch/clips`, {
-  query: { broadcaster_id: channelID, after: cursor, started_at: startdate, ended_at: enddate.value },
-  watch: [],
+  query: { broadcaster_id: channelID, after: cursor, started_at: startdate, ended_at: enddate },
+  watch: [dateRange],
   server: false,
 })
 
 watch([dateRange], () => {
+  if (selected.value?.query === 'custom') {
+    const query = { ...route.query, start: format(dateRange.value.start, 'yyyy-MM-dd'), end: format(dateRange.value.end, 'yyyy-MM-dd') }
+    router.replace({ query })
+  }
   compiledClips.value = []
   cursor.value = undefined
-}, { immediate: true, deep: true })
+  execute()
+}, { deep: true })
 
 const clipsContainer = ref<HTMLElement>()
 
@@ -213,5 +249,10 @@ function openClip(id: string) {
       router.push({ query: remainingQuery })
     },
   })
+}
+
+function onDatePickerClose(close: () => void) {
+  dateRange.value = { ...tempDateRange.value }
+  close()
 }
 </script>
