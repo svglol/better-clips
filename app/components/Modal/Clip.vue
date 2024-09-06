@@ -1,5 +1,5 @@
 <template>
-  <UModal :ui="{ width: 'sm:max-w-[calc(100vw-58rem)] m-20 h-auto' }">
+  <UModal :ui="{ width: 'sm:!max-w-[calc(100vw-12rem)] lg:!max-w-[calc(100vw-10vw)] 2xl:!max-w-[calc(100vw-30vw)] xl:m-20 h-auto', container: '!items-center' }">
     <div class="aspect-w-16 aspect-h-9 relative w-full">
       <iframe
         :src="iframeSrc"
