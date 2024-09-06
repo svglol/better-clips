@@ -39,4 +39,12 @@ export default defineNuxtConfig({
     preference: 'dark',
     fallback: 'dark',
   },
+  nitro: {
+    storage: {
+      cache: {
+        driver: 'cloudflare-kv-binding',
+        binding: 'CACHE',
+      },
+    },
+  },
 })
