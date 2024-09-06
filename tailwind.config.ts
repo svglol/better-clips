@@ -9,4 +9,11 @@ export default <Partial<Config>>{
     './nuxt.config.{js,ts}',
     './app.vue',
   ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter'],
+      },
+    },
+  },
 }

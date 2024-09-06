@@ -1,7 +1,10 @@
 export default defineAppConfig({
   ui: {
-    primary: 'green',
+    primary: 'cyan',
     gray: 'zinc',
+    selectMenu: {
+      width: 'w-auto min-w-full',
+    },
   },
   nuxtIcon: {},
 })

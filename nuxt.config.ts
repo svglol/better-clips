@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@vue-macros/nuxt',
     '@nuxt/eslint',
+    '@nuxt/image',
   ],
   future: {
     compatibilityVersion: 4,
@@ -25,5 +26,17 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
     strict: true,
+  },
+  experimental: {
+    typedPages: true,
+  },
+  runtimeConfig: {
+    apiToken: '',
+    twitchClientId: '',
+    twitchClientSecret: '',
+  },
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark',
   },
 })
