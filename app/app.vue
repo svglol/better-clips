@@ -15,7 +15,7 @@
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
-      ? `${titleChunk} • Better Twitch Clips Browser 🎬`
+      ? `${titleChunk} • Better Twitch Clips🎬`
       : 'Better Twitch Clips Browser 🎬'
   },
   htmlAttrs: {
