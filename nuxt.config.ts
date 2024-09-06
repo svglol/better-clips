@@ -1,4 +1,6 @@
+/* eslint-disable node/prefer-global/process */
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/test-utils/module',
@@ -31,9 +33,8 @@ export default defineNuxtConfig({
     typedPages: true,
   },
   runtimeConfig: {
-    apiToken: '',
-    twitchClientId: '',
-    twitchClientSecret: '',
+    twitchClientId: process.env.NUXT_TWITCH_CLIENT_ID,
+    twitchClientSecret: process.env.NUXT_TWITCH_CLIENT_SECRET,
   },
   colorMode: {
     preference: 'dark',
