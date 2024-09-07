@@ -34,6 +34,44 @@ useHead({
   title: category.value?.name,
 })
 
+useSeoMeta({
+  title: category.value?.name,
+  ogTitle: category.value?.name,
+  ogImage: category.value?.box_art_url.replace('{width}', '576').replace('{height}', '768'),
+  twitterCard: 'summary',
+  twitterTitle: category.value?.name,
+  twitterImage: category.value?.box_art_url.replace('{width}', '576').replace('{height}', '768'),
+  ogUrl: `https://better-clips.trotman.xyz/category/${category.value?.id}`,
+})
+
+if (route.query.clip) {
+  const clipId = route.query.clip.toString()
+  const { data: clipData } = await useFetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${clipId}`)
+  if (clipData.value && clipData.value.data && clipData.value.data.length > 0) {
+    const clip = clipData.value.data[0]
+    if (clip) {
+      const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
+      useSeoMeta({
+        title: `${clip.title} - ${clip.broadcaster_name}`,
+        ogDescription: `Created by ${clip.creator_name}`,
+        ogTitle: `${clip.title} - ${clip.broadcaster_name}`,
+        ogVideo: {
+          url: videoUrl,
+          type: 'video/mp4',
+          width: 1280,
+          height: 720,
+        },
+        ogImage: clip.thumbnail_url,
+        twitterCard: 'player',
+        twitterTitle: `${clip.title} - ${clip.broadcaster_name}`,
+        twitterImage: clip.thumbnail_url,
+        twitterDescription: `Created by ${clip.creator_name}`,
+        ogUrl: `https://better-clips.trotman.xyz/channel/${clip.broadcaster_name}?clip=${clip.id}`,
+      })
+    }
+  }
+}
+
 const boxArt = computed(() => category.value?.box_art_url.replace('{width}', '144').replace('{height}', '192'))
 
 const cursor = ref<string | undefined>()
