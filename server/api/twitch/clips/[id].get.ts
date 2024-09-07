@@ -1,4 +1,4 @@
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
   if (!id)
     return createError({ statusCode: 400, statusMessage: 'Missing id' })
@@ -6,4 +6,4 @@ export default defineEventHandler(async (event) => {
   const params = new URLSearchParams({ id })
 
   return fetchFromTwitchAPI<TwitchClip[]>('/clips', params)
-})
+}, { maxAge: 60 * 60 })
