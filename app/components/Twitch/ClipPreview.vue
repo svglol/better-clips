@@ -3,12 +3,14 @@
     <NuxtLink :to="clip.url" target="_blank" class="shadow transition-all hover:scale-[97%] hover:opacity-80" @click="handleClipClick">
       <div class="relative aspect-video">
         <div
-          class="bg-primary-500 aspect-video h-56 w-full animate-pulse rounded-lg object-cover"
+          ref="placeholder"
+          class="bg-primary-500 aspect-video w-full animate-pulse rounded-lg object-cover"
+          :style="{ height: `${(placeholder?.clientWidth ?? 0) / 16 * 9}px` }"
           :class="{ hidden: imageLoaded }"
         />
         <NuxtImg
           :src="clip.thumbnail_url"
-          class="aspect-video size-full rounded-lg object-cover"
+          class="aspect-video w-full rounded-lg object-cover"
           :class="{ hidden: !imageLoaded }"
           placeholder
           @load="handleImageLoad"
@@ -52,6 +54,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'openClip', id: string): void
 }>()
+
+const placeholder = ref<HTMLDivElement>()
 
 const truncatedTitle = computed(() => {
   const maxLength = 75
