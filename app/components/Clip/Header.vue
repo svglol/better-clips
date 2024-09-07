@@ -9,8 +9,9 @@
         :popper="{ placement: 'bottom-start' }"
       >
         <UButton
-          size="xs"
+          size="sm"
           icon="i-heroicons-calendar-days-20-solid"
+          variant="outline"
         >
           {{ new Date(tempDateRange.start).toLocaleDateString() }} -
           {{ new Date(tempDateRange.end).toLocaleDateString() }}
