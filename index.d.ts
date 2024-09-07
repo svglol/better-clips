@@ -72,3 +72,8 @@ interface TwitchClip {
   vod_offset: number | null
   is_featured: boolean
 }
+
+interface DateRange {
+  start: Date
+  end: Date
+}
