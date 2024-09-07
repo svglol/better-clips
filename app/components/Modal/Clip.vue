@@ -1,5 +1,5 @@
 <template>
-  <UModal :ui="{ width: 'sm:!max-w-[calc(100vw-12rem)] lg:!max-w-[calc(100vw-10vw)] 2xl:!max-w-[calc(100vw-30vw)] xl:m-20 h-auto', container: '!items-center' }">
+  <UModal :ui="{ width: 'm-0 sm:!max-w-[calc(100vw-12rem)] lg:!max-w-[calc(100vw-10vw)] 2xl:!max-w-[calc(100vw-30vw)] xl:m-20 h-auto', container: '!items-center !p-2' }">
     <div class="flex flex-col">
       <div class="aspect-w-16 aspect-h-9 relative w-full">
         <iframe
@@ -9,7 +9,7 @@
           style="border: none;"
         />
       </div>
-      <div class="flex flex-row-reverse gap-4 p-4">
+      <div class="flex flex-row-reverse gap-4 p-2 sm:p-4">
         <UTooltip text="Download">
           <UButton icon="i-heroicons-arrow-down-tray" color="primary" class="flex-none" :to="videoUrl" _target="_blank" size="sm" variant="ghost" />
         </UTooltip>
