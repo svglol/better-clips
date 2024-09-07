@@ -38,4 +38,7 @@ onMounted(() => {
     favoriteCategories.value = JSON.parse(storedFavoritesCategories)
   }
 })
+useSeoMeta({
+  title: '',
+})
 </script>
