@@ -61,6 +61,7 @@ if (route.query.clip) {
           type: 'video/mp4',
           width: 1280,
           height: 720,
+          alt: 'Better Twitch Clips🎬',
         },
         ogImage: clip.thumbnail_url,
         twitterCard: 'player',
