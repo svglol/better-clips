@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="`/category/${id}`" class="flex w-full max-w-56 flex-col items-center gap-4 rounded bg-gray-100 p-2 shadow transition-all hover:scale-[97%] hover:opacity-80 dark:bg-gray-900">
+  <NuxtLink :to="`/category/${id}`" class="flex w-56 flex-col items-center gap-4 rounded bg-gray-100 p-2 shadow transition-all hover:scale-[97%] hover:opacity-80 dark:bg-gray-900">
     <img :src="boxArt">
     <span class="aspect-[9:16] text-lg text-gray-800 dark:text-gray-200">{{ category?.name }}</span>
   </NuxtLink>

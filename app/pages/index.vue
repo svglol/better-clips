@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4 p-2">
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col items-center gap-2">
       <span class="text-xl text-gray-700 dark:text-gray-200">Favourite Streamers</span>
-      <div class="flex flex-wrap">
+      <div class="flex flex-wrap items-center justify-center gap-4">
         <TwitchFavouriteChannel v-for="channel in favoriteChannels" :key="channel" :name="channel" />
         <div v-if="favoriteChannels.length === 0" class="flex flex-col items-center justify-center gap-2">
           <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-6xl" />
@@ -10,9 +10,9 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col items-center gap-2">
       <span class="text-xl text-gray-700 dark:text-gray-200">Favourite Categories</span>
-      <div class="flex flex-wrap">
+      <div class="flex flex-wrap items-center justify-center gap-4">
         <TwitchFavouriteCategory v-for="channel in favoriteCategories" :id="channel" :key="channel" />
         <div v-if="favoriteCategories.length === 0" class="flex flex-col items-center justify-center gap-2">
           <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-6xl" />

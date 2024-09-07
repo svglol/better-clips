@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="`/channel/${name}`" class="flex w-full max-w-56 flex-col items-center gap-4 rounded bg-gray-100 p-2 shadow transition-all hover:scale-[97%] hover:opacity-80 dark:bg-gray-900">
+  <NuxtLink :to="`/channel/${name}`" class="flex w-56 flex-col items-center gap-4 rounded bg-gray-100 p-2 shadow transition-all hover:scale-[97%] hover:opacity-80 dark:bg-gray-900">
     <USkeleton v-if="loading" class="size-20 rounded-full" />
     <UAvatar v-else :src="channel?.profile_image_url" size="3xl" class="rounded-full" />
     <span class="text-lg text-gray-800 dark:text-gray-200">{{ name }}</span>
