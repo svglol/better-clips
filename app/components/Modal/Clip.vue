@@ -16,6 +16,9 @@
         <UTooltip text="Share">
           <UButton icon="i-heroicons-share" color="primary" class="flex-none" size="sm" variant="ghost" @click="startShare" />
         </UTooltip>
+        <UTooltip v-if="clip?.url" text="Open in Twitch">
+          <UButton icon="ic:sharp-launch" color="primary" class="flex-none" size="sm" variant="ghost" :to="clip?.url" _target="_blank" @click="openInTwitch" />
+        </UTooltip>
       </div>
     </div>
   </UModal>
@@ -29,9 +32,9 @@ const props = defineProps<{
 const clip = ref<TwitchClip | undefined>()
 const videoUrl = computed(() => clip.value?.thumbnail_url.replace('-preview-480x272.jpg', '.mp4'))
 
-const { data } = await useFetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${props.id}`)
-if (data.value && data.value.data && data.value.data.length > 0) {
-  clip.value = data.value.data[0]
+const data = await $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${props.id}`)
+if (data && data.data && data.data.length > 0) {
+  clip.value = data.data[0]
   if (clip.value) {
     useSeoMeta({
       title: `${clip.value.title} - ${clip.value.broadcaster_name}`,
@@ -50,5 +53,12 @@ function startShare() {
     title: document.title,
     url: location.href,
   })
+}
+
+function openInTwitch(event: MouseEvent) {
+  event.preventDefault()
+  if (clip.value) {
+    window.open(clip.value?.url, '_blank')
+  }
 }
 </script>
