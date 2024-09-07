@@ -52,7 +52,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'openClip', id: string): void
+  (e: 'openClip', id: string, clip: TwitchClip): void
 }>()
 
 const placeholder = ref<HTMLDivElement>()
@@ -83,7 +83,7 @@ function handleImageLoad() {
 
 function handleClipClick(event: MouseEvent) {
   event.preventDefault()
-  emit('openClip', props.clip.id)
+  emit('openClip', props.clip.id, props.clip)
 }
 
 onMounted(async () => {

@@ -77,12 +77,13 @@ watch(() => route.query, () => {
   }
 })
 
-function openClip(id: string) {
+function openClip(id: string, clip?: TwitchClip) {
   const query = { ...route.query, clip: id }
   router.push({ query })
 
   modal.open(ModalClip, {
     id,
+    clip,
     onClose: () => {
       const { clip, ...remainingQuery } = route.query
       router.push({ query: remainingQuery })

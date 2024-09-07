@@ -44,19 +44,23 @@
 <script setup lang="ts">
 const props = defineProps<{
   id: string
+  clip?: TwitchClip
 }>()
 
-const clip = ref<TwitchClip | undefined>()
+const clip = ref<TwitchClip | undefined>(props.clip)
 const videoUrl = computed(() => clip.value?.thumbnail_url.replace('-preview-480x272.jpg', '.mp4'))
 
-const data = await $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${props.id}`)
-if (data && data.data && data.data.length > 0) {
-  clip.value = data.data[0]
-  if (clip.value) {
-    useSeoMeta({
-      title: `${clip.value.title} - ${clip.value.broadcaster_name}`,
-    })
+if (!props.clip) {
+  const data = await $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${props.id}`)
+  if (data && data.data && data.data.length > 0) {
+    clip.value = data.data[0]
   }
+}
+
+if (clip.value) {
+  useSeoMeta({
+    title: `${clip.value.title} - ${clip.value.broadcaster_name}`,
+  })
 }
 const { share } = useShare()
 
