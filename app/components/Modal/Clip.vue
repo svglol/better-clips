@@ -18,6 +18,15 @@ const props = defineProps<{
   id: string
 }>()
 
+const { data } = await useFetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${props.id}`)
+if (data.value && data.value.data && data.value.data.length > 0) {
+  const clip = data.value.data[0]
+  if (clip) {
+    useSeoMeta({
+      title: `${clip.title} - ${clip.broadcaster_name}`,
+    })
+  }
+}
 const iframeSrc = computed(() => {
   const { hostname } = new URL(window.location.href)
   return `https://clips.twitch.tv/embed?clip=${props.id}&parent=${hostname}&autoplay=true`
