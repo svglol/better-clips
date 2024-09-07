@@ -70,6 +70,13 @@ const itemsPerRow = computed(() => {
   }
 })
 const modal = useModal()
+
+watch(() => route.query, () => {
+  if (!route.query.clip) {
+    modal.close()
+  }
+})
+
 function openClip(id: string) {
   const query = { ...route.query, clip: id }
   router.push({ query })
