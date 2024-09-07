@@ -22,7 +22,7 @@ const route = useRoute('channel-name')
 
 const { name } = route.params
 
-const dateRange = ref<DateRange>({ start: new Date(), end: new Date() })
+const dateRange = ref<DateRange>({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() })
 
 const { data: channelData, error } = await useFetch<TwitchAPIResponse<TwitchUser>>(`/api/twitch/channels/${name}`)
 if (error.value || !channelData.value || !channelData.value.data || channelData.value.data.length === 0) {

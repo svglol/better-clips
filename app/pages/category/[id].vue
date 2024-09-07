@@ -21,7 +21,7 @@ const route = useRoute('category-id')
 
 const { id } = route.params
 
-const dateRange = ref({ start: new Date(), end: new Date() })
+const dateRange = ref<DateRange>({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() })
 
 const { data: categoryData, error } = await useFetch<TwitchAPIResponse<TwitchCategory>>(`/api/twitch/game/game`, { query: { id } })
 if (error.value || !categoryData.value || !categoryData.value.data || categoryData.value.data.length === 0) {
