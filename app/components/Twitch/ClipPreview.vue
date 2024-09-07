@@ -27,7 +27,7 @@
       </div>
     </NuxtLink>
     <NuxtLink :to="clip.url" target="_blank" class="transition-all hover:opacity-80" @click="handleClipClick">
-      <span class="font-bold text-gray-800 dark:text-gray-200">{{ clip.title }}</span>
+      <span class="max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ truncatedTitle }}</span>
     </NuxtLink>
     <NuxtLink :to="`/channel/${clip.broadcaster_name}`" class="text-sm transition-all hover:opacity-80">
       {{ clip.broadcaster_name }}
@@ -52,6 +52,11 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'openClip', id: string): void
 }>()
+
+const truncatedTitle = computed(() => {
+  const maxLength = 75
+  return props.clip.title.length > maxLength ? `${props.clip.title.slice(0, maxLength)}...` : props.clip.title
+})
 
 function formatDuration(duration: number): string {
   const totalSeconds = Math.ceil(duration)
