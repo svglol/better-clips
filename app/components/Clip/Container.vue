@@ -5,6 +5,7 @@
         :items="chunkedClips"
         page-mode
         :min-item-size="200"
+        :buffer="1000"
         @scroll-end="$emit('scrollEnd')"
       >
         <template #default="{ item, index, active }">
