@@ -51,23 +51,28 @@ if (route.query.clip) {
     const clip = clipData.value.data[0]
     if (clip) {
       const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
+      const clipDescription = `Watch this clip from ${channel.value?.display_name}: "${clip.title}". Better Twitch Clips🎬`
       useSeoMeta({
         title: `${clip.title} - ${channel.value?.display_name}`,
-        description: 'Better Twitch Clips🎬',
-        ogDescription: 'Better Twitch Clips🎬',
+        description: clipDescription,
         ogTitle: `${clip.title} - ${channel.value?.display_name}`,
+        ogDescription: clipDescription,
+        ogType: 'video.other',
         ogVideo: {
           url: videoUrl,
           type: 'video/mp4',
           width: 1280,
           height: 720,
-          alt: 'Better Twitch Clips🎬',
         },
         ogImage: clip.thumbnail_url,
+        ogSiteName: 'Better Twitch Clips🎬',
         twitterCard: 'player',
         twitterTitle: `${clip.title} - ${channel.value?.display_name}`,
+        twitterDescription: clipDescription,
         twitterImage: clip.thumbnail_url,
-        twitterDescription: `Better Twitch Clips🎬`,
+        twitterPlayer: `https://clips.twitch.tv/embed?clip=${clip.id}`,
+        twitterPlayerWidth: 1280,
+        twitterPlayerHeight: 720,
         ogUrl: `https://better-clips.trotman.xyz/${channel.value?.display_name}?clip=${clip.id}`,
       })
     }

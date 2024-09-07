@@ -35,6 +35,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     twitchClientId: process.env.NUXT_TWITCH_CLIENT_ID,
     twitchClientSecret: process.env.NUXT_TWITCH_CLIENT_SECRET,
+    public: {
+      baseUrl: process.env.NUXT_BASE_URL,
+    },
   },
   colorMode: {
     preference: 'dark',

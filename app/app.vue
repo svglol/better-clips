@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
+const baseUrl = config.public.baseUrl || 'https://better-clips.trotman.xyz'
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
@@ -24,5 +26,17 @@ useHead({
   link: [
     { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
   ],
+})
+
+useSeoMeta({
+  ogTitle: 'Better Twitch Clips🎬',
+  twitterTitle: 'Better Twitch Clips🎬',
+  description: 'A better way to browse Twitch clips.',
+  ogDescription: 'A better way to browse Twitch clips.',
+  twitterDescription: 'A better way to browse Twitch clips.',
+  ogUrl: 'https://better-clips.trotman.xyz',
+  twitterCard: 'summary',
+  ogImage: `${baseUrl}/og.png`,
+  twitterImage: `${baseUrl}/og.png`,
 })
 </script>
