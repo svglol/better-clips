@@ -31,10 +31,14 @@
       </DynamicScroller>
     </ClientOnly>
   </div>
+
+  <transition name="fade">
+    <UButton v-show="showScrollToTop" icon="mdi:arrow-up" color="primary" class="fixed bottom-4 right-4 z-50 rounded-full text-white shadow-lg transition-colors duration-300" aria-label="Scroll to top" @click="scrollToTop" />
+  </transition>
 </template>
 
 <script lang="ts" setup>
-import { breakpointsTailwind } from '@vueuse/core'
+import { breakpointsTailwind, useWindowScroll } from '@vueuse/core'
 import { ModalClip } from '#components'
 
 defineEmits<{
@@ -102,4 +106,20 @@ function chunkArray(array: any[], size: number) {
   }
   return result
 }
+const { y: scrollY } = useWindowScroll()
+const showScrollToTop = computed(() => scrollY.value > 200)
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
