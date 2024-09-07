@@ -35,7 +35,7 @@ useSeoMeta({
   title: `${channel.value?.display_name}`,
   description: channel.value?.description,
   ogTitle: `${channel.value?.display_name} • Better Twitch Clips🎬`,
-  ogDescription: `${channel.value?.display_name} • Better Twitch Clips🎬`,
+  ogDescription: channel.value?.description,
   ogImage: channel.value?.profile_image_url,
   twitterCard: 'summary',
   twitterTitle: channel.value?.display_name,
