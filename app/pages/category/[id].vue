@@ -12,7 +12,7 @@
         </div>
       </div>
     </ClipHeader>
-    <ClipContainer v-model:clips="compiledClips" v-model:status="status" @scroll-end="onScrollEnd" />
+    <ClipContainer v-model:clips="compiledClips" v-model:status="status" :title="category?.name" @scroll-end="onScrollEnd" />
   </div>
 </template>
 

@@ -49,6 +49,7 @@ const route = useRoute('channel-name')
 
 const clips = defineModel<TwitchClip[]>('clips', { required: true, default: [] })
 const status = defineModel<string>('status', { required: true, default: 'pending' })
+const title = defineModel<string>('title', { default: '' })
 const clipsContainer = ref<HTMLElement>()
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
@@ -78,6 +79,9 @@ function openClip(id: string) {
     onClose: () => {
       const { clip, ...remainingQuery } = route.query
       router.push({ query: remainingQuery })
+      useSeoMeta({
+        title: title.value,
+      })
     },
   })
 }
