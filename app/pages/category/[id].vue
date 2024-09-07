@@ -30,16 +30,12 @@ if (error.value || !categoryData.value || !categoryData.value.data || categoryDa
 
 const category = ref(categoryData.value.data[0])
 
-useHead({
-  title: category.value?.name,
-})
-
 useSeoMeta({
-  title: category.value?.name,
-  ogTitle: category.value?.name,
+  title: `${category.value?.name}`,
+  ogTitle: `${category.value?.name} • Better Twitch Clips🎬`,
   ogImage: category.value?.box_art_url.replace('{width}', '576').replace('{height}', '768'),
   twitterCard: 'summary',
-  twitterTitle: category.value?.name,
+  twitterTitle: `${category.value?.name} • Better Twitch Clips🎬`,
   twitterImage: category.value?.box_art_url.replace('{width}', '576').replace('{height}', '768'),
   ogUrl: `https://better-clips.trotman.xyz/category/${category.value?.id}`,
 })
@@ -53,7 +49,8 @@ if (route.query.clip) {
       const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
       useSeoMeta({
         title: `${clip.title} - ${clip.broadcaster_name}`,
-        ogDescription: `Created by ${clip.creator_name}`,
+        description: `Better Twitch Clips🎬`,
+        ogDescription: `Better Twitch Clips🎬`,
         ogTitle: `${clip.title} - ${clip.broadcaster_name}`,
         ogVideo: {
           url: videoUrl,
@@ -65,7 +62,7 @@ if (route.query.clip) {
         twitterCard: 'player',
         twitterTitle: `${clip.title} - ${clip.broadcaster_name}`,
         twitterImage: clip.thumbnail_url,
-        twitterDescription: `Created by ${clip.creator_name}`,
+        twitterDescription: `Better Twitch Clips🎬`,
         ogUrl: `https://better-clips.trotman.xyz/channel/${clip.broadcaster_name}?clip=${clip.id}`,
       })
     }

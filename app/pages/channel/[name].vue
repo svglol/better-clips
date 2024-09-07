@@ -31,15 +31,11 @@ if (error.value || !channelData.value || !channelData.value.data || channelData.
 
 const channel = ref(channelData.value.data[0])
 
-useHead({
-  title: channel.value?.display_name,
-})
-
 useSeoMeta({
-  title: channel.value?.display_name,
+  title: `${channel.value?.display_name}`,
   description: channel.value?.description,
-  ogTitle: channel.value?.display_name,
-  ogDescription: channel.value?.description,
+  ogTitle: `${channel.value?.display_name} • Better Twitch Clips🎬`,
+  ogDescription: `${channel.value?.display_name} • Better Twitch Clips🎬`,
   ogImage: channel.value?.profile_image_url,
   twitterCard: 'summary',
   twitterTitle: channel.value?.display_name,
@@ -57,7 +53,8 @@ if (route.query.clip) {
       const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
       useSeoMeta({
         title: `${clip.title} - ${channel.value?.display_name}`,
-        ogDescription: `Created by ${clip.creator_name}`,
+        description: 'Better Twitch Clips🎬',
+        ogDescription: 'Better Twitch Clips🎬',
         ogTitle: `${clip.title} - ${channel.value?.display_name}`,
         ogVideo: {
           url: videoUrl,
@@ -69,7 +66,7 @@ if (route.query.clip) {
         twitterCard: 'player',
         twitterTitle: `${clip.title} - ${channel.value?.display_name}`,
         twitterImage: clip.thumbnail_url,
-        twitterDescription: `Created by ${clip.creator_name}`,
+        twitterDescription: `Better Twitch Clips🎬`,
         ogUrl: `https://better-clips.trotman.xyz/${channel.value?.display_name}?clip=${clip.id}`,
       })
     }
