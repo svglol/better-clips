@@ -79,18 +79,23 @@ watch(() => route.query, () => {
   if (!route.query.clip) {
     modal.close()
   }
+  else {
+    openModal()
+  }
 })
 
-function openClip(id: string, clip?: TwitchClip) {
+function openClip(id: string) {
   const query = { ...route.query, clip: id }
   router.push({ query })
+}
 
+function openModal() {
   modal.open(ModalClip, {
-    id,
-    clip,
+    id: String(route.query.clip),
+    clip: clips.value.find(clip => clip.id === String(route.query.clip)),
     onClose: () => {
       const { clip, ...remainingQuery } = route.query
-      router.push({ query: remainingQuery })
+      router.replace({ query: remainingQuery })
       useSeoMeta({
         title: title.value,
       })
@@ -100,7 +105,7 @@ function openClip(id: string, clip?: TwitchClip) {
 
 onMounted(() => {
   if (route.query.clip) {
-    openClip(String(route.query.clip))
+    openModal()
   }
 })
 
