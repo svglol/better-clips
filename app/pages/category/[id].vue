@@ -47,19 +47,27 @@ if (route.query.clip) {
     const clip = clipData.value.data[0]
     if (clip) {
       const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
+      const iframeSrc = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=meta.tag&autoplay=true`
       const clipDescription = `Watch this clip from ${clip.broadcaster_name}: "${clip.title}". Better Twitch Clips🎬`
       useSeoMeta({
         title: `${clip.title} - ${clip.broadcaster_name}`,
         description: clipDescription,
         ogDescription: clipDescription,
         ogTitle: `${clip.title} - ${clip.broadcaster_name}`,
-        ogVideo: {
-          url: videoUrl,
-          type: 'video/mp4',
-          width: 1280,
-          height: 720,
-          alt: 'Better Twitch Clips🎬',
-        },
+        // @ts-expect-error type is wrong
+        ogVideo: videoUrl.endsWith('.mp4')
+          ? {
+              url: videoUrl,
+              type: 'video/mp4',
+              width: 1280,
+              height: 720,
+            }
+          : {
+              url: iframeSrc,
+              type: 'text/html',
+              width: 1280,
+              height: 720,
+            },
         ogImage: clip.thumbnail_url,
         twitterCard: 'player',
         twitterTitle: `${clip.title} - ${clip.broadcaster_name}`,
