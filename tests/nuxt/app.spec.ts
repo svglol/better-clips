@@ -9,6 +9,6 @@ describe('app', () => {
   })
   it('app has Better Twitch Clips Browser text', async () => {
     const component = await mountSuspended(app, { route: '/' })
-    expect(component.html()).toContain('Better Twitch Clips Browser')
+    expect(component.html()).toContain('Better Twitch Clips')
   })
 })

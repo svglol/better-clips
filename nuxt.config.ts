@@ -50,5 +50,13 @@ export default defineNuxtConfig({
         binding: 'CACHE',
       },
     },
+    devStorage: {
+      cache: {
+        driver: 'memory',
+      },
+    },
+  },
+  sourcemap: {
+    server: false,
   },
 })
