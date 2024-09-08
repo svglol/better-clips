@@ -1,12 +1,39 @@
-# Nuxt 3 Template
+# Better Twitch Clips
 
-A simple Nuxt 3 template with a few additions
+A better way to browse/watch Twitch clips. Built with Nuxt.
 
-- @nuxt/eslint & @antfu/eslint-config
-- Stylelint
-- Commitlint
-- Nuxt UI (Includes Tailwind, Nuxt Icon, & Color Mode)
-- E2E Testing and Unit Testing
-- VueUse and Vue Macros
-- Renovate config
-- Github workflow tests
+## Features
+
+- Browse clips by game, category.
+- Watch clips in a player.
+- Share clips.
+- Download clips.
+
+## Development
+
+### Setup
+
+1. Install [pnpm](https://pnpm.io/)
+2. Install dependencies with `pnpm install`
+3. Create a `.env` file in the root of the project with the following content:
+   ```
+   NUXT_TWITCH_CLIENT_ID=your-twitch-client-id
+   NUXT_TWITCH_CLIENT_SECRET=your-twitch-client-secret
+   ```
+4. Run `pnpm dev`
+
+### Testing
+
+Run `pnpm test`
+
+### Linting
+
+Run `pnpm lint`
+
+### Committing
+
+This project uses [commitlint](https://commitlint.js.org/) and [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+## License
+
+[MIT](LICENSE)
