@@ -1,3 +1,4 @@
+import type { H3Event } from 'h3'
 import type { UserSession } from '#auth-utils'
 
 export default defineCachedEventHandler(async (event) => {
@@ -39,7 +40,10 @@ export default defineCachedEventHandler(async (event) => {
   }).filter(Boolean)
 
   return reorderedFetchedData
-}, { maxAge: 60 * 60 })
+}, {
+  maxAge: 60 * 60,
+  getKey: async (event: H3Event) => String((await getUserSession(event)).user?.id),
+})
 
 async function getFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
   const allChannels: TwitchFollowedChannel[] = []
