@@ -98,17 +98,26 @@ function handleClipClick(event: MouseEvent) {
   emit('openClip', props.clip.id, props.clip)
 }
 
+const gameData = useState<Map<string, TwitchGame>>('gameData', () => new Map<string, TwitchGame>())
+if (gameData.value.has(props.clip.game_id)) {
+  game.value = gameData.value.get(props.clip.game_id) as TwitchGame
+  loadingGame.value = false
+}
+
 onMounted(async () => {
-  try {
-    const data = await $fetch <TwitchAPIResponse<TwitchGame>>(`/api/twitch/game/game`, { query: { id: props.clip.game_id } })
-    if (data.data[0])
-      game.value = data.data[0]
-  }
-  catch (error) {
-    console.error('Failed to load game data', error)
-  }
-  finally {
-    loadingGame.value = false
+  if (!gameData.value.has(props.clip.game_id)) {
+    try {
+      const data = await $fetch <TwitchAPIResponse<TwitchGame>>(`/api/twitch/game/game`, { query: { id: props.clip.game_id } })
+      if (data.data[0])
+        game.value = data.data[0]
+    }
+    catch (error) {
+      console.error('Failed to load game data', error)
+    }
+    finally {
+      gameData.value.set(props.clip.game_id, game.value as TwitchGame)
+      loadingGame.value = false
+    }
   }
 })
 </script>
