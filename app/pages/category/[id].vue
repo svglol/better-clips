@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 p-2">
-    <ClipHeader v-model:date-range="dateRange" :is-favorite="isFavorite" @toggle-favorite="toggleFavorite">
+    <ClipHeader v-model:date-range="dateRange">
       <div class="flex flex-row items-center gap-4">
         <NuxtLink :to="`https://twitch.tv/directory/category/${slugify(category?.name ?? '')}`" target="_blank" class="flex-none transition-all hover:opacity-80">
           <NuxtImg :src="boxArt" class="h-full w-16 flex-none" />
@@ -99,29 +99,7 @@ watch([dateRange], () => {
   cursor.value = undefined
 }, { deep: true })
 
-const favorites = ref<string[]>([])
-const isFavorite = computed(() => favorites.value.includes(category.value?.id || ''))
-
-function toggleFavorite() {
-  const categoryId = category.value?.id
-  if (!categoryId)
-    return
-
-  if (isFavorite.value) {
-    favorites.value = favorites.value.filter(id => id !== categoryId)
-  }
-  else {
-    favorites.value.push(categoryId)
-  }
-  localStorage.setItem('favoriteCategories', JSON.stringify(favorites.value))
-}
-
 onMounted(() => {
-  const storedFavorites = localStorage.getItem('favoriteCategories')
-  if (storedFavorites) {
-    favorites.value = JSON.parse(storedFavorites)
-  }
-
   execute()
 })
 

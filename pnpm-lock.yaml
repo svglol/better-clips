@@ -65,6 +65,9 @@ importers:
       nuxt:
         specifier: 3.13.1
         version: 3.13.1(@parcel/watcher@2.4.1)(@types/node@22.5.4)(eslint@9.9.1(jiti@1.21.6))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.21.2)(stylelint@16.9.0(typescript@5.5.4))(terser@5.31.6)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4)(terser@5.31.6))(vue-tsc@2.1.6(typescript@5.5.4))
+      nuxt-auth-utils:
+        specifier: ^0.3.7
+        version: 0.3.7(magicast@0.3.5)(rollup@4.21.2)
       playwright-core:
         specifier: 1.46.1
         version: 1.46.1
@@ -4157,6 +4160,9 @@ packages:
     resolution: {integrity: sha512-rhUfFCtIH8IxhfibVd26uGrC0ojUijGoU3bAhPQHrkl7mFlK+g+XeIttdsI8YAC7s/wPishrTpE9z1UssHY6eA==}
     engines: {node: ^16.10.0 || >=18.0.0}
     hasBin: true
+
+  nuxt-auth-utils@0.3.7:
+    resolution: {integrity: sha512-vD4wJJ9eDA0nn0Q9bXN83avUv7e4lTKHboq6Hrp916MxaazQx6AXmZ6M2lYvH46RTERiqq5TsVZa9+Lc6ZnMqA==}
 
   nuxt@3.13.1:
     resolution: {integrity: sha512-En0vVrCJWu54ptShUlrqOGzXTcjhX+RnHShwdcpNqL9kmE9FWqeDYnPTgt2gJWrYSvVbmjJcVfEugNo9XpNmHA==}
@@ -10652,6 +10658,22 @@ snapshots:
   nuxi@3.13.1:
     optionalDependencies:
       fsevents: 2.3.3
+
+  nuxt-auth-utils@0.3.7(magicast@0.3.5)(rollup@4.21.2):
+    dependencies:
+      '@nuxt/kit': 3.13.1(magicast@0.3.5)(rollup@4.21.2)
+      defu: 6.1.4
+      hookable: 5.5.3
+      ofetch: 1.3.4
+      ohash: 1.1.3
+      pathe: 1.1.2
+      scule: 1.3.0
+      uncrypto: 0.1.3
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+      - webpack-sources
 
   nuxt@3.13.1(@parcel/watcher@2.4.1)(@types/node@22.5.4)(eslint@9.9.1(jiti@1.21.6))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.21.2)(stylelint@16.9.0(typescript@5.5.4))(terser@5.31.6)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4)(terser@5.31.6))(vue-tsc@2.1.6(typescript@5.5.4)):
     dependencies:

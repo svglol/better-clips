@@ -28,26 +28,12 @@
         </template>
       </UPopover>
       <USelectMenu v-model="selected" :options="rangeOptions" color="primary" />
-      <UButton
-        :icon="isFavorite ? 'material-symbols:star' : 'material-symbols:star-outline'"
-        variant="ghost"
-        color="primary"
-        @click="$emit('toggleFavorite')"
-      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { format, sub } from 'date-fns'
-
-defineProps<{
-  isFavorite: boolean
-}>()
-
-defineEmits<{
-  (e: 'toggleFavorite'): void
-}>()
 
 const route = useRoute()
 const router = useRouter()

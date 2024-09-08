@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@vue-macros/nuxt',
     '@nuxt/eslint',
     '@nuxt/image',
+    'nuxt-auth-utils',
   ],
   future: {
     compatibilityVersion: 4,
@@ -35,6 +36,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     twitchClientId: process.env.NUXT_TWITCH_CLIENT_ID,
     twitchClientSecret: process.env.NUXT_TWITCH_CLIENT_SECRET,
+    oauth: {
+      twitch: {
+        clientId: process.env.NUXT_TWITCH_CLIENT_ID,
+        clientSecret: process.env.NUXT_TWITCH_CLIENT_SECRET,
+      },
+    },
     public: {
       baseUrl: process.env.NUXT_BASE_URL,
     },

@@ -77,3 +77,10 @@ interface DateRange {
   start: Date
   end: Date
 }
+
+interface TwitchFollowedChannel {
+  broadcaster_id: string
+  broadcaster_name: string
+  broadcaster_login: string
+  followed_at: string
+}
