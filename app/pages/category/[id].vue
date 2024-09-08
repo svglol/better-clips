@@ -88,22 +88,16 @@ const gameID = computed(() => category.value?.id)
 const startdate = computed(() => dateRange.value.start.toISOString())
 const enddate = computed(() => dateRange.value.end.toISOString())
 
-const { data, status, execute } = await useLazyFetch<TwitchAPIResponse<TwitchClip>>(() => `/api/twitch/clips`, {
-  query: { game_id: gameID, after: cursor, started_at: startdate, ended_at: enddate },
-  watch: [dateRange],
-  server: false,
-})
+const { data, status } = await useAsyncData('fetchClips', () => $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips`, {
+  params: { game_id: gameID.value, after: cursor.value, started_at: startdate.value, ended_at: enddate.value },
+}), { watch: [dateRange, cursor, gameID], server: false })
 
 watch([dateRange], () => {
   compiledClips.value = []
   cursor.value = undefined
 }, { deep: true })
 
-onMounted(() => {
-  execute()
-})
-
-watchDeep(data, () => {
+watch(data, () => {
   if (data.value) {
     compiledClips.value.push(...data.value.data)
   }

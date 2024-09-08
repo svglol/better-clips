@@ -95,21 +95,16 @@ const channelID = computed(() => channel.value?.id)
 const startdate = computed(() => dateRange.value.start.toISOString())
 const enddate = computed(() => dateRange.value.end.toISOString())
 
-const { data, status, execute } = await useLazyFetch<TwitchAPIResponse<TwitchClip>>(() => `/api/twitch/clips`, {
-  query: { broadcaster_id: channelID, after: cursor, started_at: startdate, ended_at: enddate },
-  watch: [dateRange],
-})
+const { data, status } = await useAsyncData('fetchClips', () => $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips`, {
+  params: { broadcaster_id: channelID.value, after: cursor.value, started_at: startdate.value, ended_at: enddate.value },
+}), { watch: [dateRange, cursor, channelID], server: false })
 
 watch([dateRange], () => {
   compiledClips.value = []
   cursor.value = undefined
 }, { deep: true })
 
-onMounted(() => {
-  execute()
-})
-
-watchDeep(data, () => {
+watch(data, () => {
   if (data.value) {
     compiledClips.value.push(...data.value.data)
   }
@@ -117,6 +112,7 @@ watchDeep(data, () => {
     compiledClips.value = []
   }
 })
+
 function onScrollEnd() {
   if (data.value?.pagination?.cursor) {
     cursor.value = data.value.pagination.cursor
