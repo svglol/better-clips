@@ -20,8 +20,12 @@
           </DynamicScrollerItem>
         </template>
         <template #after>
-          <div v-if="status === 'pending'" class="py-auto my-auto flex size-full items-center justify-center">
-            <div class="border-primary-200 dark:border-primary-800 m-2 size-12 animate-spin rounded-full border-y-2 p-2" />
+          <div v-if="status === 'pending'" class="py-auto my-4 flex size-full items-center justify-center">
+            <div class="flex items-center justify-center space-x-2">
+              <div class="bg-primary-500 size-4 animate-bounce rounded-full" />
+              <div class="bg-primary-500 size-4 animate-bounce rounded-full [animation-delay:-0.1s]" />
+              <div class="bg-primary-500 size-4 animate-bounce rounded-full [animation-delay:-0.2s]" />
+            </div>
           </div>
           <div v-else-if="clips.length === 0" class="py-auto my-auto flex size-full flex-col items-center justify-center">
             <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-9xl" />
@@ -124,11 +128,39 @@ const showScrollToTop = computed(() => scrollY.value > 200)
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+const loadedImages = useState<string[]>('loadedImages', () => [])
+
+function preloadImage(url: string): Promise<void> {
+  return new Promise((resolve) => {
+    if (!loadedImages.value.includes(url)) {
+      const img = new Image()
+      img.src = url
+      img.onload = () => {
+        loadedImages.value.push(url)
+        resolve()
+      }
+      img.onerror = () => resolve()
+    }
+    else {
+      resolve()
+    }
+  })
+}
+
+function preloadAllImages() {
+  const clipUrls = clips.value.map(clip => clip.thumbnail_url)
+  Promise.all(clipUrls.map(url => preloadImage(url)))
+}
+
+watchDeep(clips, () => {
+  preloadAllImages()
+})
 </script>
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s;
+  transition: opacity 0.1s;
 }
 
 .fade-enter-from, .fade-leave-to {

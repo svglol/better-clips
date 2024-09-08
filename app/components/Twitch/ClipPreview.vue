@@ -1,20 +1,23 @@
 <template>
   <div class="relative my-2 flex w-full flex-col gap-0 rounded-lg">
     <NuxtLink :to="clip.url" target="_blank" class="shadow transition-all hover:scale-[97%] hover:opacity-80" @click="handleClipClick">
-      <div class="relative aspect-video">
-        <div
-          ref="placeholder"
-          class="bg-primary-500 aspect-video w-full animate-pulse rounded-lg object-cover"
-          :style="{ height: `${(placeholder?.clientWidth ?? 0) / 16 * 9}px` }"
-          :class="{ hidden: imageLoaded }"
-        />
-        <NuxtImg
-          :src="clip.thumbnail_url"
-          class="aspect-video w-full rounded-lg object-cover"
-          :class="{ hidden: !imageLoaded }"
-          placeholder
-          @load="handleImageLoad"
-        />
+      <div class="aspect-w-16 aspect-h-9 relative">
+        <Transition :name="transition">
+          <div
+            v-if="!imageLoaded"
+            ref="placeholder"
+            :key="`placeholder-${clip.id}`"
+            class="absolute aspect-video w-full animate-pulse rounded-lg bg-gray-200 object-cover dark:bg-gray-800"
+            :style="{ height: `${(placeholder?.clientWidth ?? 0) / 16 * 9}px` }"
+          />
+          <NuxtImg
+            v-else
+            ref="image"
+            :key="`image-${clip.id}`"
+            :src="clip.thumbnail_url"
+            class="absolute aspect-video w-full rounded-lg object-cover"
+          />
+        </Transition>
         <div class="absolute inset-0 flex flex-col justify-between p-2">
           <span class="absolute left-2 top-2 rounded bg-black bg-opacity-50 p-1 text-xs text-white">
             {{ formatDuration(clip.duration) }}
@@ -34,7 +37,7 @@
     <NuxtLink :to="`/channel/${clip.broadcaster_name}`" class="text-sm transition-all hover:opacity-80">
       {{ clip.broadcaster_name }}
     </NuxtLink>
-    <USkeleton v-if="loadingGame" class="h-4 w-[100px]" />
+    <USkeleton v-if="loadingGame" class="h-5 w-[100px]" />
     <div v-else>
       <NuxtLink :to="`/category/${game?.id}`" class="text-sm transition-all hover:opacity-80">
         {{ game?.name }}
@@ -45,8 +48,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-
 const props = defineProps<{
   clip: TwitchClip
 }>()
@@ -56,6 +57,7 @@ const emit = defineEmits<{
 }>()
 
 const placeholder = ref<HTMLDivElement>()
+const image = ref<HTMLImageElement>()
 
 const truncatedTitle = computed(() => {
   const maxLength = 75
@@ -77,8 +79,18 @@ const imageLoaded = ref(false)
 const loadingGame = ref(true)
 const game = ref<TwitchGame | null>(null)
 
-function handleImageLoad() {
+const transition = ref('fade')
+const loadedImages = useState<string[]>('loadedImages', () => [])
+if (loadedImages.value.includes(props.clip.thumbnail_url)) {
+  transition.value = 'none'
   imageLoaded.value = true
+}
+else {
+  watchDeep(loadedImages, () => {
+    if (loadedImages.value.includes(props.clip.thumbnail_url) && !imageLoaded.value) {
+      imageLoaded.value = true
+    }
+  })
 }
 
 function handleClipClick(event: MouseEvent) {
@@ -100,3 +112,13 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>

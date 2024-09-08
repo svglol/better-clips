@@ -3,7 +3,7 @@ import { z } from 'zod'
 const querySchema = z.object({
   broadcaster_id: z.string().optional(),
   game_id: z.string().optional(),
-  first: z.string().default('100'),
+  first: z.string().default('50'),
   after: z.string().optional(),
   started_at: z.string().optional(),
   ended_at: z.string().optional(),
