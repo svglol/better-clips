@@ -34,16 +34,22 @@
     <NuxtLink :to="clip.url" target="_blank" class="transition-all hover:opacity-80" @click="handleClipClick">
       <span class="max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ truncatedTitle }}</span>
     </NuxtLink>
-    <NuxtLink :to="`/channel/${clip.broadcaster_name}`" class="text-sm transition-all hover:opacity-80">
-      {{ clip.broadcaster_name }}
+    <USkeleton v-if="loadingGame" class="h-3 w-[100px]" />
+    <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs transition-all hover:underline">
+      {{ game?.name }}
     </NuxtLink>
-    <USkeleton v-if="loadingGame" class="h-5 w-[100px]" />
-    <div v-else>
-      <NuxtLink :to="`/category/${game?.id}`" class="text-sm transition-all hover:opacity-80">
-        {{ game?.name }}
-      </NuxtLink>
-    </div>
-    <span class="text-sm text-gray-500">Clipped by <NuxtLink :to="`https://twitch.tv/${clip.creator_name}`" target="_blank" class="transition-all hover:opacity-80">{{ clip.creator_name }}</NuxtLink></span>
+    <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
+      <span class="inline-flex flex-wrap items-center gap-x-1">
+        Clipped by
+        <NuxtLink :to="`https://twitch.tv/${clip?.creator_name}`" target="_blank" class="font-semibold hover:underline">
+          {{ clip?.creator_name }}
+        </NuxtLink>
+        on
+        <NuxtLink :to="`/channel/${clip?.broadcaster_name}`" target="_blank" class="font-bold hover:underline">
+          {{ clip?.broadcaster_name }}
+        </NuxtLink>
+      </span>
+    </p>
   </div>
 </template>
 
