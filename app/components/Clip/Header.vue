@@ -52,20 +52,22 @@ const rangeOptions = [
 
 const dateRange = defineModel<DateRange>('dateRange', { required: true, default: { start: new Date(), end: new Date() } })
 
+const tempDateRange = ref({ ...dateRange.value })
+
 const selected = ref(route.query.range ? rangeOptions.find(option => option.query === route.query.range) : rangeOptions[0])
 if (route.query.start && route.query.end && route.query.range === 'custom') {
   dateRange.value = { start: new Date(route.query.start.toString()), end: new Date(route.query.end.toString()) }
 }
 else {
   dateRange.value = { start: sub(new Date(), selected.value?.duration ?? { years: 100 }), end: new Date() }
+  tempDateRange.value = { ...dateRange.value }
 }
-
-const tempDateRange = ref({ ...dateRange.value })
 
 watch(selected, (newValue) => {
   if (newValue) {
     if (newValue.query === 'custom') {
       const query = { ...route.query, range: newValue.query, start: format(dateRange.value.start, 'yyyy-MM-dd'), end: format(dateRange.value.end, 'yyyy-MM-dd') }
+      tempDateRange.value = { ...dateRange.value }
       router.replace({ query })
     }
     else {
