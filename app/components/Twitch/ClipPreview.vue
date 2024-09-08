@@ -41,11 +41,11 @@
     <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
       <span class="inline-flex flex-wrap items-center gap-x-1">
         Clipped by
-        <NuxtLink :to="`https://twitch.tv/${clip?.creator_name}`" target="_blank" class="font-semibold hover:underline">
+        <NuxtLink :to="`https://twitch.tv/${clip?.creator_name.replace(' ', '')}`" target="_blank" class="font-semibold hover:underline">
           {{ clip?.creator_name }}
         </NuxtLink>
         on
-        <NuxtLink :to="`/channel/${clip?.broadcaster_name}`" target="_blank" class="font-bold hover:underline">
+        <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" target="_blank" class="font-bold hover:underline">
           {{ clip?.broadcaster_name }}
         </NuxtLink>
       </span>
