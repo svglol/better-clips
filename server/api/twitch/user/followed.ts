@@ -1,6 +1,6 @@
 import type { UserSession } from '#auth-utils'
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   await refreshTwitchoAuthToken(event)
   const session = await getUserSession(event)
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
   }).filter(Boolean)
 
   return reorderedFetchedData
-})
+}, { maxAge: 60 * 60 })
 
 async function getFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
   const allChannels: TwitchFollowedChannel[] = []
