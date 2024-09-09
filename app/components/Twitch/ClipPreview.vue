@@ -31,8 +31,8 @@
         </div>
       </div>
     </NuxtLink>
-    <NuxtLink :to="clip.url" target="_blank" class="transition-all hover:opacity-80" @click="handleClipClick">
-      <span class="max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ truncatedTitle }}</span>
+    <NuxtLink :to="clip.url" target="_blank" class="group transition-all hover:opacity-80" @click="handleClipClick">
+      <span class="group-hover:text-primary-500 dark:group-hover:text-primary-400 max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ truncatedTitle }}</span>
     </NuxtLink>
     <USkeleton v-if="loadingGame" class="h-3 w-[100px]" />
     <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs transition-all hover:underline">
