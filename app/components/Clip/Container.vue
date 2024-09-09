@@ -20,8 +20,8 @@
           </DynamicScrollerItem>
         </template>
         <template #after>
-          <UILoading :loading="status === 'pending'" />
-          <div v-if="clips.length === 0 && status !== 'pending'" class="py-auto my-auto flex size-full flex-col items-center justify-center">
+          <UILoading v-if="status === 'pending'" />
+          <div v-else-if="clips.length === 0" class="py-auto my-auto flex size-full flex-col items-center justify-center">
             <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-9xl" />
             <span class="text-2xl text-gray-500 dark:text-gray-400">No clips found!</span>
           </div>

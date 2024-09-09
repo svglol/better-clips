@@ -15,13 +15,7 @@
         class="w-full"
       >
         <template #followed-channels>
-          <div v-if="data?.length ?? 0 > 0" class="flex flex-col gap-2">
-            <div class="grid grid-cols-2 items-center gap-4 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-12">
-              <div v-for="channel in data" :key="channel.id">
-                <TwitchFavouriteChannel :channel="channel" />
-              </div>
-            </div>
-          </div>
+          <FollowedChannels />
         </template>
       </UTabs>
     </div>
@@ -44,8 +38,6 @@ const { loggedIn } = useUserSession()
 useSeoMeta({
   title: '',
 })
-
-const { data } = await useFetch<TwitchUser[]>('/api/twitch/user/followed')
 
 const route = useRoute()
 const router = useRouter()
