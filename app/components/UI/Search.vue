@@ -1,15 +1,25 @@
 <template>
-  <UTooltip text="Search" :shortcuts="[metaSymbol, 'K']">
-    <UButton
-      icon="i-heroicons-magnifying-glass-20-solid"
-      color="gray"
-      variant="ghost"
-      aria-label="Search"
-      @click="isOpen = true"
-    />
-  </UTooltip>
+  <div class="flex flex-row rounded-md border border-gray-300 shadow-sm md:w-96 dark:border-gray-700">
+    <UInput v-model="searchQuery" placeholder="Search" :ui="{ rounded: 'rounded-l-md rounded-r-none' }" class="flex-1" :size="size" variant="none" @keydown.enter="search">
+      <template #leading>
+        <UIcon name="i-heroicons-magnifying-glass-20-solid" />
+      </template>
+    </UInput>
+    <UTooltip text="Search" :shortcuts="[metaSymbol, 'K']">
+      <UButton
+        :ui="{ rounded: 'rounded-r-md rounded-l-none' }"
+        icon="i-heroicons-magnifying-glass-20-solid"
+        variant="soft"
+        aria-label="Search"
+        :size="size"
+        color="primary"
+        @click="search"
+      />
+    </UTooltip>
+  </div>
   <UModal v-model="isOpen">
     <UCommandPalette
+      ref="commandPalette"
       :autoselect="false"
       :groups="groups"
       selected-icon=""
@@ -23,12 +33,27 @@
 </template>
 
 <script lang="ts" setup>
+import { breakpointsTailwind } from '@vueuse/core'
+
 const { metaSymbol } = useShortcuts()
 const { disableShortcut } = definePropsRefs<{
   disableShortcut?: boolean
 }>()
 
+const searchQuery = ref('')
 const isOpen = ref(false)
+const commandPalette = ref()
+const route = useRoute()
+
+watch(() => route.path, () => {
+  searchQuery.value = ''
+})
+
+watch(isOpen, () => {
+  if (!isOpen.value) {
+    searchQuery.value = ''
+  }
+})
 
 const groups = [
   {
@@ -71,6 +96,9 @@ defineShortcuts({
       if (disableShortcut.value)
         return
       isOpen.value = !isOpen.value
+      nextTick(() => {
+        commandPalette.value.updateQuery(searchQuery.value)
+      })
     },
   },
   escape: {
@@ -97,4 +125,29 @@ function onSelect(option: any) {
     window.open(option.href, '_blank')
   }
 }
+
+function search() {
+  isOpen.value = true
+  nextTick(() => {
+    commandPalette.value.updateQuery(searchQuery.value)
+  })
+}
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const activeBreakpoint = breakpoints.active()
+const size = computed(() => {
+  switch (activeBreakpoint.value) {
+    case 'sm':
+      return 'md'
+    case 'md':
+      return 'xl'
+    case 'lg':
+      return 'xl'
+    case 'xl':
+      return 'xl'
+    case '2xl':
+      return 'xl'
+    default: return 'md'
+  }
+})
 </script>

@@ -3,8 +3,10 @@
     <NuxtLink to="/" class="flex flex-row items-center gap-2 text-xl text-black hover:opacity-80 dark:text-white">
       <UIcon name="fluent-emoji-flat:clapper-board" /><span class="hidden sm:inline-block">Better Twitch Clips</span>
     </NuxtLink>
-    <div class="flex flex-row gap-2">
+    <div>
       <UISearch />
+    </div>
+    <div class="flex flex-row gap-2">
       <AuthState v-slot="{ loggedIn }">
         <div v-if="loggedIn">
           <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
@@ -32,8 +34,6 @@
           </UButton>
         </a>
       </AuthState>
-
-      <!-- <UIDarkToggle /> -->
     </div>
   </div>
 </template>
