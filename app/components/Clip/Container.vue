@@ -88,8 +88,7 @@ function openModal() {
     id: String(route.query.clip),
     clip: clips.value.find(clip => clip.id === String(route.query.clip)),
     onClose: () => {
-      const { clip, ...remainingQuery } = route.query
-      router.replace({ query: remainingQuery })
+      router.back()
       useSeoMeta({
         title: title.value,
       })
