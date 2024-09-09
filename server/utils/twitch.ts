@@ -1,15 +1,21 @@
 import type { H3Event } from 'h3'
 
 export async function fetchFromTwitchAPI<T>(endpoint: string, params: URLSearchParams): Promise<TwitchAPIResponse<T>> {
-  const token = await getTwitchToken()
-  const url = `https://api.twitch.tv/helix${endpoint}?${params}`
-  const data = await $fetch<TwitchAPIResponse<T>>(url, {
-    headers: {
-      'Client-ID': useRuntimeConfig().twitchClientId,
-      'Authorization': `Bearer ${token}`,
-    },
-  })
-  return data
+  try {
+    const token = await getTwitchToken()
+    const url = `https://api.twitch.tv/helix${endpoint}?${params}`
+    const data = await $fetch<TwitchAPIResponse<T>>(url, {
+      headers: {
+        'Client-ID': useRuntimeConfig().twitchClientId,
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+    return data
+  }
+  catch (error) {
+    console.error(`Error fetching from Twitch API: ${error}`)
+    return { data: [] }
+  }
 }
 
 export async function getTwitchToken() {
