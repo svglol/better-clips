@@ -20,14 +20,8 @@
           </DynamicScrollerItem>
         </template>
         <template #after>
-          <div v-if="status === 'pending'" class="py-auto my-4 flex size-full items-center justify-center">
-            <div class="flex items-center justify-center space-x-2">
-              <div class="bg-primary-500 size-4 animate-bounce rounded-full" />
-              <div class="bg-primary-500 size-4 animate-bounce rounded-full [animation-delay:-0.1s]" />
-              <div class="bg-primary-500 size-4 animate-bounce rounded-full [animation-delay:-0.2s]" />
-            </div>
-          </div>
-          <div v-else-if="clips.length === 0" class="py-auto my-auto flex size-full flex-col items-center justify-center">
+          <UILoading :loading="status === 'pending'" />
+          <div v-if="clips.length === 0 && status !== 'pending'" class="py-auto my-auto flex size-full flex-col items-center justify-center">
             <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-9xl" />
             <span class="text-2xl text-gray-500 dark:text-gray-400">No clips found!</span>
           </div>
@@ -42,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { breakpointsTailwind, useWindowScroll } from '@vueuse/core'
+import { breakpointsTailwind } from '@vueuse/core'
 import { ModalClip } from '#components'
 
 defineEmits<{
