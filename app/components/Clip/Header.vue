@@ -3,7 +3,7 @@
     <div class="flex flex-row items-center gap-4">
       <slot />
     </div>
-    <div class="flex flex-row items-center gap-4">
+    <div class="flex flex-wrap items-center gap-4">
       <UPopover
         v-if="selected?.query === 'custom'"
         :popper="{ placement: 'bottom-start' }"
