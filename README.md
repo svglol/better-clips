@@ -19,6 +19,8 @@ A better way to browse/watch Twitch clips. Built with Nuxt.
    ```
    NUXT_TWITCH_CLIENT_ID=your-twitch-client-id
    NUXT_TWITCH_CLIENT_SECRET=your-twitch-client-secret
+   NUXT_BASE_URL=base-url
+   NUXT_SESSION_PASSWORD=your-session-password
    ```
 4. Run `pnpm dev`
 
