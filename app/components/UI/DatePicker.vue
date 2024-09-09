@@ -84,4 +84,8 @@ const isRange = computed(() => {
     --vc-accent-800: rgb(var(--color-primary-800));
     --vc-accent-900: rgb(var(--color-primary-900));
   }
+
+  .vc-pane-layout{
+    @apply !grid-cols-1 sm:!grid-cols-2
+  }
   </style>
