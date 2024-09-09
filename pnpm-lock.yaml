@@ -80,6 +80,9 @@ importers:
       nuxt-auth-utils:
         specifier: ^0.3.7
         version: 0.3.7(magicast@0.3.5)(rollup@4.21.2)
+      nuxt-time:
+        specifier: ^0.1.3
+        version: 0.1.3(magicast@0.3.5)(rollup@4.21.2)
       playwright-core:
         specifier: 1.46.1
         version: 1.46.1
@@ -4187,6 +4190,9 @@ packages:
 
   nuxt-auth-utils@0.3.7:
     resolution: {integrity: sha512-vD4wJJ9eDA0nn0Q9bXN83avUv7e4lTKHboq6Hrp916MxaazQx6AXmZ6M2lYvH46RTERiqq5TsVZa9+Lc6ZnMqA==}
+
+  nuxt-time@0.1.3:
+    resolution: {integrity: sha512-Ie9KA4DfaebqDaTy+u49VVI8lHHjTlllEqdFgeQuvQItrkDaojXWKLwHfW7ju7tDJlpVIV9K6KpRXWPAWUq7Bw==}
 
   nuxt@3.13.1:
     resolution: {integrity: sha512-En0vVrCJWu54ptShUlrqOGzXTcjhX+RnHShwdcpNqL9kmE9FWqeDYnPTgt2gJWrYSvVbmjJcVfEugNo9XpNmHA==}
@@ -10709,6 +10715,17 @@ snapshots:
       pathe: 1.1.2
       scule: 1.3.0
       uncrypto: 0.1.3
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+      - webpack-sources
+
+  nuxt-time@0.1.3(magicast@0.3.5)(rollup@4.21.2):
+    dependencies:
+      '@nuxt/kit': 3.13.1(magicast@0.3.5)(rollup@4.21.2)
+      defu: 6.1.4
+      pathe: 1.1.2
     transitivePeerDependencies:
       - magicast
       - rollup

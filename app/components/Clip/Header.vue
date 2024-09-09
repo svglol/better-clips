@@ -13,8 +13,8 @@
           icon="i-heroicons-calendar-days-20-solid"
           variant="outline"
         >
-          {{ new Date(tempDateRange.start).toLocaleDateString() }} -
-          {{ new Date(tempDateRange.end).toLocaleDateString() }}
+          <NuxtTime :datetime="new Date(tempDateRange.start)" locale-matcher="best fit" /> -
+          <NuxtTime :datetime="new Date(tempDateRange.end)" locale-matcher="best fit" />
         </UButton>
 
         <template #panel="{ close }">

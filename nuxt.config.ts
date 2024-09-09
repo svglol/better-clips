@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     'nuxt-auth-utils',
+    'nuxt-time',
   ],
   future: {
     compatibilityVersion: 4,
