@@ -31,7 +31,7 @@
         </div>
       </div>
     </NuxtLink>
-    <NuxtLink :to="clip.url" target="_blank" class="group transition-all hover:opacity-80" @click="handleClipClick">
+    <NuxtLink :to="clip.url" target="_blank" class="group mt-1 transition-all hover:opacity-80" @click="handleClipClick">
       <span class="group-hover:text-primary-500 dark:group-hover:text-primary-400 max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ truncatedTitle }}</span>
     </NuxtLink>
     <USkeleton v-if="loadingGame" class="h-3 w-[100px]" />
@@ -45,7 +45,7 @@
           {{ clip?.creator_name }}
         </NuxtLink>
         on
-        <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" target="_blank" class="font-bold hover:underline">
+        <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" class="font-bold hover:underline">
           {{ clip?.broadcaster_name }}
         </NuxtLink>
       </span>

@@ -1,4 +1,5 @@
 import type { H3Event } from 'h3'
+import type { UserSession } from '#auth-utils'
 
 export async function fetchFromTwitchAPI<T>(endpoint: string, params: URLSearchParams): Promise<TwitchAPIResponse<T>> {
   try {
@@ -83,4 +84,45 @@ export async function refreshTwitchoAuthToken(event: H3Event) {
       await clearUserSession(event)
     }
   }
+}
+
+export const getFollowedChannels = defineCachedFunction(async (session: UserSession) => {
+  return fetchFollowedChannels(session)
+}, {
+  maxAge: 60 * 60,
+  name: 'followed-channels',
+  getKey: (session: UserSession) => String(session.user?.id) ?? '',
+})
+
+async function fetchFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
+  const allChannels: TwitchFollowedChannel[] = []
+  const params = new URLSearchParams()
+  params.append('user_id', String(session.user?.id ?? ''))
+  params.append('first', '100')
+  if (cursor) {
+    params.append('after', cursor)
+  }
+
+  try {
+    const { data, pagination } = await $fetch<TwitchAPIResponse<TwitchFollowedChannel>>(`https://api.twitch.tv/helix/channels/followed?${params}`, {
+      method: 'GET',
+      headers: {
+        'Client-ID': useRuntimeConfig().twitchClientId,
+        'Authorization': `Bearer ${session.user?.token.access_token}`,
+      },
+    })
+
+    allChannels.push(...data)
+
+    if (pagination?.cursor) {
+      const newChannels = await fetchFollowedChannels(session, pagination.cursor)
+      allChannels.push(...newChannels)
+    }
+  }
+  catch (error) {
+    console.error('Error fetching followed channels:', error)
+    return []
+  }
+
+  return allChannels
 }

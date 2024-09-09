@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-6 p-2 py-0">
     <div v-if="loggedIn" class="flex flex-col gap-6">
-      <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" :ui="{ base: 'text-lg' }" />
+      <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
       <UTabs
         v-model="selected"
         :items="tabs"
@@ -49,7 +49,7 @@ const tabs = ref([
   {
     slot: 'top-clips',
     id: 'top-clips',
-    label: 'Top Clips',
+    label: 'Trending Clips',
   },
   {
     slot: 'followed-channels',

@@ -5,13 +5,11 @@
     </template>
     <template v-else-if="data && data.length > 0">
       <div class="grid grid-cols-2 items-center gap-4 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-12">
-        <div v-for="channel in data" :key="channel.id">
-          <TwitchFavouriteChannel :channel="channel" />
-        </div>
+        <TwitchFavouriteChannel v-for="channel in data" :key="channel.id" :channel="channel" />
       </div>
     </template>
     <template v-else>
-      <div class="col-span-full">
+      <div>
         No followed channels found.
       </div>
     </template>
