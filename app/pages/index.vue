@@ -55,8 +55,6 @@ const tabs = ref([
     slot: 'followed-channels',
     id: 'followed-channels',
     label: 'Followed Channels',
-    active: false,
-    click: () => {},
   },
 ])
 
