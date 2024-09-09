@@ -1,7 +1,7 @@
 export default defineAppConfig({
   ui: {
-    primary: 'cyan',
-    gray: 'zinc',
+    primary: 'purple',
+    gray: 'neutral',
     selectMenu: {
       width: 'w-auto min-w-full',
     },
