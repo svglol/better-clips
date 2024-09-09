@@ -5,21 +5,19 @@
     </template>
     <template v-else-if="data && data.length > 0">
       <div class="grid grid-cols-2 items-center gap-4 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-12">
-        <div v-for="channel in data" :key="channel.id">
-          <TwitchFavouriteChannel :channel="channel" />
-        </div>
+        {{ data }}
       </div>
     </template>
     <template v-else>
       <div class="col-span-full">
-        No followed channels found.
+        No clips found.
       </div>
     </template>
   </div>
 </template>
 
 <script lang="ts" setup>
-const { data, status, execute } = await useLazyFetch<TwitchUser[]>('/api/twitch/user/followed', { immediate: false })
+const { data, status, execute } = await useLazyFetch<TwitchClip[]>('/api/twitch/user/topclips', { immediate: false })
 onMounted(() => {
   execute()
 })

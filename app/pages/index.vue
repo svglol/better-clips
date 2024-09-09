@@ -14,6 +14,9 @@
         }"
         class="w-full"
       >
+        <template #top-clips>
+          <TopClips />
+        </template>
         <template #followed-channels>
           <FollowedChannels />
         </template>
@@ -44,6 +47,11 @@ const router = useRouter()
 
 const tabs = ref([
   {
+    slot: 'top-clips',
+    id: 'top-clips',
+    label: 'Top Clips',
+  },
+  {
     slot: 'followed-channels',
     id: 'followed-channels',
     label: 'Followed Channels',
@@ -60,10 +68,18 @@ const selected = computed({
   },
   set(value) {
     if (tabs.value[value]) {
-      router.replace({
-        query: { tab: tabs.value[value].id },
-        hash: '',
-      })
+      if (value === 0) {
+        router.replace({
+          query: { },
+          hash: '',
+        })
+      }
+      else {
+        router.replace({
+          query: { tab: tabs.value[value].id },
+          hash: '',
+        })
+      }
     }
   },
 })

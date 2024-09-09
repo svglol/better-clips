@@ -42,7 +42,7 @@ export default defineCachedEventHandler(async (event) => {
   return reorderedFetchedData
 }, {
   maxAge: 60 * 60,
-  getKey: async (event: H3Event) => String((await getUserSession(event)).user?.id),
+  getKey: async (event: H3Event) => String(`followed-${(await getUserSession(event)).user?.id}`),
 })
 
 async function getFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
