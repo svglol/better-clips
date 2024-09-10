@@ -1,25 +1,15 @@
 <template>
   <div class="flex flex-col gap-2">
-    <template v-if="status === 'pending' || status === 'idle'">
-      <UILoading />
-    </template>
-    <template v-else-if="data && data.length > 0">
-      <div class="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        <TwitchClipPreview v-for="clip in data" :key="clip.id" :clip="clip" @open-clip="openClip" />
-      </div>
-    </template>
-    <template v-else>
-      <div>
-        No clips found.
-      </div>
-    </template>
+    <ClipContainer v-model:clips="clips" v-model:status="status" title="" @scroll-end="onScrollEnd" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ModalClip } from '#components'
+const page = ref(1)
+const { data, status, execute } = await useLazyFetch<{ clips: TwitchClip[], pagination: { currentPage: number, totalPages: number, totalClips: number, limit: number, hasNextPage: boolean, hasPreviousPage: boolean } }>('/api/twitch/user/topclips', { params: { page }, server: false })
 
-const { data, status, execute } = await useLazyFetch<TwitchClip[]>('/api/twitch/user/topclips', { immediate: false })
+const clips = ref<TwitchClip[]>([])
+
 onMounted(() => {
   execute()
 })
@@ -45,48 +35,27 @@ function preloadImage(url: string): Promise<void> {
 
 function preloadAllImages() {
   if (data.value) {
-    const clipUrls = data.value.map(clip => clip.thumbnail_url)
+    const clipUrls = clips.value.map(clip => clip.thumbnail_url)
     Promise.all(clipUrls.map(url => preloadImage(url)))
   }
 }
 
-watchDeep(data, () => {
+watchDeep(clips, () => {
   preloadAllImages()
 })
 
-const router = useRouter()
-const route = useRoute('index')
-function openClip(id: string) {
-  const query = { ...route.query, clip: id }
-  router.push({ query })
-}
-const modal = useModal()
-
-watch(() => route.query, () => {
-  if (!route.query.clip) {
-    modal.close()
+watch(data, () => {
+  if (data.value && data.value.clips) {
+    clips.value.push(...data.value.clips)
   }
   else {
-    openModal()
+    clips.value = []
   }
 })
 
-function openModal() {
-  modal.open(ModalClip, {
-    id: String(route.query.clip),
-    clip: data.value?.find(clip => clip.id === String(route.query.clip)) ?? undefined,
-    onClose: () => {
-      router.back()
-      useSeoMeta({
-        title: '',
-      })
-    },
-  })
+function onScrollEnd() {
+  if (data.value?.pagination?.hasNextPage && data.value?.pagination?.currentPage < data.value?.pagination?.totalPages) {
+    page.value++
+  }
 }
-
-onMounted(() => {
-  if (route.query.clip) {
-    openModal()
-  }
-})
 </script>
