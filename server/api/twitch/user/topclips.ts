@@ -36,8 +36,8 @@ export default defineCachedEventHandler(async (event) => {
 
   const followedChannels = await getFollowedChannels(session)
   let allClips = await getAllClipsFromFollowedChannels(followedChannels)
-  allClips = allClips.sort((a, b) => b.view_count - a.view_count)
   allClips = allClips.filter(clip => clip.view_count > 50)
+  allClips = allClips.sort((a, b) => b.view_count - a.view_count)
 
   const totalClips = allClips.length
   const totalPages = Math.ceil(totalClips / limit)
