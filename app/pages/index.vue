@@ -1,37 +1,68 @@
 <template>
-  <div class="flex flex-col gap-6 p-2 py-0">
-    <div v-if="loggedIn" class="flex flex-col gap-6">
-      <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
-      <UTabs
-        v-model="selected"
-        :items="tabs"
-        :default-index="0"
-        :ui="{
-          wrapper: 'space-y-0',
-          list: {
-            base: 'hidden',
-          },
-        }"
-        class="w-full"
-      >
-        <template #top-clips>
-          <TopClips />
-        </template>
-        <template #followed-channels>
-          <FollowedChannels />
-        </template>
-      </UTabs>
-    </div>
-    <div v-else class="flex flex-col items-center justify-center gap-6 py-24">
-      <span class="text-center text-lg font-semibold text-gray-900 dark:text-gray-200">
-        For the best experience, please log in with your Twitch account
+  <div v-if="!loggedIn" class="relative -mt-2 min-h-[calc(100vh-66px)]">
+    <BackgroundGradient />
+    <div class="relative flex size-full flex-col items-center justify-center gap-16 px-2 py-16">
+      <img src="/og.png" class="relative mx-auto size-32">
+      <span class="text-center text-4xl font-semibold text-gray-900 dark:text-gray-200">
+        An improved experience for browsing Twitch clips
       </span>
+      <div class="grid w-full max-w-screen-xl grid-cols-1 gap-8 lg:grid-cols-3">
+        <UISpotlightCard remove-padding>
+          <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
+            <UIcon name="fa6-solid:fire" size="2xl" class="text-primary-500 dark:text-primary-400" />
+            <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Trending Clips</span>
+            <span class="mt-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+              Quickly discover the latest and most viral clips from Twitch.
+            </span>
+          </div>
+        </UISpotlightCard>
+        <UISpotlightCard remove-padding>
+          <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
+            <UIcon name="fa6-solid:user-group" size="2xl" class="text-primary-500 dark:text-primary-400" />
+            <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Personalized Feed</span>
+            <span class="mt-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+              Get clips from your favorite streamers and games, and stay up-to-date with their latest moments.
+            </span>
+          </div>
+        </UISpotlightCard>
+        <UISpotlightCard remove-padding>
+          <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
+            <UIcon name="fa6-solid:magnifying-glass" size="2xl" class="text-primary-500 dark:text-primary-400" />
+            <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Easy Discovery</span>
+            <span class="mt-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+              Find exactly what you're looking for with our powerful search and filter options. Explore clips by game, streamer.
+            </span>
+          </div>
+        </UISpotlightCard>
+      </div>
       <a href="/auth/twitch">
         <UButton icon="fa6-brands:twitch" color="purple" size="lg" class="px-8 py-4">
           Login with Twitch
         </UButton>
       </a>
     </div>
+  </div>
+  <div v-else class="flex flex-col gap-6">
+    <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
+    <UTabs
+      v-model="selected"
+      :items="tabs"
+      :default-index="0"
+      :ui="{
+        wrapper: 'space-y-0',
+        list: {
+          base: 'hidden',
+        },
+      }"
+      class="w-full"
+    >
+      <template #top-clips>
+        <TopClips />
+      </template>
+      <template #followed-channels>
+        <FollowedChannels />
+      </template>
+    </UTabs>
   </div>
 </template>
 
