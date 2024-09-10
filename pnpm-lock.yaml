@@ -29,6 +29,9 @@ importers:
       '@iconify-json/mdi':
         specifier: ^1.2.0
         version: 1.2.0
+      '@iconify-json/pajamas':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@nuxt/devtools':
         specifier: 1.4.1
         version: 1.4.1(rollup@4.21.2)(vite@5.4.3(@types/node@22.5.4)(terser@5.31.6))
@@ -980,6 +983,9 @@ packages:
 
   '@iconify-json/mdi@1.2.0':
     resolution: {integrity: sha512-E9/3l5Syg3wfuarorFodhn4s8YorxhH3U3U20LaNBNiqw1kFNIDWhF6HymuzAD35k7RH0OBasJ+ZUyFtVVV6eg==}
+
+  '@iconify-json/pajamas@1.2.0':
+    resolution: {integrity: sha512-xi20oPetGjPVKmgBoj9h+4xWWc9vsmDHV0t95nYgEsA4LgUyp5rQr069tR1eCRIKMRgFYeZz7fS3lhV2sBAaug==}
 
   '@iconify/collections@1.0.456':
     resolution: {integrity: sha512-mVTAgeptQbYrJx38K3l5our5dya7QlzPonecvBnDcwBekuaokht6OakCJx3hgFaJaqXMoDt8X0ZnMa4cFSJFBA==}
@@ -6649,6 +6655,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/mdi@1.2.0':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/pajamas@1.2.0':
     dependencies:
       '@iconify/types': 2.0.0
 

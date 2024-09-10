@@ -23,6 +23,7 @@
     "@iconify-json/fluent-emoji-flat": "^1.2.0",
     "@iconify-json/ic": "^1.2.0",
     "@iconify-json/mdi": "^1.2.0",
+    "@iconify-json/pajamas": "^1.2.0",
     "@nuxt/devtools": "1.4.1",
     "@nuxt/eslint": "0.5.5",
     "@nuxt/fonts": "0.7.2",
