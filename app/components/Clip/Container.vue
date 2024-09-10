@@ -1,5 +1,5 @@
 <template>
-  <div ref="clipsContainer">
+  <div ref="clipsContainer" class="py-2">
     <ClientOnly>
       <DynamicScroller
         :items="chunkedClips"

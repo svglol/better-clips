@@ -42,7 +42,7 @@
       </a>
     </div>
   </div>
-  <div v-else class="flex flex-col gap-6">
+  <div v-else class="flex flex-col gap-6 px-2">
     <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
     <UTabs
       v-model="selected"
