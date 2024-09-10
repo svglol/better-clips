@@ -39,10 +39,13 @@
       <p class="line-clamp-1 text-xs leading-tight text-gray-500 dark:text-gray-400">
         <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" class="font-bold hover:underline">
           {{ clip?.broadcaster_name }}
-        </NuxtLink> • <USkeleton v-if="loadingGame" class="h-3 w-[100px]" />
-        <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs font-bold transition-all hover:underline">
-          {{ game?.name }}
-        </NuxtLink>
+        </NuxtLink> •
+        <Transition name="fade" mode="out-in">
+          <span v-if="loadingGame" class="animate-pulse rounded-md  bg-gray-100 px-2 text-gray-100 dark:bg-gray-800 dark:text-gray-800">loading.......</span>
+          <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs font-bold transition-all hover:underline">
+            {{ game?.name }}
+          </NuxtLink>
+        </Transition>
       </p>
       <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
         Clipped by
