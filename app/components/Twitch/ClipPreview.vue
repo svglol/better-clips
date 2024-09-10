@@ -1,13 +1,13 @@
 <template>
-  <div class="relative my-2 flex w-full flex-col gap-0 rounded-lg">
-    <NuxtLink :to="clip.url" target="_blank" class="shadow transition-all hover:scale-[97%] hover:opacity-80" @click="handleClipClick">
+  <div class="relative my-2 flex w-full flex-col gap-0 rounded-lg bg-gray-100 shadow transition-all hover:scale-[97%] dark:bg-gray-900">
+    <NuxtLink :to="clip.url" target="_blank" class="" @click="handleClipClick">
       <div class="aspect-w-16 aspect-h-9 relative">
         <Transition :name="transition">
           <div
             v-if="!imageLoaded"
             ref="placeholder"
             :key="`placeholder-${clip.id}`"
-            class="absolute aspect-video w-full animate-pulse rounded-lg bg-gray-200 object-cover dark:bg-gray-800"
+            class="absolute aspect-video w-full animate-pulse rounded-t-lg bg-gray-200 object-cover dark:bg-gray-800"
             :style="{ height: `${(placeholder?.clientWidth ?? 0) / 16 * 9}px` }"
           />
           <NuxtImg
@@ -15,7 +15,7 @@
             ref="image"
             :key="`image-${clip.id}`"
             :src="clip.thumbnail_url"
-            class="absolute aspect-video w-full rounded-lg object-cover"
+            class="absolute aspect-video w-full rounded-t-lg object-cover"
           />
         </Transition>
         <div class="absolute inset-0 flex flex-col justify-between p-2">
@@ -31,25 +31,26 @@
         </div>
       </div>
     </NuxtLink>
-    <NuxtLink :to="clip.url" target="_blank" class="group mt-1 transition-all hover:opacity-80" @click="handleClipClick">
-      <span class="group-hover:text-primary-500 dark:group-hover:text-primary-400 max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ truncatedTitle }}</span>
-    </NuxtLink>
-    <USkeleton v-if="loadingGame" class="h-3 w-[100px]" />
-    <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs transition-all hover:underline">
-      {{ game?.name }}
-    </NuxtLink>
-    <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
-      <span class="inline-flex flex-wrap items-center gap-x-1">
+    <div class="flex flex-col gap-0 px-2 py-1">
+      <NuxtLink :to="clip.url" target="_blank" class="group transition-all hover:opacity-80" @click="handleClipClick">
+        <span class="group-hover:text-primary-500 dark:group-hover:text-primary-400 line-clamp-1 max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ clip.title }}</span>
+      </NuxtLink>
+
+      <p class="line-clamp-1 text-xs leading-tight text-gray-500 dark:text-gray-400">
+        <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" class="font-bold hover:underline">
+          {{ clip?.broadcaster_name }}
+        </NuxtLink> • <USkeleton v-if="loadingGame" class="h-3 w-[100px]" />
+        <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs font-bold transition-all hover:underline">
+          {{ game?.name }}
+        </NuxtLink>
+      </p>
+      <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
         Clipped by
         <NuxtLink :to="`https://twitch.tv/${clip?.creator_name.replace(' ', '')}`" target="_blank" class="font-semibold hover:underline">
           {{ clip?.creator_name }}
         </NuxtLink>
-        on
-        <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" class="font-bold hover:underline">
-          {{ clip?.broadcaster_name }}
-        </NuxtLink>
-      </span>
-    </p>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -64,11 +65,6 @@ const emit = defineEmits<{
 
 const placeholder = ref<HTMLDivElement>()
 const image = ref<HTMLImageElement>()
-
-const truncatedTitle = computed(() => {
-  const maxLength = 75
-  return props.clip.title.length > maxLength ? `${props.clip.title.slice(0, maxLength)}...` : props.clip.title
-})
 
 function formatDuration(duration: number): string {
   const totalSeconds = Math.ceil(duration)
