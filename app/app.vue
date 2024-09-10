@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig()
+const colorMode = useColorMode()
 const baseUrl = config.public.baseUrl || 'https://better-clips.trotman.xyz'
 useHead({
   titleTemplate: (titleChunk) => {
@@ -26,7 +27,35 @@ useHead({
   link: [
     { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
   ],
+  meta: [
+    {
+      name: 'theme-color',
+      content: colorMode.value === 'dark' ? '#212121' : '#ffffff',
+    },
+    {
+      name: 'background-color',
+      content: colorMode.value === 'dark' ? '#212121' : '#ffffff',
+    },
+  ],
 })
+
+watch(
+  () => colorMode.value,
+  () => {
+    useHead({
+      meta: [
+        {
+          name: 'theme-color',
+          content: colorMode.value === 'dark' ? '#212121' : '#ffffff',
+        },
+        {
+          name: 'background-color',
+          content: colorMode.value === 'dark' ? '#212121' : '#ffffff',
+        },
+      ],
+    })
+  },
+)
 
 useSeoMeta({
   ogTitle: 'Better Twitch Clips🎬',
