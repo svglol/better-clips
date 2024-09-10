@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { sub } from 'date-fns'
+import { addHours, sub } from 'date-fns'
 
 import { z } from 'zod'
 
@@ -74,7 +74,14 @@ async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[]
     const params = new URLSearchParams()
     params.append('broadcaster_id', channel.broadcaster_id)
     params.append('first', '5')
-    params.append('started_at', sub(new Date(), { hours: 24 }).toISOString())
+
+    let startedAt = sub(new Date(), { hours: 24 })
+    const minutes = startedAt.getMinutes()
+    if (minutes >= 30)
+      startedAt = addHours(startedAt, 1)
+
+    startedAt.setMinutes(0, 0, 0)
+    params.append('started_at', startedAt.toISOString())
     return getTopClipsFromChannel(params)
   })
 
