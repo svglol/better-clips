@@ -25,4 +25,7 @@ export default defineCachedEventHandler(async (event) => {
     params.append('igdb_id', query.igdb_id)
   }
   return await fetchFromTwitchAPI<TwitchGame>(`/games`, params)
-}, { maxAge: 60 * 60 * 24 })
+}, { maxAge: 60 * 60 * 24, name: 'game', getKey: async (event) => {
+  const query = await getValidatedQuery(event, querySchema.parse)
+  return JSON.stringify(query)
+} })
