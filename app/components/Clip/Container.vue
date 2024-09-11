@@ -69,11 +69,11 @@ const itemsPerRow = computed(() => {
 })
 const modal = useModal()
 
-watch(() => route.query, () => {
+watch(() => route.query, (newQuery, oldQuery) => {
   if (!route.query.clip) {
     modal.close()
   }
-  else {
+  else if (newQuery.clip !== oldQuery.clip) {
     openModal()
   }
 })

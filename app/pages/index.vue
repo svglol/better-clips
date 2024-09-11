@@ -122,4 +122,43 @@ const links = computed(() => {
     click: () => selected.value = index,
   }))
 })
+
+if (route.query.clip) {
+  const { data: clipData } = await useFetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${route.query.clip}`)
+  const clip = clipData.value?.data?.[0]
+  if (clip) {
+    const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
+    const iframeSrc = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=meta.tag&autoplay=true`
+    const clipDescription = `Watch this clip from ${clip.broadcaster_name}: "${clip.title}". Better Clips🎬`
+    useSeoMeta({
+      title: `${clip.title} - ${clip.broadcaster_name}`,
+      description: clipDescription,
+      ogDescription: clipDescription,
+      ogTitle: `${clip.title} - ${clip.broadcaster_name}`,
+      // @ts-expect-error type is wrong
+      ogVideo: videoUrl.endsWith('.mp4')
+        ? {
+            url: videoUrl,
+            type: 'video/mp4',
+            width: 1280,
+            height: 720,
+          }
+        : {
+            url: iframeSrc,
+            type: 'text/html',
+            width: 1280,
+            height: 720,
+          },
+      ogImage: clip.thumbnail_url,
+      twitterCard: 'player',
+      twitterTitle: `${clip.title} - ${clip.broadcaster_name}`,
+      twitterImage: clip.thumbnail_url,
+      twitterDescription: clipDescription,
+      ogUrl: `https://better-clips.trotman.xyz/channel/${clip.broadcaster_name}?clip=${clip.id}`,
+    })
+    if (!loggedIn.value) {
+      router.replace({ path: `/channel/${clip.broadcaster_name}`, query: { clip: clip.id } })
+    }
+  }
+}
 </script>
