@@ -52,8 +52,9 @@ if (route.query.clip) {
       useSeoMeta({
         title: `${clip.title} - ${clip.broadcaster_name}`,
         description: clipDescription,
-        ogDescription: clipDescription,
         ogTitle: `${clip.title} - ${clip.broadcaster_name}`,
+        ogDescription: clipDescription,
+        ogType: 'video.other',
         // @ts-expect-error type is wrong
         ogVideo: videoUrl.endsWith('.mp4')
           ? {
@@ -69,11 +70,15 @@ if (route.query.clip) {
               height: 720,
             },
         ogImage: clip.thumbnail_url,
+        ogSiteName: 'Better Clips🎬',
         twitterCard: 'player',
         twitterTitle: `${clip.title} - ${clip.broadcaster_name}`,
-        twitterImage: clip.thumbnail_url,
         twitterDescription: clipDescription,
-        ogUrl: `https://better-clips.trotman.xyz/channel/${clip.broadcaster_name}?clip=${clip.id}`,
+        twitterImage: clip.thumbnail_url,
+        twitterPlayer: `https://clips.twitch.tv/embed?clip=${clip.id}`,
+        twitterPlayerWidth: 1280,
+        twitterPlayerHeight: 720,
+        ogUrl: `https://better-clips.trotman.xyz/${clip.broadcaster_name}?clip=${clip.id}`,
       })
     }
   }
