@@ -4,5 +4,6 @@
     <div class="mx-auto grid w-full grow">
       <slot />
     </div>
+    <Footer />
   </div>
 </template>

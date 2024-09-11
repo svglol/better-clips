@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loggedIn" class="relative -mt-2 min-h-[calc(100vh-66px)]">
+  <div v-if="!loggedIn" class="relative -my-2 min-h-[calc(100vh-123px)]">
     <BackgroundGradient />
     <div class="relative flex size-full flex-col items-center justify-center gap-16 px-2 py-16">
       <img src="/og.png" class="relative mx-auto size-32">
