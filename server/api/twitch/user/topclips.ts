@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { addHours, sub } from 'date-fns'
+import { differenceInMinutes, sub } from 'date-fns'
 
 import { z } from 'zod'
 
@@ -37,8 +37,28 @@ export default defineCachedEventHandler(async (event) => {
   const followedChannels = await getFollowedChannels(session)
   let allClips = await getAllClipsFromFollowedChannels(followedChannels)
   allClips = allClips.filter(clip => clip.view_count > 50)
-  allClips = allClips.sort((a, b) => b.view_count - a.view_count)
 
+  const maxMinutesSince = Math.max(...allClips.map(clip => differenceInMinutes(new Date(), new Date(clip.created_at))))
+  const weightViews = 0.4
+  const weightRecency = 0.6
+
+  const today = new Date()
+
+  allClips = allClips.sort((a, b) => {
+    const viewsA = Math.log10(a.view_count + 1)
+    const viewsB = Math.log10(b.view_count + 1)
+
+    const daysSinceA = differenceInMinutes(today, new Date(a.created_at))
+    const daysSinceB = differenceInMinutes(today, new Date(b.created_at))
+
+    const recencyA = daysSinceA === 0 ? 1 : (maxMinutesSince - daysSinceA) / maxMinutesSince
+    const recencyB = daysSinceB === 0 ? 1 : (maxMinutesSince - daysSinceB) / maxMinutesSince
+
+    const scoreA = (weightViews * viewsA) + (weightRecency * recencyA)
+    const scoreB = (weightViews * viewsB) + (weightRecency * recencyB)
+
+    return scoreB - scoreA
+  })
   const totalClips = allClips.length
   const totalPages = Math.ceil(totalClips / limit)
   const startIndex = (page - 1) * limit
@@ -75,12 +95,14 @@ async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[]
     params.append('broadcaster_id', channel.broadcaster_id)
     params.append('first', '5')
 
-    let startedAt = sub(new Date(), { hours: 24 })
-    const minutes = startedAt.getMinutes()
-    if (minutes >= 30)
-      startedAt = addHours(startedAt, 1)
+    const now = new Date()
+    now.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
 
-    startedAt.setMinutes(0, 0, 0)
+    const endedAt = now.toISOString()
+    params.append('ended_at', endedAt)
+
+    const startedAt = sub(now, { hours: 24 })
+    startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
     params.append('started_at', startedAt.toISOString())
     return getTopClipsFromChannel(params)
   })
