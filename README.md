@@ -1,4 +1,4 @@
-# Better Twitch Clips
+# Better Clips
 
 A better way to browse/watch Twitch clips. Built with Nuxt.
 

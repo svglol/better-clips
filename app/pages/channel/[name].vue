@@ -40,7 +40,7 @@ const channel = ref(channelData.value.data[0])
 useSeoMeta({
   title: `${channel.value?.display_name}`,
   description: channel.value?.description,
-  ogTitle: `${channel.value?.display_name} • Better Twitch Clips🎬`,
+  ogTitle: `${channel.value?.display_name} • Better Clips🎬`,
   ogDescription: channel.value?.description,
   ogImage: channel.value?.profile_image_url,
   twitterCard: 'summary',
@@ -58,7 +58,7 @@ if (route.query.clip) {
     if (clip) {
       const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
       const iframeSrc = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=meta.tag&autoplay=true`
-      const clipDescription = `Watch this clip from ${channel.value?.display_name}: "${clip.title}". Better Twitch Clips🎬`
+      const clipDescription = `Watch this clip from ${channel.value?.display_name}: "${clip.title}". Better Clips🎬`
       useSeoMeta({
         title: `${clip.title} - ${channel.value?.display_name}`,
         description: clipDescription,
@@ -80,7 +80,7 @@ if (route.query.clip) {
               height: 720,
             },
         ogImage: clip.thumbnail_url,
-        ogSiteName: 'Better Twitch Clips🎬',
+        ogSiteName: 'Better Clips🎬',
         twitterCard: 'player',
         twitterTitle: `${clip.title} - ${channel.value?.display_name}`,
         twitterDescription: clipDescription,

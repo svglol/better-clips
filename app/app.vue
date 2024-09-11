@@ -18,8 +18,8 @@ const baseUrl = config.public.baseUrl || 'https://better-clips.trotman.xyz'
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
-      ? `${titleChunk} • Better Twitch Clips🎬`
-      : 'Better Twitch Clips Browser 🎬'
+      ? `${titleChunk} • Better Clips🎬`
+      : 'Better Clips🎬'
   },
   htmlAttrs: {
     lang: 'en',
@@ -58,8 +58,8 @@ watch(
 )
 
 useSeoMeta({
-  ogTitle: 'Better Twitch Clips🎬',
-  twitterTitle: 'Better Twitch Clips🎬',
+  ogTitle: 'Better Clips🎬',
+  twitterTitle: 'Better Clips🎬',
   description: 'A better way to browse Twitch clips.',
   ogDescription: 'A better way to browse Twitch clips.',
   twitterDescription: 'A better way to browse Twitch clips.',

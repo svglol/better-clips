@@ -32,10 +32,10 @@ const category = ref(categoryData.value.data[0])
 
 useSeoMeta({
   title: `${category.value?.name}`,
-  ogTitle: `${category.value?.name} • Better Twitch Clips🎬`,
+  ogTitle: `${category.value?.name} • Better Clips🎬`,
   ogImage: category.value?.box_art_url.replace('{width}', '576').replace('{height}', '768'),
   twitterCard: 'summary',
-  twitterTitle: `${category.value?.name} • Better Twitch Clips🎬`,
+  twitterTitle: `${category.value?.name} • Better Clips🎬`,
   twitterImage: category.value?.box_art_url.replace('{width}', '576').replace('{height}', '768'),
   ogUrl: `https://better-clips.trotman.xyz/category/${category.value?.id}`,
 })
@@ -48,7 +48,7 @@ if (route.query.clip) {
     if (clip) {
       const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
       const iframeSrc = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=meta.tag&autoplay=true`
-      const clipDescription = `Watch this clip from ${clip.broadcaster_name}: "${clip.title}". Better Twitch Clips🎬`
+      const clipDescription = `Watch this clip from ${clip.broadcaster_name}: "${clip.title}". Better Clips🎬`
       useSeoMeta({
         title: `${clip.title} - ${clip.broadcaster_name}`,
         description: clipDescription,
