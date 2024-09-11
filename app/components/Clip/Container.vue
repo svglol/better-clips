@@ -88,7 +88,12 @@ function openModal() {
     id: String(route.query.clip),
     clip: clips.value.find(clip => clip.id === String(route.query.clip)),
     onClose: () => {
-      router.back()
+      if (window.history.length > 1 && window.history.state.back) {
+        router.back()
+      }
+      else {
+        router.push({ query: { ...route.query, clip: undefined } })
+      }
       useSeoMeta({
         title: title.value,
       })
