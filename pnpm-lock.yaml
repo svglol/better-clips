@@ -20,6 +20,9 @@ importers:
       '@iconify-json/fa6-brands':
         specifier: ^1.2.0
         version: 1.2.0
+      '@iconify-json/fa6-solid':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@iconify-json/fluent-emoji-flat':
         specifier: ^1.2.0
         version: 1.2.0
@@ -30,6 +33,9 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       '@iconify-json/pajamas':
+        specifier: ^1.2.0
+        version: 1.2.0
+      '@iconify-json/uil':
         specifier: ^1.2.0
         version: 1.2.0
       '@nuxt/devtools':
@@ -972,6 +978,9 @@ packages:
   '@iconify-json/fa6-brands@1.2.0':
     resolution: {integrity: sha512-2f5AeUbufKeU/JY+cbX6dOsPaQO1WwfShfoxwRd5VRF3Lr1jGM8CfXLFhb8bonAqbue1oBPwmjHUfaCafAfo2A==}
 
+  '@iconify-json/fa6-solid@1.2.0':
+    resolution: {integrity: sha512-hywmSkhPqay1lBtEltuGhawtUpq18Yyko8H2e3/artvTv5Eey1hz7OdBA2cXRwiES17KrkmXGoLDwNtkcpN4cw==}
+
   '@iconify-json/fluent-emoji-flat@1.2.0':
     resolution: {integrity: sha512-WhU4XA2v+Nv+LTPfzFrWyip0G3L+t7gb7OuVnPN3FZL9s1MY+hRUn7PpXzLV1rGi7BLTro+tYbZC2K/5nX/GJQ==}
 
@@ -986,6 +995,9 @@ packages:
 
   '@iconify-json/pajamas@1.2.0':
     resolution: {integrity: sha512-xi20oPetGjPVKmgBoj9h+4xWWc9vsmDHV0t95nYgEsA4LgUyp5rQr069tR1eCRIKMRgFYeZz7fS3lhV2sBAaug==}
+
+  '@iconify-json/uil@1.2.0':
+    resolution: {integrity: sha512-DFhJYbp/H2BGQ2oBS0DmqhvgkdUXpBTgCErhqwLEeRhkt8+MuTKlivpQf/gPgD5/6wHH37gPX4BhlqU4eH372w==}
 
   '@iconify/collections@1.0.456':
     resolution: {integrity: sha512-mVTAgeptQbYrJx38K3l5our5dya7QlzPonecvBnDcwBekuaokht6OakCJx3hgFaJaqXMoDt8X0ZnMa4cFSJFBA==}
@@ -6642,6 +6654,10 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
+  '@iconify-json/fa6-solid@1.2.0':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/fluent-emoji-flat@1.2.0':
     dependencies:
       '@iconify/types': 2.0.0
@@ -6659,6 +6675,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/pajamas@1.2.0':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/uil@1.2.0':
     dependencies:
       '@iconify/types': 2.0.0
 
