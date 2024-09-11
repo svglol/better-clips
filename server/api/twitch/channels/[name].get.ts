@@ -6,4 +6,7 @@ export default defineCachedEventHandler(async (event) => {
     login: username,
   })
   return await fetchFromTwitchAPI<TwitchUser>(`/users`, params)
-}, { maxAge: 60 * 60 * 24 })
+}, { maxAge: 60 * 60 * 24, name: 'channel', getKey: async (event) => {
+  const username = getRouterParam(event, 'name')
+  return username ?? ''
+} })
