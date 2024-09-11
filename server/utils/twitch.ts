@@ -1,11 +1,6 @@
-import { createHash } from 'node:crypto'
 import type { H3Event } from 'h3'
+import { hash } from 'ohash'
 import type { UserSession } from '#auth-utils'
-
-function hashKey(endpoint: string, params: URLSearchParams): string {
-  const fullKey = `${endpoint}-${params.toString()}`
-  return createHash('md5').update(fullKey).digest('hex')
-}
 
 export const fetchFromTwitchAPI = defineCachedFunction(async <T>(endpoint: string, params: URLSearchParams, token?: string) => {
   try {
@@ -28,7 +23,7 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(endpoint: strin
 }, {
   maxAge: 60 * 60,
   name: 'twitch-api',
-  getKey: (endpoint: string, params: URLSearchParams) => hashKey(endpoint, params),
+  getKey: (endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString() }),
 })
 
 export async function getTwitchToken() {
