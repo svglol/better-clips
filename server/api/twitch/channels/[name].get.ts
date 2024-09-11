@@ -5,5 +5,5 @@ export default defineCachedEventHandler(async (event) => {
   const params = new URLSearchParams({
     login: username,
   })
-  return await fetchFromTwitchAPI<TwitchUser>(`/users`, params) as TwitchAPIResponse<TwitchUser>
+  return await fetchFromTwitchAPI<TwitchUser>(`/users`, params)
 }, { maxAge: 60 * 60 * 24 })

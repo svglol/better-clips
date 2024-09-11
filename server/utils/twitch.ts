@@ -1,9 +1,11 @@
 import type { H3Event } from 'h3'
 import type { UserSession } from '#auth-utils'
 
-export async function fetchFromTwitchAPI<T>(endpoint: string, params: URLSearchParams): Promise<TwitchAPIResponse<T>> {
+export async function fetchFromTwitchAPI<T>(endpoint: string, params: URLSearchParams, token?: string): Promise<TwitchAPIResponse<T>> {
   try {
-    const token = await getTwitchToken()
+    if (!token) {
+      token = await getTwitchToken()
+    }
     const url = `https://api.twitch.tv/helix${endpoint}?${params}`
     const data = await $fetch<TwitchAPIResponse<T>>(url, {
       headers: {
@@ -44,7 +46,7 @@ async function getToken() {
 export async function refreshTwitchoAuthToken(event: H3Event) {
   const session = await getUserSession(event)
   if (!session.user) {
-    return
+    return null
   }
   if ((session.loggedInAt + (session.user.token.expires_in * 1000)) < Date.now()) {
     const body = new URLSearchParams()
@@ -84,6 +86,7 @@ export async function refreshTwitchoAuthToken(event: H3Event) {
       await clearUserSession(event)
     }
   }
+  return (await getUserSession(event)).user?.token
 }
 
 export const getFollowedChannels = defineCachedFunction(async (session: UserSession) => {

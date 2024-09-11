@@ -2,10 +2,11 @@ import type { H3Event } from 'h3'
 import { differenceInMinutes, sub } from 'date-fns'
 
 import { z } from 'zod'
+import type { UserSession } from '#auth-utils'
 
-export const getTopClipsFromChannel = defineCachedFunction(async (params: URLSearchParams) => {
+export const getTopClipsFromChannel = defineCachedFunction(async (params: URLSearchParams, user: UserSession) => {
   try {
-    const response = await fetchFromTwitchAPI<TwitchClip[]>('/clips', params)
+    const response = await fetchFromTwitchAPI<TwitchClip[]>('/clips', params, user.user?.token.access_token)
     return response.data.flat()
   }
   catch (error) {
@@ -35,7 +36,7 @@ export default defineCachedEventHandler(async (event) => {
   }
 
   const followedChannels = await getFollowedChannels(session)
-  let allClips = await getAllClipsFromFollowedChannels(followedChannels)
+  let allClips = await getAllClipsFromFollowedChannels(followedChannels, session)
   allClips = allClips.filter(clip => clip.view_count > 50)
 
   const maxMinutesSince = Math.max(...allClips.map(clip => differenceInMinutes(new Date(), new Date(clip.created_at))))
@@ -89,7 +90,7 @@ export default defineCachedEventHandler(async (event) => {
   },
 })
 
-async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[]) {
+async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[], user: UserSession) {
   const clipPromises = channels.map(async (channel) => {
     const params = new URLSearchParams()
     params.append('broadcaster_id', channel.broadcaster_id)
@@ -104,7 +105,7 @@ async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[]
     const startedAt = sub(now, { hours: 24 })
     startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
     params.append('started_at', startedAt.toISOString())
-    return getTopClipsFromChannel(params)
+    return getTopClipsFromChannel(params, user)
   })
 
   const clipsArrays = await Promise.all(clipPromises)

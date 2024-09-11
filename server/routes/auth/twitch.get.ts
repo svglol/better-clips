@@ -23,7 +23,7 @@ export default oauthTwitchEventHandler({
     return sendRedirect(event, '/')
   },
   onError(event, error) {
-    console.error('GitHub OAuth error:', error)
+    console.error('Discord OAuth error:', error)
     return sendRedirect(event, '/')
   },
 })
