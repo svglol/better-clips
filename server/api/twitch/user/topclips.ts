@@ -1,40 +1,21 @@
-import type { H3Event } from 'h3'
 import { differenceInMinutes, sub } from 'date-fns'
-
 import { z } from 'zod'
 import type { UserSession } from '#auth-utils'
-
-export const getTopClipsFromChannel = defineCachedFunction(async (params: URLSearchParams, user: UserSession) => {
-  try {
-    const response = await fetchFromTwitchAPI<TwitchClip[]>('/clips', params, user.user?.token.access_token)
-    return response.data.flat()
-  }
-  catch (error) {
-    console.error(`Error fetching clips for channel ${params}:`, error)
-    return []
-  }
-}, {
-  maxAge: 60 * 60,
-  name: 'top-clips-from-channel',
-  getKey: (params: URLSearchParams) => String(params),
-})
 
 const querySchema = z.object({
   page: z.string().default('1'),
   limit: z.string().default('50'),
 })
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const page = Number(query.page)
   const limit = Number(query.limit)
   await refreshTwitchoAuthToken(event)
   const session = await getUserSession(event)
-
   if (!session.user) {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
-
   const followedChannels = await getFollowedChannels(session)
   let allClips = await getAllClipsFromFollowedChannels(followedChannels, session)
   allClips = allClips.filter(clip => clip.view_count > 50)
@@ -80,14 +61,6 @@ export default defineCachedEventHandler(async (event) => {
     clips: paginatedClips,
     pagination: paginationMeta,
   }
-}, {
-  maxAge: 60 * 60,
-  name: 'topclips',
-  getKey: async (event: H3Event) => {
-    const session = await getUserSession(event)
-    const query = await getValidatedQuery(event, querySchema.parse)
-    return `${session.user?.id}-${query.limit}-${query.page}`
-  },
 })
 
 async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[], user: UserSession) {
@@ -105,7 +78,8 @@ async function getAllClipsFromFollowedChannels(channels: TwitchFollowedChannel[]
     const startedAt = sub(now, { hours: 24 })
     startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
     params.append('started_at', startedAt.toISOString())
-    return getTopClipsFromChannel(params, user)
+    const response = await fetchFromTwitchAPI<TwitchClip[]>('/clips', params, user.user?.token.access_token)
+    return response.data.flat()
   })
 
   const clipsArrays = await Promise.all(clipPromises)

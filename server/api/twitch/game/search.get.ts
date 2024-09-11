@@ -6,8 +6,9 @@ const querySchema = z.object({
   after: z.string().optional(),
 })
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
+  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams({
     first: query.first,
   })
@@ -17,5 +18,5 @@ export default defineCachedEventHandler(async (event) => {
   if (query.after) {
     params.append('after', query.after)
   }
-  return await fetchFromTwitchAPI<TwitchCategory>(`/search/categories`, params)
-}, { maxAge: 60 * 60 * 24 })
+  return await fetchFromTwitchAPI<TwitchCategory>(`/search/categories`, params, token?.access_token)
+})

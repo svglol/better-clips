@@ -1,12 +1,10 @@
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const username = getRouterParam(event, 'name')
   if (!username)
     return createError({ statusCode: 400, statusMessage: 'Missing username' })
+  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams({
     login: username,
   })
-  return await fetchFromTwitchAPI<TwitchUser>(`/users`, params)
-}, { maxAge: 60 * 60 * 24, name: 'channel', getKey: async (event) => {
-  const username = getRouterParam(event, 'name')
-  return username ?? ''
-} })
+  return await fetchFromTwitchAPI<TwitchUser>(`/users`, params, token?.access_token)
+})

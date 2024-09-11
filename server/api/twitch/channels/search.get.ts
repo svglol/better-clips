@@ -7,8 +7,9 @@ const querySchema = z.object({
   after: z.string().optional(),
 })
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
+  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams({
     first: query.first,
   })
@@ -22,7 +23,7 @@ export default defineCachedEventHandler(async (event) => {
     params.append('live_only', query.live_only)
   }
 
-  const data = await fetchFromTwitchAPI<TwitchChannel>(`/search/channels`, params)
+  const data = await fetchFromTwitchAPI<TwitchChannel>(`/search/channels`, params, token?.access_token)
   const queryLower = query.query?.toLowerCase() ?? ''
 
   const filteredData = data.data.filter(channel => channel.title !== '')
@@ -43,4 +44,4 @@ export default defineCachedEventHandler(async (event) => {
   })
 
   return { ...data, data: sortedData }
-}, { maxAge: 60 * 60 * 24 })
+})

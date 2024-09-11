@@ -24,6 +24,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatISO, roundToNearestMinutes } from 'date-fns'
+
 const route = useRoute('channel-name')
 
 const { name } = route.params
@@ -98,8 +100,15 @@ const cursor = ref<string | undefined>()
 const compiledClips = ref<TwitchClip[]>([])
 const channelID = computed(() => channel.value?.id)
 
-const startdate = computed(() => dateRange.value.start.toISOString())
-const enddate = computed(() => dateRange.value.end.toISOString())
+const startdate = computed(() => {
+  const rounded = roundToNearestMinutes(dateRange.value.start, { nearestTo: 30 })
+  return formatISO(rounded)
+})
+
+const enddate = computed(() => {
+  const rounded = roundToNearestMinutes(dateRange.value.end, { nearestTo: 30 })
+  return formatISO(rounded)
+})
 
 const { data, status } = await useAsyncData('fetchClips', () => $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips`, {
   params: { broadcaster_id: channelID.value, after: cursor.value, started_at: startdate.value, ended_at: enddate.value },
