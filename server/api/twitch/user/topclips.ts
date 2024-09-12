@@ -54,11 +54,11 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (channels: Tw
 
   return clips
 }, {
-  name: 'all-clips-from-followed-channels',
+  name: 'clips-from-followed-channels',
   maxAge: 60 * 60,
 })
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const page = Number(query.page)
   const limit = Number(query.limit)
@@ -90,4 +90,7 @@ export default defineEventHandler(async (event) => {
     clips: paginatedClips,
     pagination: paginationMeta,
   }
+}, {
+  maxAge: 60 * 60,
+  name: 'topclips',
 })

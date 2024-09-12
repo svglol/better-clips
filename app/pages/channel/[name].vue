@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 p-2">
+    {{ startdate }}  {{ enddate }}
     <ClipHeader v-model:date-range="dateRange">
       <div class="flex flex-row items-center gap-4">
         <NuxtLink :to="`https://twitch.tv/${channel?.login}`" target="_blank" class="flex-none transition-all hover:opacity-80">
@@ -99,14 +100,13 @@ if (route.query.clip) {
 const cursor = ref<string | undefined>()
 const compiledClips = ref<TwitchClip[]>([])
 const channelID = computed(() => channel.value?.id)
-
 const startdate = computed(() => {
-  const rounded = roundToNearestMinutes(dateRange.value.start, { nearestTo: 30 })
+  const rounded = roundToNearestMinutes(dateRange.value.start, { nearestTo: 15 })
   return formatISO(rounded)
 })
 
 const enddate = computed(() => {
-  const rounded = roundToNearestMinutes(dateRange.value.end, { nearestTo: 30 })
+  const rounded = roundToNearestMinutes(dateRange.value.end, { nearestTo: 15 })
   return formatISO(rounded)
 })
 

@@ -93,12 +93,12 @@ const compiledClips = ref<TwitchClip[]>([])
 const gameID = computed(() => category.value?.id)
 
 const startdate = computed(() => {
-  const rounded = roundToNearestMinutes(dateRange.value.start, { nearestTo: 30 })
+  const rounded = roundToNearestMinutes(dateRange.value.start, { nearestTo: 15 })
   return formatISO(rounded)
 })
 
 const enddate = computed(() => {
-  const rounded = roundToNearestMinutes(dateRange.value.end, { nearestTo: 30 })
+  const rounded = roundToNearestMinutes(dateRange.value.end, { nearestTo: 15 })
   return formatISO(rounded)
 })
 
