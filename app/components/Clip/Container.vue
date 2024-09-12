@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import { breakpointsTailwind } from '@vueuse/core'
-import { ModalClip } from '#components'
+import ModalClip from '~/components/Modal/Clip.vue'
 
 defineEmits<{
   (e: 'scrollEnd'): void
