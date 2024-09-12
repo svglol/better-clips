@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { differenceInMinutes, sub } from 'date-fns'
+import type { H3Event } from 'h3'
 import type { UserSession } from '#auth-utils'
 
 const querySchema = z.object({
@@ -7,7 +8,7 @@ const querySchema = z.object({
   limit: z.string().default('50'),
 })
 
-const getAllClipsFromFollowedChannels = defineCachedFunction(async (session: UserSession) => {
+const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   try {
     const channels = await getFollowedChannels(session)
     const clipPromises = channels.map(async (channel) => {
@@ -62,6 +63,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (session: Use
 }, {
   name: 'top-clips',
   maxAge: 60 * 60,
+  getKey: (event: H3Event, session: UserSession) => String(session.user?.id),
 })
 
 export default defineEventHandler(async (event) => {
@@ -73,7 +75,7 @@ export default defineEventHandler(async (event) => {
   if (!session.user) {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
-  const allClips = await getAllClipsFromFollowedChannels(session)
+  const allClips = await getAllClipsFromFollowedChannels(event, session)
 
   const totalClips = allClips.length
   const totalPages = Math.ceil(totalClips / limit)
