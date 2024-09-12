@@ -31,7 +31,7 @@
   </div>
 
   <transition name="fade">
-    <UButton v-show="showScrollToTop" icon="mdi:arrow-up" color="primary" class="fixed bottom-4 right-4 z-50 transition-colors duration-300" aria-label="Scroll to top" @click="scrollToTop" />
+    <UButton v-show="showScrollToTop" icon="mdi:arrow-up" color="primary" class="fixed bottom-4 right-4 z-50 transition-colors duration-300" aria-label="Scroll to top" size="xl" @click="scrollToTop" />
   </transition>
 </template>
 
