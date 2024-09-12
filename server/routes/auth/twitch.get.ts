@@ -15,7 +15,7 @@ export default oauthTwitchEventHandler({
         token: {
           access_token: tokens.access_token,
           refresh_token: tokens.refresh_token,
-          expires_in: tokens.expires_in,
+          expires_at: Date.now() + (tokens.expires_in * 1000),
         },
       },
       loggedInAt: Date.now(),

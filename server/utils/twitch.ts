@@ -3,7 +3,7 @@ import { hash } from 'ohash'
 import type { UserSession } from '#auth-utils'
 
 export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams) => {
-  const userToken = await refreshTwitchoAuthToken(event)
+  const userToken = await getUserToken(event)
   let token = userToken?.access_token
   try {
     if (!token) {
@@ -25,6 +25,7 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event,
 }, {
   maxAge: 60 * 60,
   name: 'twitch-api',
+  swr: false,
   getKey: (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString() }),
 })
 
@@ -50,50 +51,12 @@ async function getToken() {
   return data
 }
 
-export async function refreshTwitchoAuthToken(event: H3Event) {
+export async function getUserToken(event: H3Event) {
   const session = await getUserSession(event)
   if (!session.user) {
     return null
   }
-  if ((session.loggedInAt + (session.user.token.expires_in * 1000)) < Date.now()) {
-    const body = new URLSearchParams()
-    body.append('client_id', useRuntimeConfig().twitchClientId)
-    body.append('client_secret', useRuntimeConfig().twitchClientSecret)
-    body.append('refresh_token', session.user?.token.refresh_token ?? '')
-    body.append('grant_type', 'refresh_token')
-    try {
-      const data = await $fetch<{ access_token: string, refresh_token: string, expires_in: number }>('https://id.twitch.tv/oauth2/token', {
-        method: 'POST',
-        body: body.toString(),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      })
-      if (data && session.user) {
-        await setUserSession(event, {
-          user: {
-            id: session.user.id,
-            login: session.user.login,
-            profile_image_url: session.user.profile_image_url,
-            token: {
-              access_token: data.access_token,
-              refresh_token: data.refresh_token,
-              expires_in: data.expires_in,
-            },
-          },
-          loggedInAt: Date.now(),
-        })
-      }
-      else {
-        await clearUserSession(event)
-      }
-    }
-    catch (error) {
-      console.error('Error refreshing oAuth token:', error)
-      await clearUserSession(event)
-    }
-  }
-  return (await getUserSession(event)).user?.token
+  return session.user.token
 }
 
 export const getFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {

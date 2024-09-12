@@ -1,7 +1,6 @@
 import type { H3Event } from 'h3'
 
 export default defineCachedEventHandler(async (event) => {
-  await refreshTwitchoAuthToken(event)
   const session = await getUserSession(event)
 
   if (!session.user) {

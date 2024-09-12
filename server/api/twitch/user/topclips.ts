@@ -71,7 +71,6 @@ export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const page = Number(query.page)
   const limit = Number(query.limit)
-  await refreshTwitchoAuthToken(event)
   const session = await getUserSession(event)
   if (!session.user) {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })

@@ -6,13 +6,13 @@ declare module '#auth-utils' {
     token: {
       access_token: string
       refresh_token: string
-      expires_in: number
+      expires_at: number
     }
   }
-
   interface UserSession {
     loggedInAt: number
   }
+
 }
 
 export {}
