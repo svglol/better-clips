@@ -53,20 +53,13 @@ export default defineNuxtConfig({
   },
   nitro: {
     storage: {
-      // cache: {
-      //   driver: 'cloudflare-kv-binding',
-      //   binding: 'CACHE',
-      // },
       cache: {
-        driver: 'redis',
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-        password: process.env.REDIS_PASSWORD,
-        tls: true,
+        driver: 'cloudflare-kv-binding',
+        binding: 'CACHE',
       },
       data: {
         driver: 'cloudflare-kv-binding',
-        binding: 'CACHE',
+        binding: 'DATA',
       },
     },
     devStorage: {
