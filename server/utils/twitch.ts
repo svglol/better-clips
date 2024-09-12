@@ -2,7 +2,9 @@ import type { H3Event } from 'h3'
 import { hash } from 'ohash'
 import type { UserSession } from '#auth-utils'
 
-export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams, token?: string) => {
+export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams) => {
+  const userToken = await refreshTwitchoAuthToken(event)
+  let token = userToken?.access_token
   try {
     if (!token) {
       token = await getTwitchToken()

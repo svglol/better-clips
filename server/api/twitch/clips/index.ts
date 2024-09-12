@@ -17,7 +17,6 @@ const querySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
-  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams()
   if (query.broadcaster_id) {
     params.append('broadcaster_id', query.broadcaster_id)
@@ -35,5 +34,5 @@ export default defineEventHandler(async (event) => {
   if (query.ended_at) {
     params.append('ended_at', query.ended_at)
   }
-  return fetchFromTwitchAPI<TwitchClip[]>(event, '/clips', params, token?.access_token)
+  return fetchFromTwitchAPI<TwitchClip[]>(event, '/clips', params)
 })

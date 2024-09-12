@@ -14,7 +14,6 @@ const querySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
-  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams()
   if (query.id) {
     params.append('id', query.id)
@@ -25,5 +24,5 @@ export default defineEventHandler(async (event) => {
   if (query.igdb_id) {
     params.append('igdb_id', query.igdb_id)
   }
-  return await fetchFromTwitchAPI<TwitchGame>(event, `/games`, params, token?.access_token)
+  return await fetchFromTwitchAPI<TwitchGame>(event, `/games`, params)
 })

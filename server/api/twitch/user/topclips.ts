@@ -26,7 +26,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
       startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
       params.append('started_at', startedAt.toISOString())
 
-      const response = await fetchFromTwitchAPI<TwitchClip>(event, '/clips', params, session.user?.token.access_token)
+      const response = await fetchFromTwitchAPI<TwitchClip>(event, '/clips', params)
       return response.data
     })
     const clipsArrays = await Promise.all(clipPromises)

@@ -8,7 +8,6 @@ const querySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
-  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams({
     first: query.first,
   })
@@ -18,5 +17,5 @@ export default defineEventHandler(async (event) => {
   if (query.after) {
     params.append('after', query.after)
   }
-  return await fetchFromTwitchAPI<TwitchCategory>(event, `/search/categories`, params, token?.access_token)
+  return await fetchFromTwitchAPI<TwitchCategory>(event, `/search/categories`, params)
 })

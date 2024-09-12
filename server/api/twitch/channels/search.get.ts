@@ -9,7 +9,6 @@ const querySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
-  const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams({
     first: query.first,
   })
@@ -23,7 +22,7 @@ export default defineEventHandler(async (event) => {
     params.append('live_only', query.live_only)
   }
 
-  const data = await fetchFromTwitchAPI<TwitchChannel>(event, `/search/channels`, params, token?.access_token)
+  const data = await fetchFromTwitchAPI<TwitchChannel>(event, `/search/channels`, params)
   const queryLower = query.query?.toLowerCase() ?? ''
 
   const filteredData = data.data.filter(channel => channel.title !== '')
