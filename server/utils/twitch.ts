@@ -102,7 +102,7 @@ export const getFollowedChannels = defineCachedFunction(async (session: UserSess
   getKey: (session: UserSession) => String(session.user?.id) ?? '',
 })
 
-async function fetchFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
+export async function fetchFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
   const allChannels: TwitchFollowedChannel[] = []
   const params = new URLSearchParams()
   params.append('user_id', String(session.user?.id ?? ''))

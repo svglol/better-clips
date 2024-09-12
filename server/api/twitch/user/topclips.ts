@@ -8,7 +8,7 @@ const querySchema = z.object({
 })
 
 const getAllClipsFromFollowedChannels = defineCachedFunction(async (session: UserSession) => {
-  const channels = await getFollowedChannels(session)
+  const channels = await fetchFollowedChannels(session)
   const clipPromises = channels.map(async (channel) => {
     const params = new URLSearchParams()
     params.append('broadcaster_id', channel.broadcaster_id)
@@ -55,7 +55,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (session: Use
 
   return clips
 }, {
-  name: 'clips',
+  name: 'top-clips',
   maxAge: 60 * 60,
   getKey: (session: UserSession) => String(session.user?.id) ?? '',
 })
