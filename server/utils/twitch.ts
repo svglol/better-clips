@@ -1,6 +1,5 @@
 import type { H3Event } from 'h3'
 import { hash } from 'ohash'
-import { differenceInMinutes, sub } from 'date-fns'
 import type { UserSession } from '#auth-utils'
 
 export const fetchFromTwitchAPI = defineCachedFunction(async <T>(endpoint: string, params: URLSearchParams, token?: string) => {
@@ -135,56 +134,3 @@ export async function fetchFollowedChannels(session: UserSession, cursor?: strin
 
   return allChannels
 }
-
-export const getAllClipsFromFollowedChannels = defineCachedFunction(async (session: UserSession) => {
-  const channels = await getFollowedChannels(session)
-  const clipPromises = channels.map(async (channel) => {
-    const params = new URLSearchParams()
-    params.append('broadcaster_id', channel.broadcaster_id)
-    params.append('first', '5')
-
-    const now = new Date()
-    now.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
-
-    const endedAt = now.toISOString()
-    params.append('ended_at', endedAt)
-
-    const startedAt = sub(now, { hours: 24 })
-    startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
-    params.append('started_at', startedAt.toISOString())
-    const response = await fetchFromTwitchAPI<TwitchClip[]>('/clips', params, session.user?.token.access_token)
-    return response.data.flat()
-  })
-
-  const clipsArrays = await Promise.all(clipPromises)
-  let clips = clipsArrays.flat()
-  clips = clips.filter(clip => clip.view_count > 50)
-
-  const maxMinutesSince = Math.max(...clips.map(clip => differenceInMinutes(new Date(), new Date(clip.created_at))))
-  const weightViews = 0.4
-  const weightRecency = 0.6
-
-  const today = new Date()
-
-  clips = clips.sort((a, b) => {
-    const viewsA = Math.log10(a.view_count + 1)
-    const viewsB = Math.log10(b.view_count + 1)
-
-    const daysSinceA = differenceInMinutes(today, new Date(a.created_at))
-    const daysSinceB = differenceInMinutes(today, new Date(b.created_at))
-
-    const recencyA = daysSinceA === 0 ? 1 : (maxMinutesSince - daysSinceA) / maxMinutesSince
-    const recencyB = daysSinceB === 0 ? 1 : (maxMinutesSince - daysSinceB) / maxMinutesSince
-
-    const scoreA = (weightViews * viewsA) + (weightRecency * recencyA)
-    const scoreB = (weightViews * viewsB) + (weightRecency * recencyB)
-
-    return scoreB - scoreA
-  })
-
-  return clips.flat()
-}, {
-  name: 'top-clips',
-  maxAge: 60 * 60,
-  getKey: (session: UserSession) => String(session.user?.id) ?? '',
-})
