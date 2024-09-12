@@ -10,7 +10,7 @@ const querySchema = z.object({
 
 const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   try {
-    const channels = await getFollowedChannels(session)
+    const channels = await getFollowedChannels(event, session)
     const clipPromises = channels.map(async (channel) => {
       const params = new URLSearchParams()
       params.append('broadcaster_id', channel.broadcaster_id)
@@ -26,7 +26,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
       startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
       params.append('started_at', startedAt.toISOString())
 
-      const response = await fetchFromTwitchAPI<TwitchClip>('/clips', params, session.user?.token.access_token)
+      const response = await fetchFromTwitchAPI<TwitchClip>(event, '/clips', params, session.user?.token.access_token)
       return response.data
     })
     const clipsArrays = await Promise.all(clipPromises)

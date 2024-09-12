@@ -35,5 +35,5 @@ export default defineEventHandler(async (event) => {
   if (query.ended_at) {
     params.append('ended_at', query.ended_at)
   }
-  return fetchFromTwitchAPI<TwitchClip[]>('/clips', params, token?.access_token)
+  return fetchFromTwitchAPI<TwitchClip[]>(event, '/clips', params, token?.access_token)
 })

@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
   if (query.after) {
     params.append('after', query.after)
   }
-  return await fetchFromTwitchAPI<TwitchCategory>(`/search/categories`, params, token?.access_token)
+  return await fetchFromTwitchAPI<TwitchCategory>(event, `/search/categories`, params, token?.access_token)
 })

@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     params.append('live_only', query.live_only)
   }
 
-  const data = await fetchFromTwitchAPI<TwitchChannel>(`/search/channels`, params, token?.access_token)
+  const data = await fetchFromTwitchAPI<TwitchChannel>(event, `/search/channels`, params, token?.access_token)
   const queryLower = query.query?.toLowerCase() ?? ''
 
   const filteredData = data.data.filter(channel => channel.title !== '')

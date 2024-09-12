@@ -2,7 +2,7 @@ import type { H3Event } from 'h3'
 import { hash } from 'ohash'
 import type { UserSession } from '#auth-utils'
 
-export const fetchFromTwitchAPI = defineCachedFunction(async <T>(endpoint: string, params: URLSearchParams, token?: string) => {
+export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams, token?: string) => {
   try {
     if (!token) {
       token = await getTwitchToken()
@@ -23,7 +23,7 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(endpoint: strin
 }, {
   maxAge: 60 * 60,
   name: 'twitch-api',
-  getKey: (endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString() }),
+  getKey: (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString() }),
 })
 
 export async function getTwitchToken() {
@@ -94,12 +94,12 @@ export async function refreshTwitchoAuthToken(event: H3Event) {
   return (await getUserSession(event)).user?.token
 }
 
-export const getFollowedChannels = defineCachedFunction(async (session: UserSession) => {
+export const getFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   return fetchFollowedChannels(session)
 }, {
   maxAge: 60 * 60,
   name: 'followed-channels',
-  getKey: (session: UserSession) => String(session.user?.id) ?? '',
+  getKey: (event: H3Event, session: UserSession) => String(session.user?.id) ?? '',
 })
 
 export async function fetchFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {

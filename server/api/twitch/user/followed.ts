@@ -8,7 +8,7 @@ export default defineCachedEventHandler(async (event) => {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
 
-  const allChannels = await getFollowedChannels(session)
+  const allChannels = await getFollowedChannels(event, session)
   allChannels.push({
     broadcaster_id: String(session.user?.id ?? ''),
     broadcaster_name: session.user?.login ?? '',
@@ -27,7 +27,7 @@ export default defineCachedEventHandler(async (event) => {
       params.append('id', channel.broadcaster_id)
     })
 
-    const fetchPromise = fetchFromTwitchAPI<TwitchUser>(`/users`, params) as Promise<TwitchAPIResponse<TwitchUser>>
+    const fetchPromise = fetchFromTwitchAPI<TwitchUser>(event, `/users`, params) as Promise<TwitchAPIResponse<TwitchUser>>
     batchedRequests.push(fetchPromise)
   }
 

@@ -6,5 +6,5 @@ export default defineEventHandler(async (event) => {
   const token = await refreshTwitchoAuthToken(event)
   const params = new URLSearchParams({ id })
 
-  return fetchFromTwitchAPI<TwitchClip[]>('/clips', params, token?.access_token)
+  return fetchFromTwitchAPI<TwitchClip[]>(event, '/clips', params, token?.access_token)
 })

@@ -25,5 +25,5 @@ export default defineEventHandler(async (event) => {
   if (query.igdb_id) {
     params.append('igdb_id', query.igdb_id)
   }
-  return await fetchFromTwitchAPI<TwitchGame>(`/games`, params, token?.access_token)
+  return await fetchFromTwitchAPI<TwitchGame>(event, `/games`, params, token?.access_token)
 })
