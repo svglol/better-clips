@@ -7,7 +7,8 @@ const querySchema = z.object({
   limit: z.string().default('50'),
 })
 
-const getAllClipsFromFollowedChannels = defineCachedFunction(async (channels: TwitchFollowedChannel[], session: UserSession) => {
+const getAllClipsFromFollowedChannels = defineCachedFunction(async (session: UserSession) => {
+  const channels = await getFollowedChannels(session)
   const clipPromises = channels.map(async (channel) => {
     const params = new URLSearchParams()
     params.append('broadcaster_id', channel.broadcaster_id)
@@ -56,7 +57,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (channels: Tw
 }, {
   name: 'clips',
   maxAge: 60 * 60,
-  getKey: (channels: TwitchFollowedChannel[], session: UserSession) => String(session.user?.id) ?? '',
+  getKey: (session: UserSession) => String(session.user?.id) ?? '',
 })
 
 export default defineEventHandler(async (event) => {
@@ -68,8 +69,7 @@ export default defineEventHandler(async (event) => {
   if (!session.user) {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
-  const followedChannels = await getFollowedChannels(session)
-  const allClips = await getAllClipsFromFollowedChannels(followedChannels, session)
+  const allClips = await getAllClipsFromFollowedChannels(session)
 
   const totalClips = allClips.length
   const totalPages = Math.ceil(totalClips / limit)
