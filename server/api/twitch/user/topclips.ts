@@ -14,7 +14,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
     const clipPromises = channels.map(async (channel) => {
       const params = new URLSearchParams()
       params.append('broadcaster_id', channel.broadcaster_id)
-      params.append('first', '5')
+      params.append('first', '20')
 
       const now = new Date()
       now.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
