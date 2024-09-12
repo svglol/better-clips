@@ -56,7 +56,7 @@ export async function getUserToken(event: H3Event) {
   if (!session.user) {
     return null
   }
-  return session.user.token
+  return session.token
 }
 
 export const getFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
@@ -81,7 +81,7 @@ export async function fetchFollowedChannels(session: UserSession, cursor?: strin
       method: 'GET',
       headers: {
         'Client-ID': useRuntimeConfig().twitchClientId,
-        'Authorization': `Bearer ${session.user?.token.access_token}`,
+        'Authorization': `Bearer ${session.token.access_token}`,
       },
     })
 
