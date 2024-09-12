@@ -54,8 +54,9 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (channels: Tw
 
   return clips
 }, {
-  name: 'clips-from-followed-channels',
+  name: 'clips',
   maxAge: 60 * 60,
+  getKey: (channels: TwitchFollowedChannel[], session: UserSession) => String(session.user?.id) ?? '',
 })
 
 export default defineEventHandler(async (event) => {
