@@ -40,9 +40,9 @@
         <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" class="font-bold hover:underline">
           {{ clip?.broadcaster_name }}
         </NuxtLink> •
-        <Transition name="fade" mode="out-in">
-          <span v-if="loadingGame" class="animate-pulse rounded-md  bg-gray-100 px-2 text-gray-100 dark:bg-gray-800 dark:text-gray-800">loading.......</span>
-          <NuxtLink v-else :to="`/category/${game?.id}`" class="text-xs font-bold transition-all hover:underline">
+        <Transition name="fade">
+          <span v-if="loadingGame" class="absolute animate-pulse rounded-md  bg-gray-100 px-2 text-gray-100 dark:bg-gray-800 dark:text-gray-800">loading.......</span>
+          <NuxtLink v-else :to="`/category/${game?.id}`" class="absolute px-1 text-xs font-bold transition-all hover:underline">
             {{ game?.name }}
           </NuxtLink>
         </Transition>
