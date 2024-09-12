@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-col gap-4 p-2">
-    {{ startdate }}  {{ enddate }}
     <ClipHeader v-model:date-range="dateRange">
       <div class="flex flex-row items-center gap-4">
         <NuxtLink :to="`https://twitch.tv/${channel?.login}`" target="_blank" class="flex-none transition-all hover:opacity-80">
