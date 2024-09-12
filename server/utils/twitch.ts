@@ -27,12 +27,12 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(endpoint: strin
 })
 
 export async function getTwitchToken() {
-  const token = await useStorage('cache').getItem('twitchToken') as TwitchToken
+  const token = await useStorage('data').getItem('twitchToken') as TwitchToken
   if (token)
     return token.access_token
 
   const tokenData = await getToken()
-  await useStorage('cache').setItem('twitchToken', tokenData, { expires: tokenData.expires_in })
+  await useStorage('data').setItem('twitchToken', tokenData, { expires: tokenData.expires_in })
   return tokenData.access_token
 }
 

@@ -64,11 +64,19 @@ export default defineNuxtConfig({
         password: process.env.REDIS_PASSWORD,
         tls: true,
       },
+      data: {
+        driver: 'cloudflare-kv-binding',
+        binding: 'CACHE',
+      },
     },
     devStorage: {
       cache: {
         driver: 'fs',
         base: './.data/kv',
+      },
+      data: {
+        driver: 'fs',
+        base: './.data/',
       },
     },
   },
