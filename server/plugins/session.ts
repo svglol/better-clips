@@ -1,3 +1,5 @@
+import type { H3Event } from 'h3'
+
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hook('request', async (event) => {
     const session = await getUserSession(event)
@@ -5,7 +7,9 @@ export default defineNitroPlugin((nitro) => {
       const now = new Date()
       const expirationDate = new Date(session.token.expires_at)
 
-      if (expirationDate < now) {
+      const isValid = await validateToken(event, session.token.access_token)
+
+      if (!isValid || expirationDate < now) {
         const body = new URLSearchParams()
         body.append('client_id', useRuntimeConfig().twitchClientId)
         body.append('client_secret', useRuntimeConfig().twitchClientSecret)
@@ -40,3 +44,19 @@ export default defineNitroPlugin((nitro) => {
     }
   })
 })
+
+async function validateToken(event: H3Event, accessToken: string) {
+  try {
+    const response = await $fetch('https://id.twitch.tv/oauth2/validate', {
+      method: 'GET',
+      headers: {
+        Authorization: `OAuth ${accessToken}`,
+      },
+    })
+    return !!response
+  }
+  catch (error) {
+    console.error('Error validating token:', error)
+    return false
+  }
+}
