@@ -28,11 +28,9 @@
             </UButton>
           </UDropdown>
         </div>
-        <a v-else href="/auth/twitch">
-          <UButton icon="fa6-brands:twitch" color="purple">
-            Login
-          </UButton>
-        </a>
+        <UButton v-else icon="fa6-brands:twitch" color="purple" @click="login">
+          Login
+        </UButton>
       </AuthState>
     </div>
   </div>
@@ -42,6 +40,7 @@
 const { session, clear } = useUserSession()
 
 const mode = useColorMode()
+const route = useRoute()
 const isDark = computed({
   get() {
     return mode.value === 'dark'
@@ -50,6 +49,12 @@ const isDark = computed({
     mode.preference = mode.value === 'dark' ? 'light' : 'dark'
   },
 })
+
+function login() {
+  const callbackUrl = useCookie('callbackUrl', { maxAge: 60 })
+  callbackUrl.value = route.path
+  window.location.href = '/auth/twitch'
+}
 
 const items = computed(() => {
   return [

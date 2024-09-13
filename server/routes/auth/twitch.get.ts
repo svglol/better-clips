@@ -20,7 +20,9 @@ export default oauthTwitchEventHandler({
         expires_at: Date.now() + (tokens.expires_in * 1000),
       },
     })
-    return sendRedirect(event, '/')
+    const callbackUrl = getCookie(event, 'callbackUrl')
+    deleteCookie(event, 'callbackUrl')
+    return sendRedirect(event, callbackUrl ?? '/')
   },
   onError(event, error) {
     console.error('Discord OAuth error:', error)
