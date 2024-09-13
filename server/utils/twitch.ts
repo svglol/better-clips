@@ -60,14 +60,14 @@ export async function getUserToken(event: H3Event) {
 }
 
 export const getFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
-  return fetchFollowedChannels(session)
+  return fetchFollowedChannels(event, session)
 }, {
   maxAge: 60 * 60,
   name: 'followed-channels',
   getKey: (event: H3Event, session: UserSession) => String(session.user?.id) ?? '',
 })
 
-export async function fetchFollowedChannels(session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
+async function fetchFollowedChannels(event: H3Event, session: UserSession, cursor?: string): Promise<TwitchFollowedChannel[]> {
   const allChannels: TwitchFollowedChannel[] = []
   const params = new URLSearchParams()
   params.append('user_id', String(session.user?.id ?? ''))
@@ -77,18 +77,11 @@ export async function fetchFollowedChannels(session: UserSession, cursor?: strin
   }
 
   try {
-    const { data, pagination } = await $fetch<TwitchAPIResponse<TwitchFollowedChannel>>(`https://api.twitch.tv/helix/channels/followed?${params}`, {
-      method: 'GET',
-      headers: {
-        'Client-ID': useRuntimeConfig().twitchClientId,
-        'Authorization': `Bearer ${session.token.access_token}`,
-      },
-    })
-
+    const { data, pagination } = await fetchFromTwitchAPI<TwitchFollowedChannel>(event, `/channels/followed`, params)
     allChannels.push(...data)
 
     if (pagination?.cursor) {
-      const newChannels = await fetchFollowedChannels(session, pagination.cursor)
+      const newChannels = await fetchFollowedChannels(event, session, pagination.cursor)
       allChannels.push(...newChannels)
     }
   }
