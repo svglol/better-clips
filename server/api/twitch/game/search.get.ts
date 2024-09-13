@@ -6,7 +6,9 @@ const querySchema = z.object({
   after: z.string().optional(),
 })
 
-export default defineEventHandler(async (event) => {
+type QuerySchema = z.infer<typeof querySchema>
+
+export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const params = new URLSearchParams({
     first: query.first,

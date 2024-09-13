@@ -8,6 +8,8 @@ const querySchema = z.object({
   limit: z.string().default('50'),
 })
 
+type QuerySchema = z.infer<typeof querySchema>
+
 const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   try {
     const channels = await getFollowedChannels(event, session)
@@ -51,7 +53,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
   getKey: (event: H3Event, session: UserSession) => String(session.user?.id),
 })
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const page = Number(query.page)
   const limit = Number(query.limit)

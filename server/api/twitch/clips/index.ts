@@ -15,7 +15,9 @@ const querySchema = z.object({
   },
 )
 
-export default defineEventHandler(async (event) => {
+type QuerySchema = z.infer<typeof querySchema>
+
+export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const params = new URLSearchParams()
   if (query.broadcaster_id) {
