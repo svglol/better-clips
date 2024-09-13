@@ -22,19 +22,9 @@ export default defineNitroPlugin(() => {
           },
         })
         if (data && session.user) {
-          await replaceUserSession(event, {
-            user: {
-              id: session.user.id,
-              login: session.user.login,
-              profile_image_url: session.user.profile_image_url,
-            },
-            loggedInAt: session.loggedInAt,
-            token: {
-              access_token: data.access_token,
-              refresh_token: data.refresh_token,
-              expires_at: Date.now() + (data.expires_in * 1000),
-            },
-          })
+          session.token.expires_at = Date.now() + (data.expires_in * 1000)
+          session.token.refresh_token = data.refresh_token
+          session.token.access_token = data.access_token
         }
         else {
           await clearUserSession(event)
