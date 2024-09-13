@@ -8,43 +8,10 @@ const querySchema = z.object({
   limit: z.string().default('50'),
 })
 
-const getClipsInLastMonth = defineCachedFunction(async (event: H3Event, userId: string) => {
-  try {
-    const date = new Date()
-    date.setMonth(date.getMonth() - 1)
-    const params = new URLSearchParams()
-    params.append('broadcaster_id', userId)
-    params.append('started_at', date.toISOString())
-    params.append('ended_at', new Date().toISOString())
-    params.append('first', '1')
-    const clips = await fetchFromTwitchAPI<TwitchClip>(event, `/clips`, params)
-    if (clips.data.length > 0) {
-      return true
-    }
-    return false
-  }
-  catch (error) {
-    console.error('Error:', error)
-    return 'An error occurred while fetching data'
-  }
-}, {
-  maxAge: 60 * 60 * 24,
-  name: 'clip-in-last-month',
-  getKey: (event: H3Event, userId: string) => userId,
-})
-
 const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   try {
     const channels = await getFollowedChannels(event, session)
-    const channelsPromises = channels.map(async (channel) => {
-      const lastBroadcast = await getClipsInLastMonth(event, channel.broadcaster_id)
-      return {
-        ...channel,
-        broadcastInLastMonth: lastBroadcast,
-      }
-    })
-    const channelsLastMonth = (await Promise.all(channelsPromises)).filter(channel => channel.broadcastInLastMonth)
-    const clipPromises = channelsLastMonth.map(async (channel) => {
+    const clipPromises = channels.map(async (channel) => {
       const params = new URLSearchParams()
       params.append('broadcaster_id', channel.broadcaster_id)
       params.append('first', '20')
