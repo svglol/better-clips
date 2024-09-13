@@ -30,7 +30,6 @@ const getClipsInLastMonth = defineCachedFunction(async (event: H3Event, userId: 
 }, {
   maxAge: 60 * 60 * 24,
   name: 'clip-in-last-month',
-  swr: false,
   getKey: (event: H3Event, userId: string) => userId,
 })
 
