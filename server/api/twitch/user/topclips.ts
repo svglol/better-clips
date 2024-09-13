@@ -11,50 +11,34 @@ const querySchema = z.object({
 const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   try {
     const channels = await getFollowedChannels(event, session)
-    const clipPromises = channels.map(async (channel) => {
-      const params = new URLSearchParams()
-      params.append('broadcaster_id', channel.broadcaster_id)
-      params.append('first', '20')
 
-      const now = new Date()
-      now.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
-
-      const endedAt = now.toISOString()
-      params.append('ended_at', endedAt)
-
-      const startedAt = sub(now, { hours: 24 })
-      startedAt.setMinutes(now.getMinutes() >= 30 ? 30 : 0, 0, 0)
-      params.append('started_at', startedAt.toISOString())
+    const clips = await Promise.all(channels.map(async (channel) => {
+      const params = new URLSearchParams({
+        broadcaster_id: channel.broadcaster_id,
+        first: '20',
+        ended_at: new Date().toISOString(),
+        started_at: sub(new Date(), { hours: 24 }).toISOString(),
+      })
 
       const response = await fetchFromTwitchAPI<TwitchClip>(event, '/clips', params)
       return response.data
-    })
-    const clipsArrays = await Promise.all(clipPromises)
-    let clips = clipsArrays.flat()
-    clips = clips.filter(clip => clip.view_count > 50)
+    }))
 
-    const maxMinutesSince = Math.max(...clips.map(clip => differenceInMinutes(new Date(), new Date(clip.created_at))))
-    const weightViews = 0.4
-    const weightRecency = 0.6
+    const filteredClips = clips.flat().filter(clip => clip.view_count > 50)
 
     const today = new Date()
+    const maxMinutesSince = Math.max(...filteredClips.map(clip => differenceInMinutes(today, new Date(clip.created_at))))
 
-    clips = clips.sort((a, b) => {
-      const viewsA = Math.log10(a.view_count + 1)
-      const viewsB = Math.log10(b.view_count + 1)
+    const calculateScore = (clip: TwitchClip) => {
+      const views = Math.log10(clip.view_count + 1)
+      const daysSince = differenceInMinutes(today, new Date(clip.created_at))
+      const recency = daysSince === 0 ? 1 : (maxMinutesSince - daysSince) / maxMinutesSince
+      return (0.4 * views) + (0.6 * recency)
+    }
 
-      const daysSinceA = differenceInMinutes(today, new Date(a.created_at))
-      const daysSinceB = differenceInMinutes(today, new Date(b.created_at))
-
-      const recencyA = daysSinceA === 0 ? 1 : (maxMinutesSince - daysSinceA) / maxMinutesSince
-      const recencyB = daysSinceB === 0 ? 1 : (maxMinutesSince - daysSinceB) / maxMinutesSince
-
-      const scoreA = (weightViews * viewsA) + (weightRecency * recencyA)
-      const scoreB = (weightViews * viewsB) + (weightRecency * recencyB)
-
-      return scoreB - scoreA
+    return filteredClips.sort((a, b) => {
+      return calculateScore(b) - calculateScore(a)
     })
-    return clips
   }
   catch (error) {
     console.error('Error fetching clips:', error)
