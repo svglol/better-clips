@@ -13,7 +13,7 @@
       </div>
       <div class="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:items-center">
         <div class="flex max-w-full flex-col gap-1 overflow-hidden">
-          <span class="text-xs text-gray-500 dark:text-gray-400">{{ new Date(clip?.created_at ?? 0).toLocaleDateString() }}</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">{{ time }}</span>
           <h2 class="max-w-full truncate text-base font-semibold leading-tight">
             {{ clip?.title }}
           </h2>
@@ -49,6 +49,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatTimeAgo } from '@vueuse/core'
+
 const props = defineProps<{
   id: string
   clip?: TwitchClip
@@ -85,4 +87,20 @@ function startShare() {
 function formatNumberWithCommas(number: number): string {
   return new Intl.NumberFormat().format(number)
 }
+
+const time = computed(() => {
+  if (!clip.value?.created_at)
+    return ''
+
+  const createdDate = new Date(clip.value.created_at)
+  const now = new Date()
+  const hoursDiff = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60)
+
+  if (hoursDiff < 20) {
+    return formatTimeAgo(createdDate)
+  }
+  else {
+    return createdDate.toLocaleDateString()
+  }
+})
 </script>

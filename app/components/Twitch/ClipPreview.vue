@@ -26,7 +26,7 @@
             {{ formatNumberWithCommas(clip.view_count) }} views
           </span>
           <span class="absolute bottom-2 right-2 rounded bg-black bg-opacity-50 p-1 text-xs text-white">
-            {{ new Date(clip.created_at).toLocaleDateString() }}
+            {{ time }}
           </span>
         </div>
       </div>
@@ -58,6 +58,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatTimeAgo } from '@vueuse/core'
+
 const props = defineProps<{
   clip: TwitchClip
 }>()
@@ -123,6 +125,22 @@ onMounted(async () => {
       gameData.value.set(props.clip.game_id, game.value as TwitchGame)
       loadingGame.value = false
     }
+  }
+})
+
+const time = computed(() => {
+  if (!props.clip.created_at)
+    return ''
+
+  const createdDate = new Date(props.clip.created_at)
+  const now = new Date()
+  const hoursDiff = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60)
+
+  if (hoursDiff < 20) {
+    return formatTimeAgo(createdDate)
+  }
+  else {
+    return createdDate.toLocaleDateString()
   }
 })
 </script>
