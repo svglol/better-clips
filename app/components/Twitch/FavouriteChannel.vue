@@ -12,7 +12,7 @@
       />
 
       <template #content>
-        <UIcon v-if="channel?.broadcaster_type === 'partner'" name="pajamas:partner-verified" class="text-primary-500 dark:text-primary-400 text-sm" />
+        <UIcon v-if="isPartner" name="pajamas:partner-verified" class="text-primary-500 dark:text-primary-400 text-sm" />
       </template>
     </UChip>
     <span class="overflow-hidden text-ellipsis font-semibold text-gray-800 dark:text-gray-200">
@@ -26,8 +26,10 @@ const props = defineProps<{
   channel: TwitchUser
 }>()
 
+const isPartner = computed(() => props.channel?.broadcaster_type === 'partner')
+
 const ringStyle = computed(() => {
-  if (props.channel?.broadcaster_type === 'partner') {
+  if (isPartner.value) {
     return 'ring-2 ring-primary-500 dark:ring-primary-500'
   }
   else {
