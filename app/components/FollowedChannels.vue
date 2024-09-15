@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-const { data, status, execute } = await useLazyFetch<TwitchUser[]>('/api/twitch/user/followed', { immediate: false })
+const { data, status, execute } = await useLazyFetch<TwitchUser[]>('/api/twitch/user/followed', { server: false })
 onMounted(() => {
   execute()
 })

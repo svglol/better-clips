@@ -111,7 +111,7 @@ const enddate = computed(() => {
 
 const { data, status } = await useAsyncData('fetchClips', () => $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips`, {
   params: { broadcaster_id: channelID.value, after: cursor.value, started_at: startdate.value, ended_at: enddate.value },
-}), { watch: [dateRange, cursor, channelID], server: false })
+}), { watch: [dateRange, cursor, channelID], server: false, lazy: true })
 
 watch([dateRange], () => {
   compiledClips.value = []
