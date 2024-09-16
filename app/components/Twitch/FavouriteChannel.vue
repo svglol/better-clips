@@ -12,7 +12,7 @@
       />
 
       <template #content>
-        <UIcon name="pajamas:partner-verified" class="text-primary-500 dark:text-primary-400 text-sm" :class="isPartner ? 'block' : 'hidden'" />
+        <UIcon v-show="isPartner" name="pajamas:partner-verified" class="text-primary-500 dark:text-primary-400 text-sm" />
       </template>
     </UChip>
     <span class="overflow-hidden text-ellipsis font-semibold text-gray-800 dark:text-gray-200">
