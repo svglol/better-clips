@@ -7,7 +7,7 @@
         An improved experience for browsing Twitch clips
       </span>
       <div class="grid w-full max-w-screen-xl grid-cols-1 gap-8 lg:grid-cols-3">
-        <UISpotlightCard remove-padding>
+        <UISpotlightCard>
           <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
             <UIcon name="fa6-solid:fire" size="2xl" class="text-primary-500 dark:text-primary-400" />
             <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Trending Clips</span>
@@ -16,7 +16,7 @@
             </span>
           </div>
         </UISpotlightCard>
-        <UISpotlightCard remove-padding>
+        <UISpotlightCard>
           <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
             <UIcon name="fa6-solid:user-group" size="2xl" class="text-primary-500 dark:text-primary-400" />
             <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Personalized Feed</span>
@@ -25,7 +25,7 @@
             </span>
           </div>
         </UISpotlightCard>
-        <UISpotlightCard remove-padding>
+        <UISpotlightCard>
           <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
             <UIcon name="fa6-solid:magnifying-glass" size="2xl" class="text-primary-500 dark:text-primary-400" />
             <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Easy Discovery</span>
