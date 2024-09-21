@@ -41,5 +41,6 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: 60 * 60,
   name: 'followed',
+  swr: false,
   getKey: async (event: H3Event) => String((await getUserSession(event)).user?.id),
 })
