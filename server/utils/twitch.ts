@@ -80,12 +80,15 @@ export async function getUserToken(event: H3Event) {
 
     const isValid = await validateToken(event, session.token.access_token)
 
-    if (!isValid || expirationDate < now) {
+    if (isValid) {
+      return session.token
+    }
+    else if (!isValid || expirationDate < now) {
       const storage = useStorage('data')
       const isRefreshing = await storage.getItem(`isRefreshing:${session.user?.id}`) || false
 
       if (!isRefreshing) {
-        await storage.setItem(`isRefreshing:${session.user?.id}`, true)
+        await storage.setItem(`isRefreshing:${session.user?.id}`, true, { expires: 60 })
         try {
           const body = new URLSearchParams()
           body.append('client_id', useRuntimeConfig().twitchClientId)
@@ -115,17 +118,30 @@ export async function getUserToken(event: H3Event) {
         catch (error) {
           console.error('Error refreshing oAuth token:', error)
           await clearUserSession(event)
+          return null
         }
         finally {
-          await storage.setItem(`isRefreshing:${session.user?.id}`, false)
+          await storage.setItem(`isRefreshing:${session.user?.id}`, false, { expires: 60 })
         }
       }
       else {
-        while (await storage.getItem(`isRefreshing:${session.user?.id}`)) {
+        let retries = 0
+        const maxRetries = 100
+        while (await storage.getItem(`isRefreshing:${session.user?.id}`) && retries < maxRetries) {
           await new Promise(resolve => setTimeout(resolve, 100))
+          retries++
         }
+
+        if (retries >= maxRetries) {
+          await storage.removeItem(`isRefreshing:${session.user?.id}`)
+          throw new Error('Timeout: Unable to refresh the session.')
+        }
+
         const updatedSession = await getUserSession(event)
-        return updatedSession.token
+        if (updatedSession.token)
+          return updatedSession.token
+        else
+          return null
       }
     }
   }
