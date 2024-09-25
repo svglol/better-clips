@@ -1,4 +1,5 @@
 import type { H3Event } from 'h3'
+import { hash } from 'ohash'
 
 export default defineCachedEventHandler(async (event) => {
   const session = await getUserSession(event)
@@ -41,6 +42,5 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: 60 * 60,
   name: 'followed',
-  swr: false,
-  getKey: async (event: H3Event) => String((await getUserSession(event)).user?.id),
+  getKey: async (event: H3Event) => hash(String((await getUserSession(event)).user?.id)),
 })
