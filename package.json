@@ -35,7 +35,7 @@
     "@vue-macros/nuxt": "1.12.2",
     "@vue/test-utils": "2.4.6",
     "@vueuse/core": "11.1.0",
-    "@vueuse/nuxt": "11.0.3",
+    "@vueuse/nuxt": "11.1.0",
     "date-fns": "3.6.0",
     "eslint": "9.11.0",
     "eslint-plugin-tailwindcss": "3.17.4",
