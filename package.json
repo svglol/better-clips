@@ -26,7 +26,7 @@
     "@iconify-json/mdi": "1.2.0",
     "@iconify-json/pajamas": "1.2.1",
     "@iconify-json/uil": "1.2.0",
-    "@nuxt/devtools": "1.5.0",
+    "@nuxt/devtools": "1.5.1",
     "@nuxt/eslint": "0.5.7",
     "@nuxt/fonts": "0.8.0",
     "@nuxt/image": "1.8.0",
