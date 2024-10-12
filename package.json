@@ -19,7 +19,7 @@
     "@antfu/eslint-config": "3.7.3",
     "@commitlint/cli": "19.5.0",
     "@commitlint/config-conventional": "19.5.0",
-    "@iconify-json/fa6-brands": "1.2.0",
+    "@iconify-json/fa6-brands": "1.2.1",
     "@iconify-json/fa6-solid": "1.2.0",
     "@iconify-json/fluent-emoji-flat": "1.2.1",
     "@iconify-json/ic": "1.2.0",
