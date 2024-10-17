@@ -30,8 +30,8 @@ importers:
         specifier: 1.2.1
         version: 1.2.1
       '@iconify-json/mdi':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.1
+        version: 1.2.1
       '@iconify-json/pajamas':
         specifier: 1.2.2
         version: 1.2.2
@@ -1150,8 +1150,8 @@ packages:
   '@iconify-json/ic@1.2.1':
     resolution: {integrity: sha512-UjL/bjJP/T5EV881+hTzcfTKVo0KEUjhnMiJcLtPzNgPtU2KZZmRx8BSKKR61H4CN/5FTEbyawGyG0aEt3SwGQ==}
 
-  '@iconify-json/mdi@1.2.0':
-    resolution: {integrity: sha512-E9/3l5Syg3wfuarorFodhn4s8YorxhH3U3U20LaNBNiqw1kFNIDWhF6HymuzAD35k7RH0OBasJ+ZUyFtVVV6eg==}
+  '@iconify-json/mdi@1.2.1':
+    resolution: {integrity: sha512-dSkQU78gsZV6Yxnq78+LuX7jzeFC/5NAmz7O3rh558GimGFcwMVY/OtqRowIzjqJBmMmWZft7wkFV4TrwRXjlg==}
 
   '@iconify-json/pajamas@1.2.2':
     resolution: {integrity: sha512-F3BqRWsOvzlZWnIslF0p3EsF05okYB3SQn+MzaFfShYsomknSGH8zSoqTMkacxJAE0TVd2fDKkYyMTRFfcIP1g==}
@@ -7033,7 +7033,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/mdi@1.2.0':
+  '@iconify-json/mdi@1.2.1':
     dependencies:
       '@iconify/types': 2.0.0
 
