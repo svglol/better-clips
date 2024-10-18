@@ -90,8 +90,8 @@ importers:
         specifier: 0.3.9
         version: 0.3.9(magicast@0.3.5)(rollup@4.24.0)
       nuxt-time:
-        specifier: 0.1.3
-        version: 0.1.3(magicast@0.3.5)(rollup@4.24.0)
+        specifier: 1.0.2
+        version: 1.0.2(magicast@0.3.5)(nuxt@3.13.1(@parcel/watcher@2.4.1)(@types/node@22.7.4)(eslint@9.11.1(jiti@2.1.2))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.24.0)(stylelint@16.9.0(typescript@5.6.2))(terser@5.34.1)(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vue-tsc@2.1.6(typescript@5.6.2)))(rollup@4.24.0)
       playwright-core:
         specifier: 1.47.2
         version: 1.47.2
@@ -4479,8 +4479,10 @@ packages:
   nuxt-auth-utils@0.3.9:
     resolution: {integrity: sha512-uYA0iij0Oo/YyevM+plMVOWruS3STbbHJUfGNOwS/BPN9/QM+nJAeQxn2KECNGugJ8dEjh2+5jzC/hr37+6dPw==}
 
-  nuxt-time@0.1.3:
-    resolution: {integrity: sha512-Ie9KA4DfaebqDaTy+u49VVI8lHHjTlllEqdFgeQuvQItrkDaojXWKLwHfW7ju7tDJlpVIV9K6KpRXWPAWUq7Bw==}
+  nuxt-time@1.0.2:
+    resolution: {integrity: sha512-mSJq5W1Z5d9EhuV/cvaAhfhwwqqtqD3n9ClLQbM7F473ic0gBZnppTJsA7f20wfm8Sz+Q1dZHhfU7gqhQ9lbgg==}
+    peerDependencies:
+      nuxt: '>=3.12.0'
 
   nuxt@3.13.1:
     resolution: {integrity: sha512-En0vVrCJWu54ptShUlrqOGzXTcjhX+RnHShwdcpNqL9kmE9FWqeDYnPTgt2gJWrYSvVbmjJcVfEugNo9XpNmHA==}
@@ -11430,10 +11432,11 @@ snapshots:
       - supports-color
       - webpack-sources
 
-  nuxt-time@0.1.3(magicast@0.3.5)(rollup@4.24.0):
+  nuxt-time@1.0.2(magicast@0.3.5)(nuxt@3.13.1(@parcel/watcher@2.4.1)(@types/node@22.7.4)(eslint@9.11.1(jiti@2.1.2))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.24.0)(stylelint@16.9.0(typescript@5.6.2))(terser@5.34.1)(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vue-tsc@2.1.6(typescript@5.6.2)))(rollup@4.24.0):
     dependencies:
       '@nuxt/kit': 3.13.2(magicast@0.3.5)(rollup@4.24.0)
       defu: 6.1.4
+      nuxt: 3.13.1(@parcel/watcher@2.4.1)(@types/node@22.7.4)(eslint@9.11.1(jiti@2.1.2))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.24.0)(stylelint@16.9.0(typescript@5.6.2))(terser@5.34.1)(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vue-tsc@2.1.6(typescript@5.6.2))
       pathe: 1.1.2
     transitivePeerDependencies:
       - magicast
