@@ -32,7 +32,7 @@
     "@nuxt/image": "1.8.1",
     "@nuxt/test-utils": "3.14.2",
     "@nuxt/ui": "2.19.2",
-    "@vue-macros/nuxt": "1.12.8",
+    "@vue-macros/nuxt": "1.12.9",
     "@vue/test-utils": "2.4.6",
     "@vueuse/core": "11.2.0",
     "@vueuse/nuxt": "11.2.0",
