@@ -18,8 +18,8 @@ importers:
         specifier: 19.6.0
         version: 19.6.0
       '@iconify-json/fa6-brands':
-        specifier: 1.2.4
-        version: 1.2.4
+        specifier: 1.2.5
+        version: 1.2.5
       '@iconify-json/fa6-solid':
         specifier: 1.2.3
         version: 1.2.3
@@ -1153,8 +1153,8 @@ packages:
     resolution: {integrity: sha512-c7hNEllBlenFTHBky65mhq8WD2kbN9Q6gk0bTk8lSBvc554jpXSkST1iePudpt7+A/AQvuHs9EMqjHDXMY1lrA==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/fa6-brands@1.2.4':
-    resolution: {integrity: sha512-lYVGXWAfdLvWUeb1/sDY4ayP3RJQiZpI41K15WXM8mRnraym6nla7oa4neD91NU+t0fst0mi6KkIEjudW7B1Og==}
+  '@iconify-json/fa6-brands@1.2.5':
+    resolution: {integrity: sha512-U/iFfziz6jSN9zArOJZYTtoj2tQyh6MxPdI8M84DQ2kEulPaj8j+h9bqvjmzszNHmD7v+kmmKd/MLkMKk+3Zuw==}
 
   '@iconify-json/fa6-solid@1.2.3':
     resolution: {integrity: sha512-C5o8YJF+ekrS4wRb/6/0SE2KjRyJlCg++IOVC/fineiRinITivsmzFRNW1MQX2xfDZ1T7bxeKxLN6lcaTG3jGA==}
@@ -7407,7 +7407,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.1': {}
 
-  '@iconify-json/fa6-brands@1.2.4':
+  '@iconify-json/fa6-brands@1.2.5':
     dependencies:
       '@iconify/types': 2.0.0
 
