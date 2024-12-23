@@ -27,7 +27,7 @@
     "@iconify-json/pajamas": "1.2.4",
     "@iconify-json/uil": "1.2.3",
     "@nuxt/devtools": "1.6.1",
-    "@nuxt/eslint": "0.7.2",
+    "@nuxt/eslint": "0.7.4",
     "@nuxt/fonts": "0.10.3",
     "@nuxt/image": "1.8.1",
     "@nuxt/test-utils": "3.14.2",
