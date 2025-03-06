@@ -74,14 +74,14 @@ const validateToken = defineCachedFunction(async (event: H3Event, accessToken: s
 
 export async function getUserToken(event: H3Event) {
   const session = await getUserSession(event)
-  if (session.token) {
+  if (session.secure?.token) {
     const now = new Date()
-    const expirationDate = new Date(session.token.expires_at)
+    const expirationDate = new Date(session.secure.token.expires_at)
 
-    const isValid = await validateToken(event, session.token.access_token)
+    const isValid = await validateToken(event, session.secure.token.access_token)
 
     if (isValid) {
-      return session.token
+      return session.secure.token
     }
     else if (!isValid || expirationDate < now) {
       const storage = useStorage('data')
@@ -93,7 +93,7 @@ export async function getUserToken(event: H3Event) {
           const body = new URLSearchParams()
           body.append('client_id', useRuntimeConfig().twitchClientId)
           body.append('client_secret', useRuntimeConfig().twitchClientSecret)
-          body.append('refresh_token', session.token.refresh_token ?? '')
+          body.append('refresh_token', session.secure.token.refresh_token ?? '')
           body.append('grant_type', 'refresh_token')
 
           const data = await $fetch<{ access_token: string, refresh_token: string, expires_in: number }>('https://id.twitch.tv/oauth2/token', {
@@ -104,11 +104,18 @@ export async function getUserToken(event: H3Event) {
             },
           })
           if (data && session.user) {
-            session.token.expires_at = Date.now() + (data.expires_in * 1000)
-            session.token.refresh_token = data.refresh_token
-            session.token.access_token = data.access_token
-            await setUserSession(event, session)
-            return session.token
+            await setUserSession(event, {
+              user: session.user,
+              loggedInAt: Date.now(),
+              secure: {
+                token: {
+                  access_token: data.access_token,
+                  refresh_token: data.refresh_token,
+                  expires_at: Date.now() + (data.expires_in * 1000),
+                },
+              },
+            })
+            return session.secure.token
           }
           else {
             await clearUserSession(event)
@@ -138,8 +145,8 @@ export async function getUserToken(event: H3Event) {
         }
 
         const updatedSession = await getUserSession(event)
-        if (updatedSession.token)
-          return updatedSession.token
+        if (updatedSession.secure?.token)
+          return updatedSession.secure.token
         else
           return null
       }
@@ -156,6 +163,7 @@ export const getFollowedChannels = defineCachedFunction(async (event: H3Event, s
 }, {
   maxAge: 60 * 60,
   name: 'followed-channels',
+  swr: false,
   getKey: (event: H3Event, session: UserSession) => String(session.user?.id) ?? '',
 })
 

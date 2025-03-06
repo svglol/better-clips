@@ -5,7 +5,10 @@ declare module '#auth-utils' {
     profile_image_url: string
   }
   interface UserSession {
+    extended?: any
     loggedInAt: number
+  }
+  interface SecureSessionData {
     token: {
       access_token: string
       refresh_token: string

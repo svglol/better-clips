@@ -61,7 +61,7 @@ export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
   if (!session.user) {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
-  const allClips = await getAllClipsFromFollowedChannels(event, session)
+  const allClips = await getAllClipsFromFollowedChannels(event, session as UserSession)
 
   const totalClips = allClips.length
   const totalPages = Math.ceil(totalClips / limit)

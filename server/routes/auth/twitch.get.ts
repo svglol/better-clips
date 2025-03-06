@@ -1,4 +1,4 @@
-export default oauthTwitchEventHandler({
+export default defineOAuthTwitchEventHandler({
   config: {
     emailRequired: true,
     scope: ['user:read:email', 'user:read:follows'],
@@ -14,10 +14,12 @@ export default oauthTwitchEventHandler({
         profile_image_url: user.profile_image_url,
       },
       loggedInAt: Date.now(),
-      token: {
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token,
-        expires_at: Date.now() + (tokens.expires_in * 1000),
+      secure: {
+        token: {
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token,
+          expires_at: Date.now() + (tokens.expires_in * 1000),
+        },
       },
     }, { maxAge: 60 * 60 * 24 * 7 })
     const callbackUrl = getCookie(event, 'callbackUrl')

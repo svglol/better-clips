@@ -1,3 +1,4 @@
+import type { UserSession } from '#auth-utils'
 import type { H3Event } from 'h3'
 import { hash } from 'ohash'
 
@@ -8,7 +9,7 @@ export default defineCachedEventHandler(async (event) => {
     return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
 
-  const allChannels = await getFollowedChannels(event, session)
+  const allChannels = await getFollowedChannels(event, session as UserSession)
   allChannels.push({
     broadcaster_id: String(session.user?.id ?? ''),
     broadcaster_name: session.user?.login ?? '',
