@@ -90,7 +90,6 @@ export async function getUserToken(event: H3Event) {
     const expirationDate = new Date(session.secure.token.expires_at)
 
     const isValid = await validateToken(event, session.secure.token.access_token)
-
     if (isValid) {
       return session.secure.token
     }
@@ -172,7 +171,7 @@ export async function getUserToken(event: H3Event) {
 export const getFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   return fetchFollowedChannels(event, session)
 }, {
-  maxAge: 60 * 60,
+  maxAge: 1,
   name: 'followed-channels',
   swr: false,
   getKey: (event: H3Event, session: UserSession) => String(session.user?.id) ?? '',
