@@ -86,84 +86,52 @@ const validateToken = defineCachedFunction(async (event: H3Event, accessToken: s
 
 export async function getUserToken(event: H3Event) {
   const session = await getUserSession(event)
-  if (session.secure?.token) {
-    const now = new Date()
-    const expirationDate = new Date(session.secure.token.expires_at)
-
-    const isValid = await validateToken(event, session.secure.token.access_token)
-    if (isValid) {
-      return session.secure.token
-    }
-    else if (!isValid || expirationDate < now) {
-      const storage = useStorage('data')
-      const isRefreshing = await storage.getItem(`isRefreshing:${session.user?.id}`) || false
-
-      if (!isRefreshing) {
-        await storage.setItem(`isRefreshing:${session.user?.id}`, true, { expires: 60 })
-        try {
-          const body = new URLSearchParams()
-          body.append('client_id', useRuntimeConfig().twitchClientId)
-          body.append('client_secret', useRuntimeConfig().twitchClientSecret)
-          body.append('refresh_token', session.secure.token.refresh_token ?? '')
-          body.append('grant_type', 'refresh_token')
-
-          const data = await $fetch<{ access_token: string, refresh_token: string, expires_in: number }>('https://id.twitch.tv/oauth2/token', {
-            method: 'POST',
-            body: body.toString(),
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-          })
-          if (data && session.user) {
-            await setUserSession(event, {
-              user: session.user,
-              loggedInAt: Date.now(),
-              secure: {
-                token: {
-                  access_token: data.access_token,
-                  refresh_token: data.refresh_token,
-                  expires_at: Date.now() + (data.expires_in * 1000),
-                },
-              },
-            })
-            return session.secure.token
-          }
-          else {
-            await clearUserSession(event)
-            return null
-          }
-        }
-        catch (error) {
-          console.error('Error refreshing oAuth token:', error)
-          await clearUserSession(event)
-          return null
-        }
-        finally {
-          await storage.setItem(`isRefreshing:${session.user?.id}`, false, { expires: 60 })
-        }
-      }
-      else {
-        let retries = 0
-        const maxRetries = 100
-        while (await storage.getItem(`isRefreshing:${session.user?.id}`) && retries < maxRetries) {
-          await new Promise(resolve => setTimeout(resolve, 100))
-          retries++
-        }
-
-        if (retries >= maxRetries) {
-          await storage.removeItem(`isRefreshing:${session.user?.id}`)
-          throw new Error('Timeout: Unable to refresh the session.')
-        }
-
-        const updatedSession = await getUserSession(event)
-        if (updatedSession.secure?.token)
-          return updatedSession.secure.token
-        else
-          return null
-      }
-    }
+  if (!session.secure?.token) {
+    await clearUserSession(event)
+    return null
   }
-  else {
+
+  const now = new Date()
+  const expirationDate = new Date(session.secure.token.expires_at)
+
+  if (expirationDate > now) {
+    const isValid = await validateToken(event, session.secure.token.access_token)
+    if (isValid)
+      return session.secure.token
+  }
+
+  try {
+    const body = new URLSearchParams({
+      client_id: useRuntimeConfig().twitchClientId,
+      client_secret: useRuntimeConfig().twitchClientSecret,
+      refresh_token: session.secure.token.refresh_token ?? '',
+      grant_type: 'refresh_token',
+    })
+
+    const data = await $fetch<{ access_token: string, refresh_token: string, expires_in: number }>(
+      'https://id.twitch.tv/oauth2/token',
+      { method: 'POST', body: body.toString(), headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    )
+
+    if (!data || !session.user)
+      throw new Error('Failed to refresh token')
+
+    await setUserSession(event, {
+      user: session.user,
+      loggedInAt: Date.now(),
+      secure: {
+        token: {
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+          expires_at: Date.now() + data.expires_in * 1000,
+        },
+      },
+    })
+
+    return data
+  }
+  catch (error) {
+    console.error('Error refreshing oAuth token:', error)
     await clearUserSession(event)
     return null
   }
