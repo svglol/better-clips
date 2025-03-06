@@ -30,12 +30,23 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event,
 })
 
 export async function getTwitchToken() {
-  const token = await useStorage('data').getItem('twitchToken') as TwitchToken
-  if (token)
-    return token.access_token
+  const tokenData = await useStorage('data').getItem('twitchToken') as TwitchToken
+  const currentTime = Math.floor(Date.now() / 1000)
+  const isTokenValid = tokenData
+    && tokenData.expires_at
+    && currentTime < tokenData.expires_at
 
-  const tokenData = await getToken()
-  await useStorage('data').setItem('twitchToken', tokenData, { expires: tokenData.expires_in })
+  if (isTokenValid) {
+    return tokenData.access_token
+  }
+
+  const newTokenData = await getToken()
+  const expiresAt = Math.floor(Date.now() / 1000) + tokenData.expires_in
+  const tokenToStore = {
+    ...newTokenData,
+    expires_at: expiresAt,
+  }
+  await useStorage('data').setItem('twitchToken', tokenToStore, { expires: tokenData.expires_in })
   return tokenData.access_token
 }
 
