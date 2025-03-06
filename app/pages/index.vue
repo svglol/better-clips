@@ -127,7 +127,6 @@ if (route.query.clip) {
   const { data: clipData } = await useFetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips/${route.query.clip}`)
   const clip = clipData.value?.data?.[0]
   if (clip) {
-    const videoUrl = clip.thumbnail_url.replace('-preview-480x272.jpg', '.mp4')
     const iframeSrc = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=meta.tag&autoplay=true`
     const clipDescription = `Watch this clip from ${clip.broadcaster_name}: "${clip.title}". Better Clips🎬`
     useSeoMeta({
@@ -137,19 +136,12 @@ if (route.query.clip) {
       ogDescription: clipDescription,
       ogType: 'video.other',
       // @ts-expect-error type is wrong
-      ogVideo: videoUrl.endsWith('.mp4')
-        ? {
-            url: videoUrl,
-            type: 'video/mp4',
-            width: 1280,
-            height: 720,
-          }
-        : {
-            url: iframeSrc,
-            type: 'text/html',
-            width: 1280,
-            height: 720,
-          },
+      ogVideo: {
+        url: iframeSrc,
+        type: 'text/html',
+        width: 1280,
+        height: 720,
+      },
       ogImage: clip.thumbnail_url,
       ogSiteName: 'Better Clips🎬',
       twitterCard: 'player',

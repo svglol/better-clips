@@ -2,9 +2,7 @@
   <UModal :ui="{ width: 'm-0 sm:!max-w-[calc(100vw-12rem)] lg:!max-w-[calc(100vw-10vw)] 2xl:!max-w-[calc(100vw-30vw)] xl:m-20 h-auto', container: '!items-center !p-2' }">
     <div class="flex flex-col">
       <div class="aspect-w-16 aspect-h-9 relative w-full">
-        <video v-if="videoUrl?.endsWith('.mp4')" :src="videoUrl" controls class="absolute inset-0 size-full object-cover" autoplay />
         <iframe
-          v-else
           :src="iframeSrc"
           class="absolute inset-0 size-full"
           allowfullscreen
@@ -33,9 +31,6 @@
           </p>
         </div>
         <div class="flex flex-shrink-0 flex-row gap-2">
-          <UTooltip v-if="videoUrl?.endsWith('.mp4')" text="Download">
-            <UButton icon="i-heroicons-arrow-down-tray" color="primary" :to="videoUrl" target="_blank" size="sm" variant="ghost" />
-          </UTooltip>
           <UTooltip text="Share">
             <UButton icon="i-heroicons-share" color="primary" size="sm" variant="ghost" @click="startShare" />
           </UTooltip>
@@ -57,7 +52,6 @@ const props = defineProps<{
 }>()
 
 const clip = ref<TwitchClip | undefined>(props.clip)
-const videoUrl = computed(() => clip.value?.thumbnail_url.replace('-preview-480x272.jpg', '.mp4'))
 const iframeSrc = computed(() => {
   const { hostname } = new URL(window.location.href)
   return `https://clips.twitch.tv/embed?clip=${props.id}&parent=${hostname}&autoplay=true`
