@@ -48,7 +48,7 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
   }
 }, {
   name: 'top-clips',
-  maxAge: 1,
+  maxAge: 60 * 15,
   swr: false,
   getKey: (event: H3Event, session: UserSession) => String(session.user?.id),
 })

@@ -41,7 +41,7 @@ export default defineCachedEventHandler(async (event) => {
 
   return reorderedFetchedData
 }, {
-  maxAge: 1,
+  maxAge: 60,
   name: 'followed',
   swr: false,
   getKey: async (event: H3Event) => hash(String((await getUserSession(event)).user?.id)),

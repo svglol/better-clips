@@ -14,7 +14,7 @@ const querySchema = z.object({
 
 type QuerySchema = z.infer<typeof querySchema>
 
-export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
+export default defineCachedEventHandler<{ query: QuerySchema }>(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
   const params = new URLSearchParams()
   if (query.id) {
@@ -27,4 +27,6 @@ export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
     params.append('igdb_id', query.igdb_id)
   }
   return await fetchFromTwitchAPI<TwitchGame>(event, `/games`, params)
+}, {
+  maxAge: 60 * 60 * 24,
 })
