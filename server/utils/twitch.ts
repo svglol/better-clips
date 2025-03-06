@@ -26,7 +26,7 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event,
   maxAge: 60 * 60,
   name: 'twitch-api',
   swr: false,
-  getKey: (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString() }),
+  getKey: async (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString(), userSession: await getUserSession(event) }),
 })
 
 export async function getTwitchToken() {
