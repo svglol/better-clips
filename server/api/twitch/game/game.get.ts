@@ -1,3 +1,5 @@
+import type { H3Event } from 'h3'
+import { hash } from 'ohash'
 import { z } from 'zod'
 
 const querySchema = z.object({
@@ -29,4 +31,6 @@ export default defineCachedEventHandler<{ query: QuerySchema }>(async (event) =>
   return await fetchFromTwitchAPI<TwitchGame>(event, `/games`, params)
 }, {
   maxAge: 60 * 60 * 24,
+  name: 'twitch-game',
+  getKey: async (event: H3Event) => hash({ query: await getValidatedQuery(event, querySchema.parse), user: await getUserSession(event) }),
 })

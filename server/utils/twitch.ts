@@ -2,7 +2,7 @@ import type { UserSession } from '#auth-utils'
 import type { H3Event } from 'h3'
 import { hash } from 'ohash'
 
-export async function fetchFromTwitchAPI<T>(event: H3Event, endpoint: string, params: URLSearchParams) {
+export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams) => {
   const userToken = await getUserToken(event)
   let token = userToken?.access_token
   try {
@@ -20,9 +20,15 @@ export async function fetchFromTwitchAPI<T>(event: H3Event, endpoint: string, pa
   }
   catch (error) {
     console.error(`Error fetching from Twitch API: ${error}`)
-    return { data: [] }
+    return { data: [], success: false } as TwitchAPIResponse<T>
   }
-}
+}, {
+  maxAge: 60 * 15,
+  name: 'twitch-api',
+  swr: false,
+  getKey: async (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString(), token: { access_token: await getUserToken(event) ?? await getTwitchToken() } }),
+  shouldBypassCache: value => value.success === true,
+})
 
 export async function getTwitchToken() {
   const tokenData = await useStorage('data').getItem('twitchToken') as TwitchToken
@@ -36,12 +42,12 @@ export async function getTwitchToken() {
   }
 
   const newTokenData = await getToken()
-  const expiresAt = Math.floor(Date.now() / 1000) + tokenData.expires_in
+  const expiresAt = Math.floor(Date.now() / 1000) + newTokenData.expires_in
   const tokenToStore = {
     ...newTokenData,
     expires_at: expiresAt,
   }
-  await useStorage('data').setItem('twitchToken', tokenToStore, { expires: tokenData.expires_in })
+  await useStorage('data').setItem('twitchToken', tokenToStore, { expires: newTokenData.expires_in })
   return tokenData.access_token
 }
 
