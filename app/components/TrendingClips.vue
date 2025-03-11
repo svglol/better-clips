@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-col gap-2">
-    <ClipContainer v-model:clips="clips" v-model:status="status" title="" instance-id="top-clips" @scroll-end="onScrollEnd" />
+    <ClipContainer v-model:clips="clips" v-model:status="status" title="" instance-id="trending-clips" @scroll-end="onScrollEnd" />
   </div>
 </template>
 
 <script lang="ts" setup>
 const page = ref(1)
-const { data, status, execute } = await useLazyFetch<{ clips: TwitchClip[], pagination: { currentPage: number, totalPages: number, totalClips: number, limit: number, hasNextPage: boolean, hasPreviousPage: boolean } }>('/api/twitch/user/topclips', { params: { page }, server: false })
+const { data, status, execute } = await useLazyFetch<{ clips: TwitchClip[], pagination: { currentPage: number, totalPages: number, totalClips: number, limit: number, hasNextPage: boolean, hasPreviousPage: boolean } }>('/api/twitch/trending-clips', { params: { page }, server: false })
 
 const clips = ref<TwitchClip[]>([])
 

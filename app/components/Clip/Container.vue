@@ -39,6 +39,14 @@
 import { breakpointsTailwind } from '@vueuse/core'
 import ModalClip from '~/components/Modal/Clip.vue'
 
+const props = defineProps({
+  instanceId: {
+    type: String,
+    required: true,
+    default: '',
+  },
+})
+
 defineEmits<{
   (e: 'scrollEnd'): void
 }>()
@@ -69,7 +77,14 @@ const itemsPerRow = computed(() => {
 })
 const modal = useModal()
 
+const isActiveInstance = computed(() => {
+  return route.query.source === props.instanceId
+})
+
 watch(() => route.query, (newQuery, oldQuery) => {
+  if (!isActiveInstance.value)
+    return
+
   if (!route.query.clip) {
     modal.close()
   }
@@ -79,11 +94,14 @@ watch(() => route.query, (newQuery, oldQuery) => {
 })
 
 function openClip(id: string) {
-  const query = { ...route.query, clip: id }
+  const query = { ...route.query, clip: id, source: props.instanceId }
   router.push({ query })
 }
 
 function openModal() {
+  if (!isActiveInstance.value)
+    return
+
   modal.open(ModalClip, {
     id: String(route.query.clip),
     clip: clips.value.find(clip => clip.id === String(route.query.clip)),
@@ -102,7 +120,7 @@ function openModal() {
 }
 
 onMounted(() => {
-  if (route.query.clip) {
+  if (route.query.clip && isActiveInstance.value) {
     openModal()
   }
 })

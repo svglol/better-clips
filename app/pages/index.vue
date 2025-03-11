@@ -43,7 +43,7 @@
     </div>
   </div>
   <div v-else class="flex flex-col gap-6 px-2">
-    <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
+    <UHorizontalNavigation :links="links" class="max-w-[calc(100vw-2rem)] border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
     <UTabs
       v-model="selected"
       :items="tabs"
@@ -56,6 +56,9 @@
       }"
       class="w-full"
     >
+      <template #trending-clips>
+        <TrendingClips />
+      </template>
       <template #top-clips>
         <TopClips />
       </template>
@@ -78,16 +81,22 @@ const router = useRouter()
 
 const tabs = ref([
   {
-    slot: 'top-clips',
-    id: 'top-clips',
+    slot: 'trending-clips',
+    id: 'trending-clips',
     label: 'Trending Clips',
     icon: 'i-heroicons-fire',
+  },
+  {
+    slot: 'top-clips',
+    id: 'top-clips',
+    label: 'Personalized Feed',
+    icon: 'i-heroicons-sparkles',
   },
   {
     slot: 'followed-channels',
     id: 'followed-channels',
     label: 'Followed Channels',
-    icon: 'i-heroicons-user-group',
+    icon: 'i-heroicons-heart',
   },
 ])
 
