@@ -17,6 +17,7 @@ interface TwitchAPIResponse<T> {
   pagination?: {
     cursor: string
   }
+  success: boolean
 }
 
 interface TwitchToken {

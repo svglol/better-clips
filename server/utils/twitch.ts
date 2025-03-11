@@ -16,7 +16,7 @@ export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event,
         'Authorization': `Bearer ${token}`,
       },
     })
-    return data
+    return { ...data, success: true }
   }
   catch (error) {
     console.error(`Error fetching from Twitch API: ${error}`)
