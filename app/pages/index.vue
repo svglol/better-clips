@@ -1,11 +1,16 @@
 <template>
-  <div v-if="!loggedIn" class="relative -my-2 min-h-[calc(100vh-123px)]">
+  <div v-if="!loggedIn" class="-my-4 min-h-[calc(100vh-123px)]">
     <BackgroundGradient />
-    <div class="relative flex size-full flex-col items-center justify-center gap-16 px-2 py-16">
+    <div class="relative z-10 flex size-full flex-col items-center justify-center gap-16 px-2 py-16">
       <img src="/og.png" class="relative mx-auto size-32">
       <span class="text-center text-4xl font-semibold text-gray-900 dark:text-gray-200">
         An improved experience for browsing Twitch clips
       </span>
+      <a href="/auth/twitch">
+        <UButton icon="fa6-brands:twitch" color="purple" size="xl">
+          Login with Twitch
+        </UButton>
+      </a>
       <div class="grid w-full max-w-screen-xl grid-cols-1 gap-8 lg:grid-cols-3">
         <UISpotlightCard>
           <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
@@ -35,11 +40,6 @@
           </div>
         </UISpotlightCard>
       </div>
-      <a href="/auth/twitch">
-        <UButton icon="fa6-brands:twitch" color="purple" size="lg" class="px-8 py-4">
-          Login with Twitch
-        </UButton>
-      </a>
     </div>
   </div>
   <div v-else class="flex flex-col gap-6 px-2">
@@ -81,11 +81,13 @@ const tabs = ref([
     slot: 'top-clips',
     id: 'top-clips',
     label: 'Trending Clips',
+    icon: 'i-heroicons-fire',
   },
   {
     slot: 'followed-channels',
     id: 'followed-channels',
     label: 'Followed Channels',
+    icon: 'i-heroicons-user-group',
   },
 ])
 

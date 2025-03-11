@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center justify-between gap-4 bg-gray-100 px-2 py-4 shadow dark:bg-gray-900">
+  <div class="z-10 flex flex-row items-center justify-between gap-4 bg-gray-100 px-2 py-4 shadow dark:bg-gray-900">
     <NuxtLink to="/" class="flex flex-row items-center gap-2 text-xl text-black hover:opacity-80 dark:text-white">
       <UIcon name="fluent-emoji-flat:clapper-board" /><span class="hidden sm:inline-block">Better Clips</span>
     </NuxtLink>
@@ -84,8 +84,8 @@ const items = computed(() => {
 
 const isAppearanceTransition
   = typeof document !== 'undefined'
-  && document.startViewTransition
-  && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    && document.startViewTransition
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /**
  * Credit to [@hooray](https://github.com/hooray)
