@@ -25,6 +25,7 @@ const { data, status, execute } = useFetch<{
   }
 }>('/api/twitch/trending-clips', {
   params: { page },
+  lazy: true,
   server: false,
   immediate: false,
 })

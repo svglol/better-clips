@@ -13,7 +13,7 @@ const isActive = computed(() => {
   return route.query.tab === 'top-clips'
 })
 
-const { data, status, execute } = await useLazyFetch<{ clips: TwitchClip[], pagination: { currentPage: number, totalPages: number, totalClips: number, limit: number, hasNextPage: boolean, hasPreviousPage: boolean } }>('/api/twitch/user/topclips', { params: { page }, server: false, immediate: false })
+const { data, status, execute } = await useFetch<{ clips: TwitchClip[], pagination: { currentPage: number, totalPages: number, totalClips: number, limit: number, hasNextPage: boolean, hasPreviousPage: boolean } }>('/api/twitch/user/topclips', { params: { page }, server: false, immediate: false, lazy: true })
 
 const clips = ref<TwitchClip[]>([])
 

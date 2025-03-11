@@ -17,8 +17,18 @@
 </template>
 
 <script lang="ts" setup>
-const { data, status, execute } = await useLazyFetch<TwitchUser[]>('/api/twitch/user/followed', { server: false })
-onMounted(() => {
-  execute()
+const route = useRoute()
+const loaded = ref(false)
+const isActive = computed(() => {
+  return route.query.tab === 'followed-channels'
 })
+
+const { data, status, execute } = useFetch<TwitchUser[]>('/api/twitch/user/followed', { server: false, immediate: false, lazy: true })
+
+watch(isActive, (active) => {
+  if (active && !loaded.value) {
+    loaded.value = true
+    execute()
+  }
+}, { immediate: true })
 </script>
