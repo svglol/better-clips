@@ -13,20 +13,20 @@ type QuerySchema = z.infer<typeof querySchema>
 
 const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Event, session: UserSession) => {
   try {
-    let channels = await getFollowedChannels(event, session)
+    const channels = await getFollowedChannels(event, session)
 
-    // Filter out channels that have been ignored
-    const filteredChannels = await Promise.all(channels.map(async (channel) => {
-      const item = await useStorage('cache').getItem(`clips-ignore/${channel.broadcaster_id}`) as { value: boolean, expiresAt: number }
-      if (item && item.expiresAt && item.expiresAt > Date.now()) {
-        return null
-      }
-      if (item && item.expiresAt && item.expiresAt < Date.now()) {
-        await useStorage('cache').removeItem(`clips-ignore/${channel.broadcaster_id}`)
-      }
-      return channel
-    }))
-    channels = filteredChannels.filter(channel => channel !== null)
+    // // Filter out channels that have been ignored
+    // const filteredChannels = await Promise.all(channels.map(async (channel) => {
+    //   const item = await useStorage('cache').getItem(`clips-ignore/${channel.broadcaster_id}`) as { value: boolean, expiresAt: number }
+    //   if (item && item.expiresAt && item.expiresAt > Date.now()) {
+    //     return null
+    //   }
+    //   if (item && item.expiresAt && item.expiresAt < Date.now()) {
+    //     await useStorage('cache').removeItem(`clips-ignore/${channel.broadcaster_id}`)
+    //   }
+    //   return channel
+    // }))
+    // channels = filteredChannels.filter(channel => channel !== null)
 
     const now = new Date()
     const minutes = now.getMinutes()
@@ -50,14 +50,14 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
       ),
     )
 
-    // if channel has no clips - add to kv cache to ignore it for 3 hours to speed up processing and reduce api calls
-    const empty = clips.filter(clip => clip.clips.length === 0)
-    for (const clip of empty) {
-      await useStorage('cache').setItem(`clips-ignore/${clip.id}`, {
-        value: true,
-        expiresAt: Date.now() + (10800 * 1000),
-      })
-    }
+    // // if channel has no clips - add to kv cache to ignore it for 3 hours to speed up processing and reduce api calls
+    // const empty = clips.filter(clip => clip.clips.length === 0)
+    // for (const clip of empty) {
+    //   await useStorage('cache').setItem(`clips-ignore/${clip.id}`, {
+    //     value: true,
+    //     expiresAt: Date.now() + (10800 * 1000),
+    //   })
+    // }
 
     const filteredClips = clips.flatMap(channel => channel.clips).filter(clip => clip.view_count > 50)
 
