@@ -5,14 +5,38 @@
 </template>
 
 <script lang="ts" setup>
+const route = useRoute()
 const page = ref(1)
-const { data, status, execute } = await useLazyFetch<{ clips: TwitchClip[], pagination: { currentPage: number, totalPages: number, totalClips: number, limit: number, hasNextPage: boolean, hasPreviousPage: boolean } }>('/api/twitch/trending-clips', { params: { page }, server: false })
+const loaded = ref(false)
+
+const isActive = computed(() => {
+  return !route.query.tab || route.query.tab === 'trending-clips'
+})
+
+const { data, status, execute } = useFetch<{
+  clips: TwitchClip[]
+  pagination: {
+    currentPage: number
+    totalPages: number
+    totalClips: number
+    limit: number
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+  }
+}>('/api/twitch/trending-clips', {
+  params: { page },
+  server: false,
+  immediate: false,
+})
 
 const clips = ref<TwitchClip[]>([])
 
-onMounted(() => {
-  execute()
-})
+watch(isActive, (active) => {
+  if (active && !loaded.value) {
+    loaded.value = true
+    execute()
+  }
+}, { immediate: true })
 
 const loadedImages = useState<string[]>('loadedImages', () => [])
 
