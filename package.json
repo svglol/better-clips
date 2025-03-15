@@ -40,7 +40,7 @@
     "eslint": "9.22.0",
     "eslint-plugin-tailwindcss": "3.18.0",
     "happy-dom": "15.11.7",
-    "lint-staged": "15.4.3",
+    "lint-staged": "15.5.0",
     "nuxt": "3.13.1",
     "nuxt-auth-utils": "0.5.16",
     "nuxt-time": "0.1.3",
