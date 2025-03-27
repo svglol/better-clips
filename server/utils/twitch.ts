@@ -2,32 +2,25 @@ import type { UserSession } from '#auth-utils'
 import type { H3Event } from 'h3'
 import { hash } from 'ohash'
 
-export const fetchFromTwitchAPI = defineCachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams) => {
+export const fetchFromTwitchAPI = cachedFunction(async <T>(event: H3Event, endpoint: string, params: URLSearchParams) => {
   const userToken = await getUserToken(event)
   let token = userToken?.access_token
-  try {
-    if (!token) {
-      token = await getTwitchToken()
-    }
-    const url = `https://api.twitch.tv/helix${endpoint}?${params}`
-    const data = await $fetch<TwitchAPIResponse<T>>(url, {
-      headers: {
-        'Client-ID': useRuntimeConfig().twitchClientId,
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-    return { ...data, success: true }
+  if (!token) {
+    token = await getTwitchToken()
   }
-  catch (error) {
-    console.error(`Error fetching from Twitch API: ${error}`)
-    return { data: [], success: false } as TwitchAPIResponse<T>
-  }
+  const url = `https://api.twitch.tv/helix${endpoint}?${params}`
+  const data = await $fetch<TwitchAPIResponse<T>>(url, {
+    headers: {
+      'Client-ID': useRuntimeConfig().twitchClientId,
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  return { ...data, success: true }
 }, {
   maxAge: 60 * 15,
   name: 'twitch-api',
   swr: false,
   getKey: async (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString(), token: { access_token: await getUserToken(event) ?? await getTwitchToken() } }),
-  shouldBypassCache: value => value.success === true,
 })
 
 export async function getTwitchToken() {
@@ -156,7 +149,11 @@ async function fetchFollowedChannels(event: H3Event, session: UserSession, curso
   }
 
   try {
-    const { data, pagination } = await fetchFromTwitchAPI<TwitchFollowedChannel>(event, `/channels/followed`, params)
+    const response = await fetchFromTwitchAPI<TwitchFollowedChannel>(event, `/channels/followed`, params)
+    if (!response) {
+      throw new Error('Failed to fetch followed channels')
+    }
+    const { data, pagination } = response
     allChannels.push(...data)
 
     if (pagination?.cursor) {

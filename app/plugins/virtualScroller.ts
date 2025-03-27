@@ -1,6 +1,6 @@
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 // @ts-expect-error types are missing
 import { DynamicScroller, DynamicScrollerItem, RecycleScroller } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('RecycleScroller', RecycleScroller)

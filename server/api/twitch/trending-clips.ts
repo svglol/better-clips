@@ -21,7 +21,7 @@ const getTrendingClipsFromTwitch = defineCachedFunction(async (event: H3Event) =
     const limit = pLimit(25)
 
     const clips = await Promise.all(
-      games.data.map(game =>
+      (games?.data ?? []).map(game =>
         limit(async () => {
           const params = new URLSearchParams({
             game_id: game.id,
@@ -32,8 +32,8 @@ const getTrendingClipsFromTwitch = defineCachedFunction(async (event: H3Event) =
           const response = await fetchFromTwitchAPI<TwitchClip>(event, '/clips', params)
           return {
             id: game.id,
-            clips: response.data,
-            success: response.success,
+            clips: response?.data ?? [],
+            success: response?.success ?? false,
           }
         }),
       ),

@@ -64,8 +64,7 @@ export default defineNuxtConfig({
     },
     devStorage: {
       cache: {
-        driver: 'fs',
-        base: './.data/kv',
+        driver: 'null',
       },
       data: {
         driver: 'fs',

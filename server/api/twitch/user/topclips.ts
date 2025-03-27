@@ -52,8 +52,8 @@ const getAllClipsFromFollowedChannels = defineCachedFunction(async (event: H3Eve
           const response = await fetchFromTwitchAPI<TwitchClip>(event, '/clips', params)
           return {
             id: channel.broadcaster_id,
-            clips: response.data,
-            success: response.success,
+            clips: response?.data ?? [],
+            success: response?.success ?? false,
           }
         }),
       ),

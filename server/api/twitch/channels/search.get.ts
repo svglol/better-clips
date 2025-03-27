@@ -27,7 +27,7 @@ export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
   const data = await fetchFromTwitchAPI<TwitchChannel>(event, `/search/channels`, params)
   const queryLower = query.query?.toLowerCase() ?? ''
 
-  const filteredData = data.data.filter(channel => channel.title !== '')
+  const filteredData = data?.data.filter(channel => channel.title !== '') ?? []
 
   const sortedData = filteredData.sort((a, b) => {
     const aName = a.display_name.toLowerCase()
