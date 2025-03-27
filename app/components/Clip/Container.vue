@@ -20,13 +20,21 @@
           </DynamicScrollerItem>
         </template>
         <template #after>
-          <UILoading v-if="status === 'pending'" />
+          <div v-if="status === 'pending' && clips.length === 0" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+            <TwitchClipSkeleton v-for="i in 24" :key="i" />
+          </div>
+          <UILoading v-else-if="status === 'pending'" />
           <div v-else-if="clips.length === 0" class="py-auto my-auto flex size-full flex-col items-center justify-center">
             <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-9xl" />
             <span class="text-2xl text-gray-500 dark:text-gray-400">No clips found!</span>
           </div>
         </template>
       </DynamicScroller>
+      <template #fallback>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <TwitchClipSkeleton v-for="i in 24" :key="i" />
+        </div>
+      </template>
     </ClientOnly>
   </div>
 

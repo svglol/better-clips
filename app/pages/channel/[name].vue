@@ -19,7 +19,7 @@
         </div>
       </div>
     </ClipHeader>
-    <ClipContainer v-model:clips="compiledClips" v-model:status="status" :title="channel?.display_name" @scroll-end="onScrollEnd" />
+    <ClipContainer v-model:clips="compiledClips" v-model:status="status" :title="channel?.display_name" :instance-id="channel?.id" @scroll-end="onScrollEnd" />
   </div>
 </template>
 
@@ -30,7 +30,7 @@ const route = useRoute('channel-name')
 
 const { name } = route.params
 
-const dateRange = ref<DateRange>({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() })
+const dateRange = useState<DateRange>(`dateRange-${useId()}`, () => ({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() }))
 
 const { data: channelData, error } = await useFetch<TwitchAPIResponse<TwitchUser>>(`/api/twitch/channels/${name}`)
 if (error.value || !channelData.value || !channelData.value.data || channelData.value.data.length === 0) {

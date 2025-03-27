@@ -12,7 +12,7 @@
         </div>
       </div>
     </ClipHeader>
-    <ClipContainer v-model:clips="compiledClips" v-model:status="status" :title="category?.name" @scroll-end="onScrollEnd" />
+    <ClipContainer v-model:clips="compiledClips" v-model:status="status" :title="category?.name" :instance-id="category?.id" @scroll-end="onScrollEnd" />
   </div>
 </template>
 
@@ -23,7 +23,7 @@ const route = useRoute('category-id')
 
 const { id } = route.params
 
-const dateRange = ref<DateRange>({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() })
+const dateRange = useState<DateRange>(`dateRange-${useId()}`, () => ({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() }))
 
 const { data: categoryData, error } = await useFetch<TwitchAPIResponse<TwitchCategory>>(`/api/twitch/game/game`, { query: { id } })
 if (error.value || !categoryData.value || !categoryData.value.data || categoryData.value.data.length === 0) {
