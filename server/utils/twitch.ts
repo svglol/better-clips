@@ -6,7 +6,7 @@ export const fetchFromTwitchAPI = cachedFunction(async <T>(event: H3Event, endpo
   const userToken = await getUserToken(event)
   let token = userToken?.access_token
   if (!token) {
-    token = await getTwitchToken()
+    token = await getTwitchToken(event)
   }
   const url = `https://api.twitch.tv/helix${endpoint}?${params}`
   const data = await $fetch<TwitchAPIResponse<T>>(url, {
@@ -20,17 +20,38 @@ export const fetchFromTwitchAPI = cachedFunction(async <T>(event: H3Event, endpo
   maxAge: 60 * 15,
   name: 'twitch-api',
   swr: false,
-  getKey: async (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString(), token: { access_token: await getUserToken(event) ?? await getTwitchToken() } }),
+  getKey: async (event: H3Event, endpoint: string, params: URLSearchParams) => hash({ endpoint, params: params.toString(), token: { access_token: await getUserToken(event) ?? await getTwitchToken(event) } }),
 })
 
-export async function getTwitchToken() {
+const validateToken = defineCachedFunction(async (event: H3Event, accessToken: string) => {
+  try {
+    const response = await $fetch('https://id.twitch.tv/oauth2/validate', {
+      method: 'GET',
+      headers: {
+        Authorization: `OAuth ${accessToken}`,
+      },
+    })
+    return !!response
+  }
+  catch (error) {
+    console.error('Error validating token:', error)
+    return false
+  }
+}, {
+  maxAge: 60 * 60,
+  swr: false,
+  name: 'validate-token',
+  getKey: (event: H3Event, accessToken: string) => hash(accessToken),
+})
+
+export async function getTwitchToken(event: H3Event) {
   const tokenData = await useStorage('data').getItem('twitchToken') as TwitchToken
   const currentTime = Math.floor(Date.now() / 1000)
   const isTokenValid = tokenData
     && tokenData.expires_at
     && currentTime < tokenData.expires_at
 
-  if (isTokenValid) {
+  if (isTokenValid && await validateToken(event, tokenData.access_token)) {
     return tokenData.access_token
   }
 
@@ -55,27 +76,6 @@ async function getToken() {
 
   return data
 }
-
-const validateToken = defineCachedFunction(async (event: H3Event, accessToken: string) => {
-  try {
-    const response = await $fetch('https://id.twitch.tv/oauth2/validate', {
-      method: 'GET',
-      headers: {
-        Authorization: `OAuth ${accessToken}`,
-      },
-    })
-    return !!response
-  }
-  catch (error) {
-    console.error('Error validating token:', error)
-    return false
-  }
-}, {
-  maxAge: 60,
-  swr: false,
-  name: 'validate-token',
-  getKey: (event: H3Event, accessToken: string) => hash(accessToken),
-})
 
 export async function getUserToken(event: H3Event) {
   const session = await getUserSession(event)
