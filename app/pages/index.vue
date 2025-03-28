@@ -7,7 +7,7 @@
         <span class="text-center text-4xl font-semibold text-(--ui-text-highlighted)">
           An improved experience for browsing Twitch clips
         </span>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex md:flex-row flex-col gap-2 items-center">
           <a href="/auth/twitch">
             <UButton icon="fa6-brands:twitch" color="primary" size="xl">
               Login with Twitch
