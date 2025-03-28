@@ -52,16 +52,16 @@
       <UNavigationMenu :items="links" highlight highlight-color="primary" variant="link" class="max-w-[calc(100vw-2rem)] border-b border-(--ui-border) justify-center" />
       <UTabs v-model="selected" :items="tabs" variant="link" class="w-full gap-4" :ui="{ trigger: 'flex-1', list: 'hidden' }">
         <template #search>
-          <Search />
+          <LazySearch hydrate-on-visible />
         </template>
         <template #trending-clips>
-          <TrendingClips />
+          <LazyTrendingClips hydrate-on-visible />
         </template>
         <template #top-clips>
-          <TopClips />
+          <LazyTopClips hydrate-on-visible />
         </template>
         <template #followed-channels>
-          <FollowedChannels />
+          <LazyFollowedChannels hydrate-on-visible />
         </template>
       </UTabs>
     </div>
