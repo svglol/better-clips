@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-interface VisitedPage {
+export interface VisitedPage {
   path: string
   timestamp: number
   title?: string
