@@ -1,36 +1,37 @@
 <template>
-  <div class="border-(--ui-border-accented) flex flex-row rounded-md border shadow-sm md:w-96">
-    <UInput v-model="searchQuery" placeholder="Search" :ui="{ base: 'rounded-l-md rounded-r-none' }" class="flex-1" variant="none" @keydown.enter="search">
-      <template #leading>
-        <UIcon name="i-heroicons-magnifying-glass-20-solid" />
+  <div class="border-(--ui-border) flex flex-row rounded-md border shadow-sm md:w-96">
+    <UPopover v-model:open="isOpen" :content="{ side: 'bottom', align: 'center', sideOffset: -32 }" :ui="{ content: '!animate-none' }">
+      <UButtonGroup class="w-full">
+        <UInput placeholder="Search" class="flex-1" variant="none" @keydown.enter="search">
+          <template #leading>
+            <UIcon name="i-heroicons-magnifying-glass-20-solid" class="text-(--ui-text-dimmed) size-5" />
+          </template>
+        </UInput>
+        <UButton
+          icon="i-heroicons-magnifying-glass-20-solid"
+          variant="soft"
+          aria-label="Search"
+          color="primary"
+        />
+      </UButtonGroup>
+      <template #content>
+        <UCommandPalette
+          v-model:search-term="searchQuery"
+          icon="i-heroicons-magnifying-glass-20-solid"
+          placeholder="Search"
+          :loading="status === 'pending'"
+          :groups="groups"
+          class="md:w-96"
+          :ui="{ input: '[&>input]:h-8' }"
+          :close="{
+            color: 'primary',
+            variant: 'link',
+          }"
+          @update:model-value="onSelect"
+        />
       </template>
-    </UInput>
-    <!-- <UTooltip text="Search" :shortcuts="['meta', 'K']"> -->
-    <UButton
-      :ui="{ base: 'rounded-r-md rounded-l-none' }"
-      icon="i-heroicons-magnifying-glass-20-solid"
-      variant="soft"
-      aria-label="Search"
-      color="primary"
-      @click="search"
-    />
-    <!-- </UTooltip> -->
+    </UPopover>
   </div>
-  <UModal v-model:open="isOpen">
-    <template #content>
-      <UCommandPalette
-        ref="commandPalette"
-        v-model:search-term="searchQuery"
-        :loading="status === 'pending'"
-        :groups="groups"
-        @update:model-value="onSelect"
-      >
-        <template #empty>
-          <div />
-        </template>
-      </UCommandPalette>
-    </template>
-  </UModal>
 </template>
 
 <script lang="ts" setup>
@@ -40,7 +41,6 @@ const { disableShortcut } = definePropsRefs<{
 
 const searchQuery = ref('')
 const isOpen = ref(false)
-const commandPalette = ref()
 const route = useRoute()
 
 watch(() => route.path, () => {
