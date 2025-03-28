@@ -21,11 +21,12 @@
           placeholder="Search"
           :loading="status === 'pending'"
           :groups="groups"
-          class="md:w-96"
-          :ui="{ input: '[&>input]:h-8' }"
+          class="md:w-96 w-full"
+          :ui="{ input: '[&>input]:h-8 [&>span]:pe-0 bg-(--ui-bg-elevated)/50' }"
           :close="{
             color: 'primary',
-            variant: 'link',
+            variant: 'soft',
+            class: 'rounded-b-none rounded-tl-none',
           }"
           @update:model-value="onSelect"
         />
