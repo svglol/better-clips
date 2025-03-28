@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-col gap-2">
-    <template v-if="status === 'pending' || status === 'idle'">
-      <UILoading />
+    <template v-if="status === 'pending'">
+      <div class="grid grid-cols-2 items-center gap-4 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-12">
+        <TwitchFavouriteChannelSkeleton v-for="i in 24" :key="i" />
+      </div>
     </template>
     <template v-else-if="data && data.length > 0">
       <div class="grid grid-cols-2 items-center gap-4 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-12">

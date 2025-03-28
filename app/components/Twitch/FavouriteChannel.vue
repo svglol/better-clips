@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="`/channel/${channel?.login}`"
-    class="bg-(--ui-bg-elevated)/50 hover:bg-(--ui-bg-elevated) flex items-center gap-2 rounded-full  p-1 shadow transition-transform duration-200 hover:scale-95 hover:shadow-md "
+    class="bg-(--ui-bg-elevated)/50 hover:bg-(--ui-bg-elevated) flex items-center gap-2 rounded-full p-1 shadow transition-transform duration-200 hover:scale-95 hover:shadow-md "
   >
     <UChip size="md" position="top-right" inset :ui="{ base: '-mx-2 rounded-none ring-0 bg-neutral' }">
       <UAvatar
@@ -30,10 +30,10 @@ const isPartner = computed(() => props.channel?.broadcaster_type === 'partner')
 
 const ringStyle = computed(() => {
   if (isPartner.value) {
-    return 'ring-2 ring-primary-500 dark:ring-primary-500'
+    return 'ring-2 ring-(--ui-primary)'
   }
   else {
-    return 'ring-2 ring-gray-500 dark:ring-gray-500'
+    return 'ring-2 ring-(--ui-border)'
   }
 })
 </script>
