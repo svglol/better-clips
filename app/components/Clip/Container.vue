@@ -5,7 +5,7 @@
         :items="chunkedClips"
         page-mode
         :min-item-size="200"
-        :buffer="1000"
+        :buffer="12"
         @scroll-end="$emit('scrollEnd')"
       >
         <template #default="{ item, index, active }">
@@ -32,7 +32,7 @@
       </DynamicScroller>
       <template #fallback>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          <TwitchClipSkeleton v-for="i in 12" :key="i" />
+          <TwitchClipSkeleton v-for="i in clips.length" :key="i" />
         </div>
       </template>
     </ClientOnly>
@@ -190,6 +190,10 @@ function preloadAllImages() {
 }
 
 watchDeep(clips, () => {
+  preloadAllImages()
+})
+
+onMounted(() => {
   preloadAllImages()
 })
 </script>

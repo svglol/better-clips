@@ -24,13 +24,27 @@
 </template>
 
 <script setup lang="ts">
-import { formatISO, roundToNearestMinutes } from 'date-fns'
+import { sub } from 'date-fns'
 
 const route = useRoute('channel-name')
 
 const { name } = route.params
 
-const dateRange = useState<DateRange>(`dateRange-${useId()}`, () => ({ start: route.query.start ? new Date(route.query.start.toString()) : new Date(), end: route.query.end ? new Date(route.query.end.toString()) : new Date() }))
+const dateRange = useState(`dateRange${useId()}`, () => {
+  let startDate = route.query.startDate ? new Date(route.query.startDate as string) : sub(new Date(), { years: 100 })
+  let endDate = route.query.endDate ? new Date(route.query.endDate as string) : new Date()
+
+  const matchedRange = rangeOptions.find(range => range.query === route.query.range)
+  if (matchedRange) {
+    startDate = sub(new Date(), matchedRange.duration)
+    endDate = new Date()
+  }
+
+  return {
+    start: startDate,
+    end: endDate,
+  }
+})
 
 const { data: channelData, error } = await useFetch<TwitchAPIResponse<TwitchUser>>(`/api/twitch/channels/${name}`)
 if (error.value || !channelData.value || !channelData.value.data || channelData.value.data.length === 0) {
@@ -91,19 +105,22 @@ if (route.query.clip) {
 const cursor = ref<string | undefined>()
 const compiledClips = ref<TwitchClip[]>([])
 const channelID = computed(() => channel.value?.id)
-const startdate = computed(() => {
-  const rounded = roundToNearestMinutes(dateRange.value.start, { nearestTo: 15 })
-  return formatISO(rounded)
+
+const params = computed(() => {
+  return {
+    broadcaster_id: channelID.value,
+    after: cursor.value,
+    started_at: dateRange.value.start.toISOString(),
+    ended_at: dateRange.value.end.toISOString(),
+  }
+})
+const { data, status } = await useLazyFetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips`, {
+  params,
 })
 
-const enddate = computed(() => {
-  const rounded = roundToNearestMinutes(dateRange.value.end, { nearestTo: 15 })
-  return formatISO(rounded)
-})
-
-const { data, status } = await useAsyncData('fetchClips', () => $fetch<TwitchAPIResponse<TwitchClip>>(`/api/twitch/clips`, {
-  params: { broadcaster_id: channelID.value, after: cursor.value, started_at: startdate.value, ended_at: enddate.value },
-}), { watch: [dateRange, cursor, channelID], server: false, lazy: true })
+if (data.value) {
+  compiledClips.value.push(...data.value.data)
+}
 
 watch([dateRange], () => {
   compiledClips.value = []
