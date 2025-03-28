@@ -95,15 +95,15 @@ const tabs = computed(() => {
       icon: 'i-heroicons-magnifying-glass',
       slot: 'search',
     },
+    {
+      slot: 'trending-clips',
+      id: 'trending-clips',
+      label: 'Trending Clips',
+      icon: 'i-heroicons-fire',
+    },
   ]
   if (loggedIn.value) {
     baseTabs.push(
-      {
-        slot: 'trending-clips',
-        id: 'trending-clips',
-        label: 'Trending Clips',
-        icon: 'i-heroicons-fire',
-      },
       {
         slot: 'top-clips',
         id: 'top-clips',
