@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-(--ui-bg-elevated)/50 relative mt-1 w-full rounded-lg shadow ">
+  <div class="bg-(--ui-bg-elevated)/50 relative w-full rounded-lg shadow ">
     <div class="relative aspect-video">
       <USkeleton class="bg-(--ui-bg-accented) absolute aspect-video w-full rounded-t-lg" />
     </div>

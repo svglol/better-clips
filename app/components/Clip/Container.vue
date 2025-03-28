@@ -14,13 +14,13 @@
             :active="active"
             :data-index="index"
           >
-            <div class="grid gap-4" :style="{ gridTemplateColumns: `repeat(${itemsPerRow}, minmax(0, 1fr))` }">
+            <div class="grid gap-4 py-2" :style="{ gridTemplateColumns: `repeat(${itemsPerRow}, minmax(0, 1fr))` }">
               <TwitchClipPreview v-for="clip in item.items" :key="clip.id" :clip="clip" @open-clip="openClip" />
             </div>
           </DynamicScrollerItem>
         </template>
         <template #after>
-          <div v-if="status === 'pending' && clips.length === 0" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <div v-if="status === 'pending' && clips.length === 0" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 py-2">
             <TwitchClipSkeleton v-for="i in 12" :key="i" />
           </div>
           <UILoading v-else-if="status === 'pending'" class="p-8" />
@@ -31,8 +31,8 @@
         </template>
       </DynamicScroller>
       <template #fallback>
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          <TwitchClipSkeleton v-for="i in clips.length" :key="i" />
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-2" @scroll-end="$emit('scrollEnd')">
+          <TwitchClipPreview v-for="clip in clips" :key="clip.id" :clip="clip" @open-clip="openClip" />
         </div>
       </template>
     </ClientOnly>

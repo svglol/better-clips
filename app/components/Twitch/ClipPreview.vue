@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-(--ui-bg-elevated)/50 relative my-2 flex w-full flex-col gap-0 rounded-lg shadow transition-all hover:scale-[97%]">
+  <div class="bg-(--ui-bg-elevated)/50 relative flex w-full flex-col gap-0 rounded-lg shadow transition-all hover:scale-[97%]">
     <NuxtLink :to="clip.url" target="_blank" class="cursor-pointer" @click="handleClipClick">
       <div class="relative aspect-video">
         <Transition :name="transition">
@@ -25,9 +25,7 @@
           <span class="absolute bottom-2 left-2 rounded bg-black bg-opacity-50 p-1 text-xs text-white">
             {{ formatNumberWithCommas(clip.view_count) }} views
           </span>
-          <span class="absolute bottom-2 right-2 rounded bg-black bg-opacity-50 p-1 text-xs text-white">
-            {{ time }}
-          </span>
+          <NuxtTime :datetime="new Date(clip.created_at)" locale-matcher="best fit" class="absolute bottom-2 right-2 rounded bg-black bg-opacity-50 p-1 text-xs text-white" />
         </div>
       </div>
     </NuxtLink>
@@ -41,7 +39,7 @@
           {{ clip?.broadcaster_name }}
         </NuxtLink> •
         <Transition name="fade">
-          <span v-if="loadingGame" class="bg-(--ui-bg-elevated) absolute animate-pulse rounded-md px-2">loading.......</span>
+          <span v-if="loadingGame" class="bg-(--ui-bg-elevated) absolute animate-pulse rounded-md px-2 h-4 w-24" />
           <NuxtLink v-else :to="`/category/${game?.id}`" class="absolute px-1 text-xs font-bold transition-all hover:underline">
             {{ game?.name }}
           </NuxtLink>
@@ -58,8 +56,6 @@
 </template>
 
 <script setup lang="ts">
-import { formatTimeAgo } from '@vueuse/core'
-
 const props = defineProps<{
   clip: TwitchClip
 }>()
@@ -125,22 +121,6 @@ onMounted(async () => {
       gameData.value.set(props.clip.game_id, game.value as TwitchGame)
       loadingGame.value = false
     }
-  }
-})
-
-const time = computed(() => {
-  if (!props.clip.created_at)
-    return ''
-
-  const createdDate = new Date(props.clip.created_at)
-  const now = new Date()
-  const hoursDiff = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60)
-
-  if (hoursDiff < 20) {
-    return formatTimeAgo(createdDate)
-  }
-  else {
-    return createdDate.toLocaleDateString()
   }
 })
 </script>
