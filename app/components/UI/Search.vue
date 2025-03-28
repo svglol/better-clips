@@ -1,8 +1,8 @@
 <template>
   <div class="border-(--ui-border) flex flex-row rounded-md border shadow-sm md:w-96">
-    <UPopover v-model:open="isOpen" :content="{ side: 'bottom', align: 'center', sideOffset: -32 }" :ui="{ content: '!animate-none' }">
+    <UPopover v-model:open="isOpen" :content="{ side: 'bottom', align: 'start', sideOffset: -35.5 }" :ui="{ content: 'data-[state=open]:!animate-[fade-in_100ms_ease-out] data-[state=closed]:!animate-[fade-out_100ms_ease-in]' }">
       <UButtonGroup class="w-full">
-        <UInput placeholder="Search" class="flex-1" variant="none" @keydown.enter="search">
+        <UInput placeholder="Search" class="flex-1" variant="none" size="lg" @keydown.enter="search">
           <template #leading>
             <UIcon name="i-heroicons-magnifying-glass-20-solid" class="text-(--ui-text-dimmed) size-5" />
           </template>
@@ -22,11 +22,11 @@
           :loading="status === 'pending'"
           :groups="groups"
           class="md:w-96 w-full"
-          :ui="{ input: '[&>input]:h-8 [&>span]:pe-0 bg-(--ui-bg-elevated)/50' }"
+          :ui="{ input: '[&>input]:h-[2.2rem] [&>span]:pe-0 bg-(--ui-bg-elevated)/50', root: 'w-full' }"
           :close="{
             color: 'primary',
             variant: 'soft',
-            class: 'rounded-b-none rounded-tl-none',
+            class: 'rounded-b-none rounded-tl-none h-[2.2rem]',
           }"
           @update:model-value="onSelect"
         />
