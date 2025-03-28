@@ -3,7 +3,15 @@
     <template #content>
       <div class="flex flex-col">
         <div class="relative aspect-video w-full">
+          <video
+            v-if="videoUrl"
+            :src="videoUrl"
+            class="size-full"
+            controls
+            autoplay
+          />
           <iframe
+            v-else
             :src="iframeSrc"
             class="size-full"
             allowfullscreen
@@ -32,11 +40,14 @@
             </p>
           </div>
           <div class="flex flex-shrink-0 flex-row gap-2">
+            <UTooltip v-if="videoUrl" text="Download">
+              <UButton icon="i-heroicons-arrow-down-tray" color="primary" :to="videoUrl" target="_blank" variant="ghost" />
+            </UTooltip>
             <UTooltip text="Share">
-              <UButton icon="i-heroicons-share" color="primary" size="sm" variant="ghost" @click="startShare" />
+              <UButton icon="i-heroicons-share" color="primary" variant="ghost" @click="startShare" />
             </UTooltip>
             <UTooltip v-if="clip?.url" text="Open on Twitch">
-              <UButton icon="ic:sharp-launch" color="primary" size="sm" variant="ghost" :to="clip?.url" target="_blank" />
+              <UButton icon="ic:sharp-launch" color="primary" variant="ghost" :to="clip?.url" target="_blank" />
             </UTooltip>
           </div>
         </div>
@@ -52,6 +63,8 @@ const props = defineProps<{
   id: string
   clip?: TwitchClip
 }>()
+
+const { data: videoUrl } = await useFetch(`/api/twitch/clips/video/${props.id}`)
 
 const clip = ref<TwitchClip | undefined>(props.clip)
 const iframeSrc = computed(() => {
