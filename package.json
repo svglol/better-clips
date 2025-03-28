@@ -37,7 +37,7 @@
     "@vue/test-utils": "2.4.6",
     "@vueuse/core": "13.0.0",
     "@vueuse/nuxt": "13.0.0",
-    "date-fns": "3.6.0",
+    "date-fns": "4.1.0",
     "eslint": "9.22.0",
     "eslint-plugin-tailwindcss": "3.18.0",
     "happy-dom": "15.11.7",
