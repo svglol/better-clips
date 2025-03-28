@@ -1,38 +1,39 @@
 <template>
-  <div class="flex flex-row rounded-md border border-gray-300 shadow-sm md:w-96 dark:border-gray-700">
-    <UInput v-model="searchQuery" placeholder="Search" :ui="{ rounded: 'rounded-l-md rounded-r-none' }" class="flex-1" variant="none" @keydown.enter="search">
+  <div class="border-(--ui-border-accented) flex flex-row rounded-md border shadow-sm md:w-96">
+    <UInput v-model="searchQuery" placeholder="Search" :ui="{ base: 'rounded-l-md rounded-r-none' }" class="flex-1" variant="none" @keydown.enter="search">
       <template #leading>
         <UIcon name="i-heroicons-magnifying-glass-20-solid" />
       </template>
     </UInput>
-    <UTooltip text="Search" :shortcuts="[metaSymbol, 'K']">
-      <UButton
-        :ui="{ rounded: 'rounded-r-md rounded-l-none' }"
-        icon="i-heroicons-magnifying-glass-20-solid"
-        variant="soft"
-        aria-label="Search"
-        color="primary"
-        @click="search"
-      />
-    </UTooltip>
+    <!-- <UTooltip text="Search" :shortcuts="['meta', 'K']"> -->
+    <UButton
+      :ui="{ base: 'rounded-r-md rounded-l-none' }"
+      icon="i-heroicons-magnifying-glass-20-solid"
+      variant="soft"
+      aria-label="Search"
+      color="primary"
+      @click="search"
+    />
+    <!-- </UTooltip> -->
   </div>
-  <UModal v-model="isOpen">
-    <UCommandPalette
-      ref="commandPalette"
-      :autoselect="false"
-      :groups="groups"
-      selected-icon=""
-      @update:model-value="onSelect"
-    >
-      <template #empty-state>
-        <div />
-      </template>
-    </UCommandPalette>
+  <UModal v-model:open="isOpen">
+    <template #content>
+      <UCommandPalette
+        ref="commandPalette"
+        v-model:search-term="searchQuery"
+        :loading="status === 'pending'"
+        :groups="groups"
+        @update:model-value="onSelect"
+      >
+        <template #empty>
+          <div />
+        </template>
+      </UCommandPalette>
+    </template>
   </UModal>
 </template>
 
 <script lang="ts" setup>
-const { metaSymbol } = useShortcuts()
 const { disableShortcut } = definePropsRefs<{
   disableShortcut?: boolean
 }>()
@@ -52,60 +53,63 @@ watch(isOpen, () => {
   }
 })
 
-const groups = [
-  {
-    key: 'channels',
-    label: (q: string) => q && `Channels matching “${q}”...`,
-    search: async (q: string) => {
-      if (!q)
-        return []
-      const pages = (await $fetch<TwitchAPIResponse<TwitchChannel>>('/api/twitch/channels/search', { params: { query: q } }))
-      return pages.data.sort((a, b) => a.is_live === b.is_live ? 0 : a.is_live ? -1 : 1).map(page => ({
-        id: page.id,
-        to: `/channel/${page.display_name}`,
-        label: page.display_name,
-        avatar: { src: page.thumbnail_url, size: 'sm', loading: 'lazy' },
-      }))
-    },
-  },
-  {
-    key: 'categories',
-    label: (q: string) => q && `Categories matching “${q}”...`,
-    search: async (q: string) => {
-      if (!q)
-        return []
+const debouncedSearch = debouncedRef(searchQuery, 300)
+const { data, status } = await useAsyncData('search', async () => {
+  if (debouncedSearch.value === '') {
+    return {
+      channels: { data: [] },
+      categories: { data: [] },
+    }
+  }
+  const [channels, categories] = await Promise.all([
+    $fetch<TwitchAPIResponse<TwitchChannel>>('/api/twitch/channels/search', { params: { query: debouncedSearch.value } }),
+    $fetch<TwitchAPIResponse<TwitchCategory>>('/api/twitch/game/search', { params: { query: debouncedSearch.value } }),
+  ])
+  return {
+    channels,
+    categories,
+  }
+}, {
+  watch: [debouncedSearch],
+  lazy: true,
+  immediate: false,
+  server: false,
+})
 
-      const pages = (await $fetch<TwitchAPIResponse<TwitchCategory>>('/api/twitch/game/search', { params: { query: q } }))
-      return pages.data.map(page => ({
-        id: page.id,
-        to: `/category/${page.id}`,
-        label: page.name,
-        avatar: { src: page.box_art_url, size: 'sm', loading: 'lazy' },
-      }))
-    },
+const groups = computed(() => [
+  {
+    id: 'users',
+    label: searchQuery.value ? `Channels matching “${searchQuery.value}”...` : 'Channels',
+    items: data.value?.channels.data.map(channel => ({
+      id: channel.id,
+      label: channel.display_name,
+      to: `/channel/${channel.display_name}`,
+      avatar: { src: channel.thumbnail_url },
+    })),
   },
-]
+  {
+    id: 'categories',
+    label: searchQuery.value ? `Categories matching “${searchQuery.value}”...` : 'Categories',
+    ignoreFilter: true,
+    items: data.value?.categories.data.map(category => ({
+      id: category.id,
+      label: category.name,
+      to: `/category/${category.name}`,
+      avatar: { src: category.box_art_url },
+    })),
+  },
+])
 
 defineShortcuts({
-  meta_k: {
-    usingInput: true,
-    handler: () => {
-      if (disableShortcut.value)
-        return
-      isOpen.value = !isOpen.value
-      nextTick(() => {
-        commandPalette.value.updateQuery(searchQuery.value)
-      })
-    },
+  meta_k: () => {
+    if (disableShortcut.value)
+      return
+    isOpen.value = !isOpen.value
   },
-  escape: {
-    usingInput: true,
-    whenever: [isOpen],
-    handler: () => {
-      if (disableShortcut.value)
-        return
-      isOpen.value = false
-    },
+  escape: () => {
+    if (disableShortcut.value)
+      return
+    isOpen.value = false
   },
 })
 
@@ -125,8 +129,5 @@ function onSelect(option: any) {
 
 function search() {
   isOpen.value = true
-  nextTick(() => {
-    commandPalette.value.updateQuery(searchQuery.value)
-  })
 }
 </script>

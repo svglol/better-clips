@@ -6,7 +6,7 @@
           <NuxtImg :src="boxArt" class="h-full w-16 flex-none" />
         </NuxtLink>
         <div class="flex flex-col">
-          <NuxtLink :to="`https://twitch.tv/directory/category/${slugify(category?.name ?? '')}`" target="_blank" class="text-primary-500 dark:text-primary-400 transition-all hover:opacity-80">
+          <NuxtLink :to="`https://twitch.tv/directory/category/${slugify(category?.name ?? '')}`" target="_blank" class="text-(--ui-primary) transition-all hover:opacity-80">
             <span class="text-xl font-bold">{{ category?.name }}</span>
           </NuxtLink>
         </div>

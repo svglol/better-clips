@@ -6,7 +6,6 @@
     <div class="flex flex-wrap items-center gap-4">
       <UPopover
         v-if="selected?.query === 'custom'"
-        :popper="{ placement: 'bottom-start' }"
       >
         <UButton
           size="sm"
@@ -17,7 +16,7 @@
           <NuxtTime :datetime="new Date(tempDateRange.end)" locale-matcher="best fit" />
         </UButton>
 
-        <template #panel="{ close }">
+        <template #content="{ close }">
           <div class="flex flex-col items-center divide-gray-200 sm:flex-row sm:divide-x dark:divide-gray-800">
             <UIDatePicker
               v-model="tempDateRange"
@@ -27,7 +26,7 @@
           </div>
         </template>
       </UPopover>
-      <USelectMenu v-model="selected" :options="rangeOptions" color="primary" />
+      <USelectMenu v-model="selected" :items="rangeOptions" color="primary" :search-input="false" highlight />
     </div>
   </div>
 </template>

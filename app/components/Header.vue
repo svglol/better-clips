@@ -1,6 +1,6 @@
 <template>
-  <div class="z-10 flex flex-row items-center justify-between gap-4 bg-gray-100 px-2 py-4 shadow dark:bg-gray-900">
-    <NuxtLink to="/" class="flex flex-row items-center gap-2 text-xl text-black hover:opacity-80 dark:text-white">
+  <div class="bg-(--ui-bg-elevated)/50 z-10 flex flex-row items-center justify-between gap-4 px-2 py-4 shadow ">
+    <NuxtLink to="/" class="text-(--ui-text-highlighted) flex flex-row items-center gap-2 text-xl hover:opacity-80 ">
       <UIcon name="fluent-emoji-flat:clapper-board" /><span class="hidden sm:inline-block">Better Clips</span>
     </NuxtLink>
     <div>
@@ -9,9 +9,9 @@
     <div class="flex flex-row gap-2">
       <AuthState v-slot="{ loggedIn }">
         <div v-if="loggedIn">
-          <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
+          <UDropdownMenu :items="items">
             <UButton
-              color="gray"
+              color="neutral"
               variant="ghost"
               :label="session?.user?.login ?? ''"
               trailing-icon="i-heroicons-chevron-down-20-solid"
@@ -26,9 +26,9 @@
                 />
               </template>
             </UButton>
-          </UDropdown>
+          </UDropdownMenu>
         </div>
-        <UButton v-else icon="fa6-brands:twitch" color="purple" @click="login">
+        <UButton v-else icon="fa6-brands:twitch" color="primary" @click="login">
           Login
         </UButton>
       </AuthState>
@@ -69,12 +69,12 @@ const items = computed(() => {
       {
         label: isDark.value ? 'Light Mode' : 'Dark Mode',
         icon: isDark.value ? 'i-heroicons-moon' : 'i-heroicons-sun',
-        click: (e: MouseEvent) => toggle(e),
+        onSelect: (e: MouseEvent) => toggle(e),
       },
       {
         label: 'Logout',
         icon: 'ic:outline-log-out',
-        click: async () => {
+        onSelect: async () => {
           await clear()
         },
       },

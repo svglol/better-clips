@@ -1,45 +1,47 @@
 <template>
-  <UModal :ui="{ width: 'm-0 sm:!max-w-[calc(100vw-12rem)] lg:!max-w-[calc(100vw-10vw)] 2xl:!max-w-[calc(100vw-30vw)] xl:m-20 h-auto', container: '!items-center !p-2' }">
-    <div class="flex flex-col">
-      <div class="aspect-w-16 aspect-h-9 relative w-full">
-        <iframe
-          :src="iframeSrc"
-          class="absolute inset-0 size-full"
-          allowfullscreen
-          style="border: none;"
-        />
-      </div>
-      <div class="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:items-center">
-        <div class="flex max-w-full flex-col gap-1 overflow-hidden">
-          <span class="text-xs text-gray-500 dark:text-gray-400">{{ time }}</span>
-          <h2 class="max-w-full truncate text-base font-semibold leading-tight">
-            {{ clip?.title }}
-          </h2>
-          <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
-            <span class="inline-flex flex-wrap items-center gap-x-1">
-              Clipped by
-              <NuxtLink :to="`https://twitch.tv/${clip?.creator_name.replace(' ', '')}`" target="_blank" class="text-primary hover:underline">
-                {{ clip?.creator_name }}
-              </NuxtLink>
-              on
-              <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" target="_blank" class="text-primary hover:underline">
-                {{ clip?.broadcaster_name }}
-              </NuxtLink>
-              •
-              <span>{{ formatNumberWithCommas(clip?.view_count ?? 0) }} views</span>
-            </span>
-          </p>
+  <UModal :ui="{ content: 'sm:!max-w-[calc(100vw-12rem)] lg:!max-w-[calc(100vw-10vw)] 2xl:!max-w-[calc(100vw-30vw)]' }">
+    <template #content>
+      <div class="flex flex-col">
+        <div class="relative aspect-video w-full">
+          <iframe
+            :src="iframeSrc"
+            class="size-full"
+            allowfullscreen
+            style="border: none;"
+          />
         </div>
-        <div class="flex flex-shrink-0 flex-row gap-2">
-          <UTooltip text="Share">
-            <UButton icon="i-heroicons-share" color="primary" size="sm" variant="ghost" @click="startShare" />
-          </UTooltip>
-          <UTooltip v-if="clip?.url" text="Open on Twitch">
-            <UButton icon="ic:sharp-launch" color="primary" size="sm" variant="ghost" :to="clip?.url" target="_blank" />
-          </UTooltip>
+        <div class="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:items-center">
+          <div class="flex max-w-full flex-col gap-1 overflow-hidden">
+            <span class="text-(--ui-text-muted) text-xs">{{ time }}</span>
+            <h2 class="text-(--ui-text-highlighted) max-w-full truncate text-base font-semibold leading-tight">
+              {{ clip?.title }}
+            </h2>
+            <p class="text-(--ui-text-dimmed) text-xs leading-tight">
+              <span class="inline-flex flex-wrap items-center gap-x-1">
+                Clipped by
+                <NuxtLink :to="`https://twitch.tv/${clip?.creator_name.replace(' ', '')}`" target="_blank" class="text-primary hover:underline">
+                  {{ clip?.creator_name }}
+                </NuxtLink>
+                on
+                <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" target="_blank" class="text-primary hover:underline">
+                  {{ clip?.broadcaster_name }}
+                </NuxtLink>
+                •
+                <span>{{ formatNumberWithCommas(clip?.view_count ?? 0) }} views</span>
+              </span>
+            </p>
+          </div>
+          <div class="flex flex-shrink-0 flex-row gap-2">
+            <UTooltip text="Share">
+              <UButton icon="i-heroicons-share" color="primary" size="sm" variant="ghost" @click="startShare" />
+            </UTooltip>
+            <UTooltip v-if="clip?.url" text="Open on Twitch">
+              <UButton icon="ic:sharp-launch" color="primary" size="sm" variant="ghost" :to="clip?.url" target="_blank" />
+            </UTooltip>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </UModal>
 </template>
 

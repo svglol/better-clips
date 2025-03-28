@@ -4,18 +4,18 @@
       <div class="flex flex-row items-center gap-4">
         <NuxtLink :to="`https://twitch.tv/${channel?.login}`" target="_blank" class="flex-none transition-all hover:opacity-80">
           <UAvatar
-            :ui="{ wrapper: ringStyle }"
+            :ui="{ root: ringStyle }"
             :src="channel?.profile_image_url"
             :alt="channel?.display_name"
             size="2xl"
           />
         </NuxtLink>
         <div class="flex flex-col">
-          <NuxtLink :to="`https://twitch.tv/${channel?.login}`" target="_blank" class="text-primary-500 dark:text-primary-400 flex flex-row items-center gap-1 transition-all hover:opacity-80">
+          <NuxtLink :to="`https://twitch.tv/${channel?.login}`" target="_blank" class="text-(--ui-primary) flex flex-row items-center gap-1 transition-all hover:opacity-80">
             <span class="text-xl font-bold">{{ channel?.display_name }}</span>
-            <UIcon v-if="channel?.broadcaster_type === 'partner'" name="pajamas:partner-verified" class="text-primary-500 dark:text-primary-400 text-sm" />
+            <UIcon v-if="channel?.broadcaster_type === 'partner'" name="pajamas:partner-verified" class="text-(--ui-primary) text-sm" />
           </NuxtLink>
-          <span class="text-sm text-gray-500 dark:text-gray-400">{{ channel?.description }}</span>
+          <span class="text-(--ui-text-dimmed) text-sm">{{ channel?.description }}</span>
         </div>
       </div>
     </ClipHeader>
@@ -127,10 +127,10 @@ function onScrollEnd() {
 
 const ringStyle = computed(() => {
   if (channel.value?.broadcaster_type === 'partner') {
-    return 'ring-2 ring-primary-500 dark:ring-primary-500'
+    return 'ring-2 ring-(--ui-primary)'
   }
   else {
-    return 'ring-2 ring-gray-500 dark:ring-gray-500'
+    return 'ring-2 ring-(--ui-neutral)'
   }
 })
 </script>

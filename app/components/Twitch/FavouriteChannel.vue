@@ -1,11 +1,11 @@
 <template>
   <NuxtLink
     :to="`/channel/${channel?.login}`"
-    class="hover:bg-primary-100 dark:hover:bg-primary-800 flex items-center gap-2 rounded-full bg-gray-200 p-1 shadow transition-transform duration-200 hover:scale-95 hover:shadow-md dark:bg-gray-900"
+    class="bg-(--ui-bg-elevated)/50 hover:bg-(--ui-bg-elevated) flex items-center gap-2 rounded-full  p-1 shadow transition-transform duration-200 hover:scale-95 hover:shadow-md "
   >
-    <UChip size="md" position="top-right" inset :ui="{ base: '-mx-2 rounded-none ring-0', background: '' }">
+    <UChip size="md" position="top-right" inset :ui="{ base: '-mx-2 rounded-none ring-0 bg-neutral' }">
       <UAvatar
-        :ui="{ wrapper: ringStyle }"
+        :ui="{ root: ringStyle }"
         :src="channel?.profile_image_url"
         :alt="channel?.display_name"
         size="md"
@@ -15,7 +15,7 @@
         <UIcon v-show="isPartner" name="pajamas:partner-verified" class="text-primary-500 dark:text-primary-400 text-sm" />
       </template>
     </UChip>
-    <span class="overflow-hidden text-ellipsis font-semibold text-gray-800 dark:text-gray-200">
+    <span class="overflow-hidden text-ellipsis font-semibold text-(--ui-text-highlighted)">
       {{ channel?.display_name }}
     </span>
   </NuxtLink>

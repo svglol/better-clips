@@ -24,9 +24,7 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  tailwindcss: {
-    cssPath: '~/assets/global.css',
-  },
+  css: ['~/assets/css/main.css'],
   typescript: {
     typeCheck: true,
     strict: true,
@@ -74,5 +72,11 @@ export default defineNuxtConfig({
   },
   sourcemap: {
     server: false,
+  },
+  ui: {
+    theme: {
+      colors: ['primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'error'],
+      transitions: true,
+    },
   },
 })

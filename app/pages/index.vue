@@ -3,38 +3,38 @@
     <BackgroundGradient />
     <div class="relative z-10 flex size-full flex-col items-center justify-center gap-16 px-2 py-16">
       <img src="/og.png" class="relative mx-auto size-32">
-      <span class="text-center text-4xl font-semibold text-gray-900 dark:text-gray-200">
+      <span class="text-center text-4xl font-semibold text-(--ui-text-highlighted)">
         An improved experience for browsing Twitch clips
       </span>
       <a href="/auth/twitch">
-        <UButton icon="fa6-brands:twitch" color="purple" size="xl">
+        <UButton icon="fa6-brands:twitch" color="primary" size="xl">
           Login with Twitch
         </UButton>
       </a>
       <div class="grid w-full max-w-screen-xl grid-cols-1 gap-8 lg:grid-cols-3">
         <UISpotlightCard>
-          <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
+          <div class="bg-(--ui-bg-elevated) flex size-full flex-col rounded-lg p-8 shadow ">
             <UIcon name="fa6-solid:fire" size="2xl" class="text-primary-500 dark:text-primary-400" />
-            <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Trending Clips</span>
-            <span class="mt-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+            <span class="mt-2 text-xl font-semibold text-(--ui-text-highlighted)">Trending Clips</span>
+            <span class="mt-4 text-sm font-semibold text-(--ui-text-dimmed)">
               Quickly discover the latest and most viral clips from Twitch.
             </span>
           </div>
         </UISpotlightCard>
         <UISpotlightCard>
-          <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
+          <div class="bg-(--ui-bg-elevated) flex size-full flex-col rounded-lg  p-8 shadow ">
             <UIcon name="fa6-solid:user-group" size="2xl" class="text-primary-500 dark:text-primary-400" />
-            <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Personalized Feed</span>
-            <span class="mt-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+            <span class="mt-2 text-xl font-semibold text-(--ui-text-highlighted)">Personalized Feed</span>
+            <span class="mt-4 text-sm font-semibold text-(--ui-text-dimmed)">
               Get clips from your favorite streamers and games, and stay up-to-date with their latest moments.
             </span>
           </div>
         </UISpotlightCard>
         <UISpotlightCard>
-          <div class="flex size-full flex-col rounded-lg bg-gray-100 p-8 shadow dark:bg-gray-900">
+          <div class="bg-(--ui-bg-elevated) flex size-full flex-col rounded-lg p-8 shadow ">
             <UIcon name="fa6-solid:magnifying-glass" size="2xl" class="text-primary-500 dark:text-primary-400" />
-            <span class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200">Easy Discovery</span>
-            <span class="mt-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+            <span class="mt-2 text-xl font-semibold text-(--ui-text-highlighted)">Easy Discovery</span>
+            <span class="mt-4 text-sm font-semibold text-(--ui-text-dimmed)">
               Find exactly what you're looking for with our powerful search and filter options. Explore clips by game, streamer.
             </span>
           </div>
@@ -43,19 +43,8 @@
     </div>
   </div>
   <div v-else class="flex flex-col gap-6 px-2">
-    <UHorizontalNavigation :links="links" class="max-w-[calc(100vw-2rem)] border-b border-gray-200 dark:border-gray-800" :ui="{ base: '!text-md md:text-lg' }" />
-    <UTabs
-      v-model="selected"
-      :items="tabs"
-      :default-index="0"
-      :ui="{
-        wrapper: 'space-y-0',
-        list: {
-          base: 'hidden',
-        },
-      }"
-      class="w-full"
-    >
+    <UNavigationMenu :items="links" highlight highlight-color="primary" variant="link" class="max-w-[calc(100vw-2rem)] border-b border-(--ui-border)" />
+    <UTabs v-model="selected" :items="tabs" variant="link" class="w-full gap-4" :ui="{ trigger: 'flex-1', list: 'hidden' }">
       <template #trending-clips>
         <TrendingClips />
       </template>
@@ -104,13 +93,13 @@ const selected = computed({
   get() {
     const index = tabs.value.findIndex(item => item.id === route.query.tab)
     if (index === -1)
-      return 0
+      return '0'
 
-    return index
+    return index.toString()
   },
   set(value) {
-    if (tabs.value[value]) {
-      if (value === 0) {
+    if (tabs.value[Number(value)]) {
+      if (value === '0') {
         router.replace({
           query: { },
           hash: '',
@@ -118,7 +107,7 @@ const selected = computed({
       }
       else {
         router.replace({
-          query: { tab: tabs.value[value].id },
+          query: { tab: tabs.value[Number(value)]?.id ?? '' },
           hash: '',
         })
       }
@@ -129,8 +118,8 @@ const selected = computed({
 const links = computed(() => {
   return tabs.value.map((tab, index) => ({
     ...tab,
-    active: selected.value === index,
-    click: () => selected.value = index,
+    active: selected.value === index.toString(),
+    onSelect: () => selected.value = index.toString(),
   }))
 })
 

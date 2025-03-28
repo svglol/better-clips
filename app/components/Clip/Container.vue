@@ -25,8 +25,8 @@
           </div>
           <UILoading v-else-if="status === 'pending'" class="p-8" />
           <div v-else-if="clips.length === 0" class="py-auto my-auto flex size-full flex-col items-center justify-center">
-            <UIcon name="mdi:robot-confused" class="text-primary-500 dark:text-primary-400 text-9xl" />
-            <span class="text-2xl text-gray-500 dark:text-gray-400">No clips found!</span>
+            <UIcon name="mdi:robot-confused" class="text-(--ui-primary) text-9xl" />
+            <span class="text-2xl text-(--ui-text-dimmed)">No clips found!</span>
           </div>
         </template>
       </DynamicScroller>
@@ -83,10 +83,17 @@ const itemsPerRow = computed(() => {
     default: return 1
   }
 })
-const modal = useModal()
+const overlay = useOverlay()
 
 const isActiveInstance = computed(() => {
   return route.query.source === props.instanceId
+})
+
+const modal = overlay.create(ModalClip, {
+  props: {
+    id: String(route.query.clip),
+    clip: clips.value.find(clip => clip.id === String(route.query.clip)),
+  },
 })
 
 watch(() => route.query, (newQuery, oldQuery) => {
@@ -106,24 +113,24 @@ function openClip(id: string) {
   router.push({ query })
 }
 
-function openModal() {
+async function openModal() {
   if (!isActiveInstance.value)
     return
 
-  modal.open(ModalClip, {
+  modal.patch({
     id: String(route.query.clip),
     clip: clips.value.find(clip => clip.id === String(route.query.clip)),
-    onClose: () => {
-      if (window.history.length > 1 && window.history.state.back) {
-        router.back()
-      }
-      else {
-        router.push({ query: { ...route.query, clip: undefined } })
-      }
-      useSeoMeta({
-        title: title.value,
-      })
-    },
+  })
+
+  await modal.open()
+  if (window.history.length > 1 && window.history.state.back) {
+    router.back()
+  }
+  else {
+    router.push({ query: { ...route.query, clip: undefined } })
+  }
+  useSeoMeta({
+    title: title.value,
   })
 }
 

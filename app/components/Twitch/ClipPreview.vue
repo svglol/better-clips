@@ -1,13 +1,13 @@
 <template>
-  <div class="relative my-2 flex w-full flex-col gap-0 rounded-lg bg-gray-100 shadow transition-all hover:scale-[97%] dark:bg-gray-900">
-    <NuxtLink :to="clip.url" target="_blank" class="" @click="handleClipClick">
-      <div class="aspect-w-16 aspect-h-9 relative">
+  <div class="bg-(--ui-bg-elevated)/50 relative my-2 flex w-full flex-col gap-0 rounded-lg shadow transition-all hover:scale-[97%]">
+    <NuxtLink :to="clip.url" target="_blank" class="cursor-pointer" @click="handleClipClick">
+      <div class="relative aspect-video">
         <Transition :name="transition">
           <div
             v-if="!imageLoaded"
             ref="placeholder"
             :key="`placeholder-${clip.id}`"
-            class="absolute aspect-video w-full animate-pulse rounded-t-lg bg-gray-200 object-cover dark:bg-gray-800"
+            class="bg-(--ui-bg-accented) absolute aspect-video w-full animate-pulse rounded-t-lg object-cover "
             :style="{ height: `${(placeholder?.clientWidth ?? 0) / 16 * 9}px` }"
           />
           <NuxtImg
@@ -33,21 +33,21 @@
     </NuxtLink>
     <div class="flex flex-col gap-0 px-2 py-1">
       <NuxtLink :to="clip.url" target="_blank" class="group transition-all hover:opacity-80" @click="handleClipClick">
-        <span class="group-hover:text-primary-500 dark:group-hover:text-primary-400 line-clamp-1 max-w-full text-ellipsis font-bold text-gray-800 dark:text-gray-200">{{ clip.title }}</span>
+        <span class="group-hover:text-primary-500 dark:group-hover:text-primary-400 text-(--ui-text-highlighted) line-clamp-1 max-w-full text-ellipsis font-bold">{{ clip.title }}</span>
       </NuxtLink>
 
-      <p class="line-clamp-1 text-xs leading-tight text-gray-500 dark:text-gray-400">
+      <p class="text-(--ui-text-muted) line-clamp-1 text-xs leading-tight">
         <NuxtLink :to="`/channel/${clip?.broadcaster_name.replace(' ', '')}`" class="font-bold hover:underline">
           {{ clip?.broadcaster_name }}
         </NuxtLink> •
         <Transition name="fade">
-          <span v-if="loadingGame" class="absolute animate-pulse rounded-md  bg-gray-100 px-2 text-gray-100 dark:bg-gray-800 dark:text-gray-800">loading.......</span>
+          <span v-if="loadingGame" class="bg-(--ui-bg-elevated) absolute animate-pulse rounded-md px-2">loading.......</span>
           <NuxtLink v-else :to="`/category/${game?.id}`" class="absolute px-1 text-xs font-bold transition-all hover:underline">
             {{ game?.name }}
           </NuxtLink>
         </Transition>
       </p>
-      <p class="text-xs leading-tight text-gray-500 dark:text-gray-400">
+      <p class="text-(--ui-text-dimmed) text-xs leading-tight">
         Clipped by
         <NuxtLink :to="`https://twitch.tv/${clip?.creator_name.replace(' ', '')}`" target="_blank" class="font-semibold hover:underline">
           {{ clip?.creator_name }}

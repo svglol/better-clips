@@ -1,13 +1,13 @@
 <template>
-  <NuxtLayout class="bg-gray-50 font-sans text-gray-500 antialiased dark:bg-gray-950 dark:text-gray-400">
+  <NuxtLayout class="bg-(--ui-bg) font-sans antialiased ">
     <NuxtLoadingIndicator
       :color="false"
       class="to-primary-600 from-primary-300 via-primary-500 bg-gradient-to-r"
       :duration="1000"
     />
-    <NuxtPage />
-    <UNotifications />
-    <UModals />
+    <UApp :tooltip="{ delayDuration: 0 }">
+      <NuxtPage />
+    </UApp>
   </NuxtLayout>
 </template>
 

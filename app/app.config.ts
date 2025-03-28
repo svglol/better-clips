@@ -1,9 +1,13 @@
 export default defineAppConfig({
   ui: {
-    primary: 'purple',
-    gray: 'neutral',
-    selectMenu: {
-      width: 'w-auto min-w-full',
+    colors: {
+      primary: 'purple',
+      neutral: 'neutral',
+    },
+    button: {
+      slots: {
+        base: 'cursor-pointer',
+      },
     },
   },
   nuxtIcon: {},

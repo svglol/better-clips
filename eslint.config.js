@@ -14,10 +14,10 @@ export default antfu(
   },
   nuxt,
   ...compat.config({
-    extends: ['plugin:tailwindcss/recommended'],
-    rules: {
-      'tailwindcss/no-custom-classname': 'off',
-      'tailwindcss/migration-from-tailwind-2': 'off',
-    },
+    // extends: ['plugin:tailwindcss/recommended'],
+    // rules: {
+    //   'tailwindcss/no-custom-classname': 'off',
+    //   'tailwindcss/migration-from-tailwind-2': 'off',
+    // },
   }),
 )
