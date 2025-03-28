@@ -147,7 +147,7 @@ const ringStyle = computed(() => {
     return 'ring-2 ring-(--ui-primary)'
   }
   else {
-    return 'ring-2 ring-(--ui-neutral)'
+    return 'ring-2 ring-(--ui-border-accented)'
   }
 })
 
