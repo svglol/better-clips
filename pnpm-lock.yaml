@@ -90,8 +90,8 @@ importers:
         specifier: 3.16.1
         version: 3.16.1(@parcel/watcher@2.5.1)(@types/node@22.13.14)(db0@0.3.1)(eslint@9.22.0(jiti@2.4.2))(ioredis@5.6.0)(lightningcss@1.29.2)(magicast@0.3.5)(meow@13.2.0)(optionator@0.9.4)(rollup@4.37.0)(stylelint@16.16.0(typescript@5.8.2))(terser@5.39.0)(typescript@5.8.2)(vite@5.4.15(@types/node@22.13.14)(lightningcss@1.29.2)(terser@5.39.0))(vue-tsc@2.1.6(typescript@5.8.2))(yaml@2.7.0)
       nuxt-auth-utils:
-        specifier: 0.5.16
-        version: 0.5.16(magicast@0.3.5)
+        specifier: 0.5.17
+        version: 0.5.17(magicast@0.3.5)
       nuxt-time:
         specifier: 1.0.3
         version: 1.0.3(magicast@0.3.5)(nuxt@3.16.1(@parcel/watcher@2.5.1)(@types/node@22.13.14)(db0@0.3.1)(eslint@9.22.0(jiti@2.4.2))(ioredis@5.6.0)(lightningcss@1.29.2)(magicast@0.3.5)(meow@13.2.0)(optionator@0.9.4)(rollup@4.37.0)(stylelint@16.16.0(typescript@5.8.2))(terser@5.39.0)(typescript@5.8.2)(vite@5.4.15(@types/node@22.13.14)(lightningcss@1.29.2)(terser@5.39.0))(vue-tsc@2.1.6(typescript@5.8.2))(yaml@2.7.0))
@@ -211,9 +211,6 @@ packages:
 
   '@antfu/install-pkg@1.0.0':
     resolution: {integrity: sha512-xvX6P/lo1B3ej0OsaErAjqgFYzYVcJpamjLAFLYh9vRJngBrMoUG7aVnrGTeqM7yxbyTD5p3F2+0/QUEh8Vzhw==}
-
-  '@antfu/utils@0.7.10':
-    resolution: {integrity: sha512-+562v9k4aI80m1+VuMHehNJWLOFjBnXn3tdOitzD0il5b7smkSBal4+a3oKiQTbrwMmN/TBUMDvbdoWDehgOww==}
 
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
@@ -4623,8 +4620,8 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
-  nuxt-auth-utils@0.5.16:
-    resolution: {integrity: sha512-mCJEwZWoFmOyEynCWWWFbRsVfNekbU06MxC+bfoPlxeJT3Pi58Wx61m03cRECQRS+AUUl3ZYqtNSOGP8u+XjxQ==}
+  nuxt-auth-utils@0.5.17:
+    resolution: {integrity: sha512-2cT494ZFGaywX3fZOkNUNrRwaqElGB2J9mfNZXFI5TXyCyxn/eaa9eMxxyWon4IwKxj3V5a9Lk3YNjcnWBU18g==}
     peerDependencies:
       '@atproto/api': ^0.13.15
       '@atproto/oauth-client-node': ^0.2.0
@@ -6467,8 +6464,6 @@ snapshots:
     dependencies:
       package-manager-detector: 0.2.11
       tinyexec: 0.3.2
-
-  '@antfu/utils@0.7.10': {}
 
   '@antfu/utils@8.1.1': {}
 
@@ -11634,7 +11629,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt-auth-utils@0.5.16(magicast@0.3.5):
+  nuxt-auth-utils@0.5.17(magicast@0.3.5):
     dependencies:
       '@adonisjs/hash': 9.0.5
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
@@ -11643,7 +11638,6 @@ snapshots:
       hookable: 5.5.3
       jose: 5.10.0
       ofetch: 1.4.1
-      ohash: 1.1.6
       openid-client: 6.3.4
       pathe: 2.0.3
       scule: 1.3.0
