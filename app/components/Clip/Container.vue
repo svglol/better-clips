@@ -50,7 +50,7 @@ import ModalClip from '~/components/Modal/Clip.vue'
 const props = defineProps({
   instanceId: {
     type: String,
-    required: true,
+    required: false,
     default: '',
   },
 })
