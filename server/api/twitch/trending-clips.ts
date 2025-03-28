@@ -77,7 +77,7 @@ export default defineEventHandler<{ query: QuerySchema }>(async (event) => {
   const limit = Number(query.limit)
   const session = await getUserSession(event)
   if (!session.user) {
-    return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
   const allClips = await getTrendingClipsFromTwitch(event)
 

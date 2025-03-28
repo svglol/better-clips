@@ -6,7 +6,7 @@ export default defineCachedEventHandler(async (event) => {
   const session = await getUserSession(event)
 
   if (!session.user) {
-    return createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
 
   const allChannels = await getFollowedChannels(event, session as UserSession)
