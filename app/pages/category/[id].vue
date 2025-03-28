@@ -117,4 +117,13 @@ function onScrollEnd() {
     cursor.value = data.value.pagination.cursor
   }
 }
+
+onMounted(() => {
+  const visitedPagesStore = useVisitedPagesStore()
+  visitedPagesStore.addVisitedPage(
+    `/category/${category.value?.id}`,
+    category.value?.name ?? '',
+    boxArt.value ?? '',
+  )
+})
 </script>

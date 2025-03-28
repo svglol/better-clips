@@ -76,7 +76,19 @@ const { data, status } = await useAsyncData('search', async () => {
   server: false,
 })
 
+const visitedPagesStore = useVisitedPagesStore()
+
 const groups = computed(() => [
+  {
+    id: 'history',
+    label: 'Recently visited',
+    items: visitedPagesStore.recentPages.filter(page => page.title?.toLowerCase()?.includes(searchQuery.value)).map(page => ({
+      id: page.path,
+      label: page.title,
+      to: page.path,
+      avatar: { src: page.img },
+    })),
+  },
   {
     id: 'users',
     label: searchQuery.value ? `Channels matching “${searchQuery.value}”...` : 'Channels',
@@ -94,7 +106,7 @@ const groups = computed(() => [
     items: data.value?.categories.data.map(category => ({
       id: category.id,
       label: category.name,
-      to: `/category/${category.name}`,
+      to: `/category/${category.id}`,
       avatar: { src: category.box_art_url },
     })),
   },

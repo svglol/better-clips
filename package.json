@@ -66,5 +66,10 @@
       "eslint --fix"
     ],
     "*.{css,vue}": "stylelint --fix"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.10.1",
+    "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0"
   }
 }

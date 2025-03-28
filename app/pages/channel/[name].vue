@@ -133,4 +133,13 @@ const ringStyle = computed(() => {
     return 'ring-2 ring-(--ui-neutral)'
   }
 })
+
+onMounted(() => {
+  const visitedPagesStore = useVisitedPagesStore()
+  visitedPagesStore.addVisitedPage(
+    `/channel/${channel.value?.display_name}`,
+    channel.value?.display_name ?? '',
+    channel.value?.profile_image_url ?? '',
+  )
+})
 </script>

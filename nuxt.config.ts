@@ -13,6 +13,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-auth-utils',
     'nuxt-time',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
   ],
   future: {
     compatibilityVersion: 4,
