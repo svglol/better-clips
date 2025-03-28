@@ -21,7 +21,7 @@
         </template>
         <template #after>
           <div v-if="status === 'pending' && clips.length === 0" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-            <TwitchClipSkeleton v-for="i in 24" :key="i" />
+            <TwitchClipSkeleton v-for="i in 12" :key="i" />
           </div>
           <UILoading v-else-if="status === 'pending'" class="p-8" />
           <div v-else-if="clips.length === 0" class="py-auto my-auto flex size-full flex-col items-center justify-center">
@@ -32,7 +32,7 @@
       </DynamicScroller>
       <template #fallback>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          <TwitchClipSkeleton v-for="i in 24" :key="i" />
+          <TwitchClipSkeleton v-for="i in 12" :key="i" />
         </div>
       </template>
     </ClientOnly>
