@@ -15,7 +15,7 @@
             <span class="text-xl font-bold">{{ channel?.display_name }}</span>
             <UIcon v-if="channel?.broadcaster_type === 'partner'" name="pajamas:partner-verified" class="text-(--ui-primary) text-sm" />
           </NuxtLink>
-          <span class="text-(--ui-text-dimmed) text-sm">{{ channel?.description }}</span>
+          <span class="text-(--ui-text-muted) text-sm">{{ channel?.description }}</span>
         </div>
       </div>
     </ClipHeader>
