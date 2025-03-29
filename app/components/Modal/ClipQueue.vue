@@ -2,14 +2,14 @@
   <div
     v-if="clips && clips.length > 0"
     ref="container"
-    class="clips-container relative w-[100vw] h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth !outline-none"
+    class="clips-container relative w-full h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth !outline-none"
     tabindex="0"
     @scroll="handleScroll"
   >
     <div
       v-for="(clip, index) in clips"
       :key="clip.id"
-      class="w-full h-screen flex justify-center items-center relative snap-center"
+      class="w-full h-full flex justify-center items-center relative snap-center"
       :style="{
         backgroundImage: `url(${clip.thumbnail_url || ''})`,
         backgroundSize: 'cover',
@@ -21,7 +21,7 @@
       <Transition name="fade">
         <video
           v-if="index === currentIndex - 1 || index === currentIndex + 1"
-          class="w-full aspect-video my-auto relative z-10 mb-36"
+          class="w-full h-full aspect-video my-auto relative z-10 mb-36 md:mb-0"
           :src="videoUrls.get(clip.id)"
           muted
           disableRemotePlayback
@@ -30,7 +30,7 @@
         <video
           v-else-if="index === currentIndex"
           ref="videoRefs"
-          class="w-full aspect-video relative z-10 mb-36"
+          class="w-full h-full aspect-video relative z-10 mb-36 md:mb-0"
           :src="videoUrls.get(clip.id)"
           :volume="volume / 100"
           autoplay
@@ -49,7 +49,7 @@
     No clips available
   </div>
 
-  <div v-if="clips && clips.length > 0" class="h-36 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-(--ui-bg-elevated)/75 backdrop-blur flex flex-col z-20">
+  <div v-if="clips && clips.length > 0" class="h-36 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-(--ui-bg-elevated)/75 backdrop-blur flex flex-col z-20" :class="{ 'md:hidden': idle }">
     <UProgress v-model="currentTime" :max="duration" :ui="{ base: 'rounded-none' }" animation="carousel" size="xs" />
     <div class="flex flex-row items-start justify-between gap-4 p-4">
       <div class="flex max-w-full flex-col gap-1 overflow-hidden">
@@ -142,9 +142,11 @@ const currentTime = ref(0)
 const { undo: undoVolume } = useRefHistory(volume)
 
 const videoUrls = ref(new Map<string, string>())
+const { idle, reset } = useIdle(5 * 1000)
 
 watchImmediate(currentIndex, async () => {
   duration.value = 0
+  reset()
 
   if (currentIndex.value === props.clips.length - 5) {
     emit('loadMore')
