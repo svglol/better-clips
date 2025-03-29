@@ -19,6 +19,14 @@
         </div>
       </div>
     </ClipHeader>
+    <UModal v-model:open="open" fullscreen>
+      <UButton label="View Feed" color="primary" variant="soft" class="sm:hidden" block />
+
+      <template #content>
+        <UButton icon="mdi:close" color="neutral" variant="link" class="absolute top-0 right-0 z-20 border-none" size="xl" @click="open = false" />
+        <ModalClipQueue :clips="compiledClips" @load-more="onScrollEnd" />
+      </template>
+    </UModal>
     <ClipContainer v-model:clips="compiledClips" v-model:status="status" :title="channel?.display_name" :instance-id="channel?.id" @scroll-end="onScrollEnd" />
   </div>
 </template>
@@ -29,6 +37,8 @@ import { sub } from 'date-fns'
 const route = useRoute('channel-name')
 
 const { name } = route.params
+
+const open = ref(false)
 
 const dateRange = useState(`dateRange${useId()}`, () => {
   let startDate = route.query.startDate ? new Date(route.query.startDate as string) : sub(new Date(), { years: 100 })
