@@ -3,8 +3,9 @@
     <template #content>
       <div class="flex flex-col">
         <div class="relative aspect-video w-full">
+          <USkeleton v-if="status === 'pending'" class="size-full" />
           <video
-            v-if="videoUrl"
+            v-else-if="videoUrl"
             :src="videoUrl"
             class="size-full"
             controls
@@ -64,7 +65,7 @@ const props = defineProps<{
   clip?: TwitchClip
 }>()
 
-const { data: videoUrl } = await useFetch(`/api/twitch/clips/video/${props.id}`)
+const { data: videoUrl, status } = await useLazyFetch(`/api/twitch/clips/video/${props.id}`)
 
 const clip = ref<TwitchClip | undefined>(props.clip)
 const iframeSrc = computed(() => {
