@@ -9,7 +9,7 @@
     <div
       v-for="(clip, index) in clips"
       :key="clip.id"
-      class="w-full h-screen flex justify-center items-center relative  snap-center"
+      class="w-full h-screen flex justify-center items-center relative snap-center"
       :style="{
         backgroundImage: `url(${clip.thumbnail_url || ''})`,
         backgroundSize: 'cover',
@@ -21,7 +21,7 @@
       <Transition name="fade">
         <video
           v-if="index === currentIndex - 1 || index === currentIndex + 1"
-          class="w-full aspect-video my-auto relative z-10"
+          class="w-full aspect-video my-auto relative z-10 mb-36"
           :src="videoUrls.get(clip.id)"
           muted
         />
@@ -29,7 +29,7 @@
         <video
           v-else-if="index === currentIndex"
           ref="videoRefs"
-          class="w-full aspect-video my-auto relative z-10 "
+          class="w-full aspect-video relative z-10 mb-36"
           :src="videoUrls.get(clip.id)"
           :volume="volume / 100"
           autoplay
@@ -47,7 +47,7 @@
     No clips available
   </div>
 
-  <div v-if="clips && clips.length > 0" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-(--ui-bg-elevated)/75 backdrop-blur flex flex-col z-20">
+  <div v-if="clips && clips.length > 0" class="h-36 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-(--ui-bg-elevated)/75 backdrop-blur flex flex-col z-20">
     <UProgress v-model="currentTime" :max="duration" :ui="{ base: 'rounded-none' }" animation="carousel" size="xs" />
     <div class="flex flex-row items-start justify-between gap-4 p-4">
       <div class="flex max-w-full flex-col gap-1 overflow-hidden">
@@ -55,8 +55,8 @@
         <h2 class="text-(--ui-text-highlighted) max-w-full truncate text-base font-semibold leading-tight">
           {{ clips[currentIndex]?.title }}
         </h2>
-        <p class="text-(--ui-text-dimmed) text-xs leading-tight">
-          <span class="inline-flex flex-wrap items-center gap-x-1">
+        <p class="text-(--ui-text-dimmed) text-xs leading-tight truncate">
+          <span class=" items-center gap-x-1 truncate">
             Clipped by
             <NuxtLink :to="`https://twitch.tv/${clips[currentIndex]?.creator_name.replace(' ', '')}`" target="_blank" class="text-primary hover:underline">
               {{ clips[currentIndex]?.creator_name }}
