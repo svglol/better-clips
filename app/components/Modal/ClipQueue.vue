@@ -2,7 +2,7 @@
   <div
     v-if="clips && clips.length > 0"
     ref="container"
-    class="container relative w-full h-screen overflow-y-auto snap-y snap-mandatory !outline-none"
+    class="clips-container relative w-[100vw] h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth !outline-none"
     tabindex="0"
     @scroll="handleScroll"
   >
@@ -315,7 +315,7 @@ function updateProgress() {
   position: absolute;
 }
 
-.container {
+.clips-container {
   scrollbar-color: transparent transparent;
 }
 </style>
