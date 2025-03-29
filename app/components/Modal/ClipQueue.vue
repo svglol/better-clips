@@ -24,6 +24,7 @@
           class="w-full aspect-video my-auto relative z-10 mb-36"
           :src="videoUrls.get(clip.id)"
           muted
+          disableRemotePlayback
         />
 
         <video
@@ -33,6 +34,7 @@
           :src="videoUrls.get(clip.id)"
           :volume="volume / 100"
           autoplay
+          disableRemotePlayback
           :loop="!autoPlayEnabled"
           :muted="isMuted"
           @timeupdate="updateProgress"
@@ -304,10 +306,6 @@ function updateProgress() {
 </script>
 
 <style scoped>
-video::-webkit-media-controls-cast-button {
-    display: none;
-}
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
