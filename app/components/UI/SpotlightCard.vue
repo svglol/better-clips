@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 const { x, y } = useMouse()
-const el = ref<HTMLElement | null>(null)
+const el = useTemplateRef('el')
 </script>
 
 <style scoped>

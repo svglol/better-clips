@@ -64,8 +64,8 @@ const emit = defineEmits<{
   (e: 'openClip', id: string, clip: TwitchClip): void
 }>()
 
-const placeholder = ref<HTMLDivElement>()
-const image = ref<HTMLImageElement>()
+const placeholder = useTemplateRef('placeholder')
+const image = useTemplateRef('image')
 
 function formatDuration(duration: number): string {
   const totalSeconds = Math.ceil(duration)

@@ -29,7 +29,7 @@
 
         <video
           v-else-if="index === currentIndex"
-          ref="videoRefs"
+          :ref="videoRefs.set"
           class="w-full h-full aspect-video relative z-10 mb-36 md:mb-0"
           :src="videoUrls.get(clip.id)"
           :volume="volume / 100"
@@ -130,8 +130,8 @@ const props = defineProps<{
 const emit = defineEmits(['loadMore'])
 
 const currentIndex = ref(0)
-const container = ref<HTMLElement | null>(null)
-const videoRefs = ref<HTMLVideoElement[]>([])
+const container = useTemplateRef('container')
+const videoRefs = useTemplateRefsList<HTMLVideoElement>()
 const autoPlayEnabled = ref(true)
 const isPlaying = ref(true)
 const isMuted = ref(true)

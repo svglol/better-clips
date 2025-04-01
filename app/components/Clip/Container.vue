@@ -64,7 +64,7 @@ const route = useRoute('channel-name')
 const clips = defineModel<TwitchClip[]>('clips', { required: true, default: [] })
 const status = defineModel<string>('status', { required: true, default: 'pending' })
 const title = defineModel<string>('title', { default: '' })
-const clipsContainer = ref<HTMLElement>()
+const clipsContainer = useTemplateRef('clipsContainer')
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const activeBreakpoint = breakpoints.active()
