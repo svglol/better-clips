@@ -43,7 +43,7 @@
     "happy-dom": "17.4.4",
     "lint-staged": "15.5.0",
     "nuxt": "3.16.2",
-    "nuxt-auth-utils": "0.5.16",
+    "nuxt-auth-utils": "0.5.18",
     "nuxt-time": "1.0.3",
     "p-limit": "6.2.0",
     "pinia": "3.0.1",
