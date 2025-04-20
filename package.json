@@ -48,7 +48,7 @@
     "p-limit": "6.2.0",
     "pinia": "3.0.2",
     "pinia-plugin-persistedstate": "4.2.0",
-    "playwright-core": "1.51.0",
+    "playwright-core": "1.52.0",
     "postcss-html": "1.8.0",
     "simple-git-hooks": "2.12.1",
     "stylelint": "16.18.0",
