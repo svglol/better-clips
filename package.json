@@ -58,7 +58,7 @@
     "vitest": "3.1.2",
     "vue-tsc": "2.1.6",
     "vue-virtual-scroller": "2.0.0-beta.8",
-    "zod": "3.24.3"
+    "zod": "3.24.4"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged",
